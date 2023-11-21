@@ -1,29 +1,23 @@
+import React from 'react';
+import './styles/login.module.css';
 
-// Get the input fields and submit button
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const submitButton = document.getElementById('submit');
+function Login(){
+  return(
+    <div className="LoginPage">
+      <h1>Login</h1>
+      <form>
+        <label>
+          Username:
+          <input type="text" name="username" />
+        </label>
+        <label>
+          Password:
+          <input type="password" name="password" />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  );
+}
 
-// Add event listener to the submit button
-submitButton.addEventListener('click', function(event) {
-  event.preventDefault(); // Prevent form submission
-
-  // Get the values from the input fields
-  const username = usernameInput.value;
-  const password = passwordInput.value;
-
-  // Perform validation
-  if (username === 'admin' && password === 'password') {
-    // Successful login
-    alert('Login successful!');
-    // Redirect to the home page or perform other actions
-  } else {
-    // Invalid login
-    alert('Invalid username or password. Please try again.');
-    // Clear the input fields
-    usernameInput.value = '';
-    passwordInput.value = '';
-    // Set focus to the username field
-    usernameInput.focus();
-  }
-});
+export default Login;
