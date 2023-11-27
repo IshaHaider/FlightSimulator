@@ -7,7 +7,7 @@ public class LoginPanel extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JLabel statusLabel;
-
+    
     public LoginPanel(Gui mainFrame) {
         setLayout(new GridLayout(5, 2));
         usernameField = new JTextField();
@@ -39,6 +39,7 @@ public class LoginPanel extends JPanel {
                 UserSession.getInstance().setUserName(username);
                 // UserSession.getInstance().setAccessLevel(retrievedAccessLevel);
                 mainFrame.setUserLabel();
+                mainFrame.switchView("Home");
                 // mainFrame.switchViewBasedOnAccessLevel();
             } else {
                 statusLabel.setText("Login failed.");

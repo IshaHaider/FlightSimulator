@@ -114,15 +114,15 @@ public class Gui extends JFrame {
         return databaseConnection;
     }
 
+    public CreditCardPanel getCreditCardPanel() {
+        return creditCardPanel;
+    }
+
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             Gui frame = new Gui();
             frame.setVisible(true);
         });
-    }
-
-    public CreditCardPanel getCreditCardPanel() {
-        return creditCardPanel;
     }
 }
 
