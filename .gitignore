@@ -4,3 +4,9 @@ Hackthon
 test.py
 node_modules
 *.pyc
+
+# Ignore all .class files
+*.class
+
+# Commit only .java files
+!*.java

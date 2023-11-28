@@ -1,5 +1,0 @@
-# Ignore all .class files
-*.class
-
-# Commit only .java files
-!*.java
