@@ -47,9 +47,6 @@ public class SQLConnect {
             System.out.println("Connection successful");
         }
         else {System.out.println("Connection unsuccessful");}
-        // EventQueue.invokeLater(() -> {
-        //     new setupGUI().setVisible(true);
-        // });
     }
 
     
