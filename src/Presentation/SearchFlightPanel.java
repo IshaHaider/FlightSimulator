@@ -57,7 +57,8 @@ public class SearchFlightPanel extends JPanel {
             if (destination.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter a destination.", "No Destination", JOptionPane.WARNING_MESSAGE);
             } else {
-                executeSearch(destination);
+                // executeSearch(destination);
+                seatMap(1); // JUST CHECKING SEATMAP HERE DELETE AFTER
             }
         });
 
@@ -210,16 +211,27 @@ public class SearchFlightPanel extends JPanel {
         seatMapFrame.setLayout(new GridLayout(7, 7)); // 7 columns for seats, 7 rows
     
         JButton[][] seatButtons = new JButton[7][7]; // 2-D array for seat buttons
-    
+        
+        int seatNumber = 0;
+        char seatLetter = (char) ('A');
+        int seatLetterCounter = 0;
         for (int row = 0; row < 7; row++) {
+            seatNumber += 1;
+            seatLetterCounter = 0;
             for (int col = 0; col < 7; col++) {
+
                 if (col == 3) { // Middle column for aisle
                     JLabel aisleLabel = new JLabel("Aisle");
                     aisleLabel.setHorizontalAlignment(JLabel.CENTER);
                     seatMapFrame.add(aisleLabel);
-                } else {
-                    // Naming the seats like 1A, 1B, 1C, etc.
-                    String seatName = (row + 1) + "" + (char) ('A' + (col > 3 ? col - 1 : col));
+                    seatNumber += 1;
+                    seatLetterCounter = 0;
+                } 
+                
+                else {
+                    seatLetter = (char) ('A' + seatLetterCounter);
+                    seatLetterCounter += 1;
+                    String seatName = seatNumber + "" + seatLetter;
                     JButton seatButton = new JButton(seatName);
                     seatButton.addActionListener(e -> {
                         // Save seat name and perform action
