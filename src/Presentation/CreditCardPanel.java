@@ -25,21 +25,21 @@ public class CreditCardPanel extends JPanel {
         JLabel cardNumberLabel = new JLabel("Card Number:");
         cardNumberField = new JTextField(24);
         // Set the document with a custom document filter
-        ((AbstractDocument) cardNumberField.getDocument()).setDocumentFilter(new DocumentFilter() {
-            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
-                if (newText.length() <= 24 && newText.matches("^[0-9]*$")) {
-                    super.replace(fb, offset, length, text, attrs);
-                }
-            }
+        // ((AbstractDocument) cardNumberField.getDocument()).setDocumentFilter(new DocumentFilter() {
+        //     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        //         String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+        //         if (newText.length() <= 24 && newText.matches("^[0-9]*$")) {
+        //             super.replace(fb, offset, length, text, attrs);
+        //         }
+        //     }
 
-            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
-                if (newText.length() <= 24 && newText.matches("^[0-9]*$")) {
-                    super.insertString(fb, offset, string, attr);
-                }
-            }
-        });
+        //     public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        //         String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
+        //         if (newText.length() <= 24 && newText.matches("^[0-9]*$")) {
+        //             super.insertString(fb, offset, string, attr);
+        //         }
+        //     }
+        // });
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(cardNumberLabel, gbc);
@@ -49,21 +49,21 @@ public class CreditCardPanel extends JPanel {
         // Expiry Date Field
         JLabel expiryDateLabel = new JLabel("Expiry Date (MM/YY):");
         expiryDateField = new JTextField(4);
-        ((AbstractDocument) expiryDateField.getDocument()).setDocumentFilter(new DocumentFilter() {
-            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
-                if (newText.length() <= 4 && newText.matches("^[0-9]*$")) {
-                    super.replace(fb, offset, length, text, attrs);
-                }
-            }
+        // ((AbstractDocument) expiryDateField.getDocument()).setDocumentFilter(new DocumentFilter() {
+        //     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        //         String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+        //         if (newText.length() <= 4 && newText.matches("^[0-9]*$")) {
+        //             super.replace(fb, offset, length, text, attrs);
+        //         }
+        //     }
 
-            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
-                if (newText.length() <= 4 && newText.matches("^[0-9]*$")) {
-                    super.insertString(fb, offset, string, attr);
-                }
-            }
-        });
+        //     public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        //         String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
+        //         if (newText.length() <= 4 && newText.matches("^[0-9]*$")) {
+        //             super.insertString(fb, offset, string, attr);
+        //         }
+        //     }
+        // });
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(expiryDateLabel, gbc);
@@ -73,21 +73,21 @@ public class CreditCardPanel extends JPanel {
         // CVV Field
         JLabel cvvLabel = new JLabel("CVV:");
         cvvField = new JTextField(3);
-                ((AbstractDocument) cvvField.getDocument()).setDocumentFilter(new DocumentFilter() {
-            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
-                if (newText.length() <= 3 && newText.matches("^[0-9]*$")) {
-                    super.replace(fb, offset, length, text, attrs);
-                }
-            }
+//         ((AbstractDocument) cvvField.getDocument()).setDocumentFilter(new DocumentFilter() {
+        //     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        //         String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+        //         if (newText.length() <= 3 && newText.matches("^[0-9]*$")) {
+        //             super.replace(fb, offset, length, text, attrs);
+        //         }
+        //     }
 
-            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
-                if (newText.length() <= 3 && newText.matches("^[0-9]*$")) {
-                    super.insertString(fb, offset, string, attr);
-                }
-            }
-        });
+        //     public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        //         String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
+        //         if (newText.length() <= 3 && newText.matches("^[0-9]*$")) {
+        //             super.insertString(fb, offset, string, attr);
+        //         }
+        //     }
+        // });
         gbc.gridx = 0;
         gbc.gridy = 2;
         add(cvvLabel, gbc);
@@ -100,9 +100,33 @@ public class CreditCardPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // saveCreditCardInfo();
+                String cardNumber = cardNumberField.getText();
+                String expiryDate = expiryDateField.getText();
+                String cvv = cvvField.getText();
+
+                if (!cardNumber.matches("\\d{16}")) {
+                    JOptionPane.showMessageDialog(CreditCardPanel.this,
+                            "Invalid Card Number. It must be 16 digits long.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+        
+                if (!expiryDate.matches("\\d{4}")) { // Matches MMYY format where MM is 01/12
+                    JOptionPane.showMessageDialog(CreditCardPanel.this,
+                            "Invalid Expiry Date. Format must be MMYY.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                if (!cvv.matches("\\d{3}")) {
+                    JOptionPane.showMessageDialog(CreditCardPanel.this,
+                            "Invalid CVV. It must be 3 digits long.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+        
+                // If all validations pass
                 JOptionPane.showMessageDialog(CreditCardPanel.this,
                         "Purchase Confirmed!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
                 displayPurchaseSummary();
+                
             }
         });
         gbc.gridx = 0;
