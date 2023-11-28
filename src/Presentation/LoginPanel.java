@@ -1,15 +1,17 @@
 package src.Presentation;
+import Controllers.*;
+import Domain.*;
 
 import javax.swing.*;
-
 import java.awt.*;
 
 public class LoginPanel extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JLabel statusLabel;
+    private LoginController loginController;
     
-    public LoginPanel(Gui mainFrame) {
+    public LoginPanel(Gui mainFrame, LoginController loginController) {
         setLayout(new GridLayout(5, 2));
         usernameField = new JTextField();
         passwordField = new JPasswordField();
@@ -25,7 +27,7 @@ public class LoginPanel extends JPanel {
         add(loginButton);
         add(registerButton);
         add(statusLabel);
-        add(backButton); // Add the back button to the panel
+        add(backButton); 
         add(new JLabel()); // Placeholder for grid alignment
         add(statusLabel);
 
@@ -35,11 +37,9 @@ public class LoginPanel extends JPanel {
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
-            // int retrievedAccessLevel = // get access level from database
-            if (!username.isEmpty()) {
-                UserSession.getInstance().setUserName(username);
-                // UserSession.getInstance().setAccessLevel(retrievedAccessLevel);
-                mainFrame.setUserLabel();
+            String password = new String(passwordField.getPassword());
+            if (loginController.validLogin(username, password)) {
+                mainFrame.setUserLabel(); // Update the user label in the main GUI
                 mainFrame.switchView("Home");
                 // mainFrame.switchViewBasedOnAccessLevel();
             } else {

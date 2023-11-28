@@ -1,5 +1,5 @@
 package src.Domain;
 
 public interface Observer {
-    void update();
+    void update(Observable o, Object arg);
 }

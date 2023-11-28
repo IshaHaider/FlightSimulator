@@ -4,3 +4,6 @@
 in main folder, run the following commands:
 javac -cp .:lib/mysql-connector-j-8.2.0.jar src/Controllers/DBController.java
 java -cp .:lib/mysql-connector-j-8.2.0.jar src.Controllers.DBController 
+
+can also use: 
+java -cp .;lib/mysql-connector-j-8.2.0.jar src.Controllers.DBController

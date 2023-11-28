@@ -11,15 +11,20 @@ public class Gui extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardsPanel;
 
+    private HomePanel homePanel;
+    private SearchFlightPanel searchFlightPanel;
+    private LoginPanel loginPanel;
+    private CancelFlightPanel cancelFlightPanel;
+    private CreditCardPanel creditCardPanel;
+    private UserPanel userPanel;
+    private AirlineAgentPanel airlineAgentPanel;
+    private AdminPanel adminPanel;
+
     private JLabel userLabel; // Label to display the user's name
     private JButton loginButton, logoutButton;
 
-    private Connection databaseConnection;
-
-    private CreditCardPanel creditCardPanel;
-
     public Gui() {
-        setTitle("Flight Reservation System");
+        
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
 
@@ -38,15 +43,23 @@ public class Gui extends JFrame {
         logoutButton.addActionListener(e -> logout());
 
         // Add the panels (views)
-        cardsPanel.add(new HomePanel(this), "Home");
-        cardsPanel.add(new SearchFlightPanel(this), "Search Flight");
-        cardsPanel.add(new LoginPanel(this), "Login");
-        cardsPanel.add(new CancelFlightPanel(this), "Cancel Flight");
-        creditCardPanel = new CreditCardPanel(this);
+        this.homePanel = new HomePanel(this);
+        this.searchFlightPanel = new SearchFlightPanel(this);
+        this.loginPanel = new LoginPanel(this);
+        this.cancelFlightPanel = new CancelFlightPanel(this);
+        this.creditCardPanel = new CreditCardPanel(this);
+        this.userPanel = new UserPanel(this);
+        this.airlineAgentPanel = new AirlineAgentPanel(this);
+        this.adminPanel = new AdminPanel(this);
+
+        cardsPanel.add(homePanel, "Home");
+        cardsPanel.add(searchFlightPanel, "Search Flight");
+        cardsPanel.add(loginPanel, "Login");
+        cardsPanel.add(cancelFlightPanel, "Cancel Flight");
         cardsPanel.add(creditCardPanel, "Payment");
-        cardsPanel.add(new UserPanel(this), "UserPanel");
-        cardsPanel.add(new AirlineAgentPanel(this), "AirlineAgentPanel");
-        cardsPanel.add(new AdminPanel(this), "AdminPanel");
+        cardsPanel.add(userPanel, "UserPanel");
+        cardsPanel.add(airlineAgentPanel, "AirlineAgentPanel");
+        cardsPanel.add(adminPanel, "AdminPanel");
 
         setLayout(new BorderLayout());
         add(topPanel, BorderLayout.NORTH);
@@ -54,12 +67,6 @@ public class Gui extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
-
-        try {
-            databaseConnection = establishDatabaseConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void switchView(String viewName) {
@@ -68,23 +75,21 @@ public class Gui extends JFrame {
 
     public void switchViewBasedOnAccessLevel() {
         int accessLevel = UserSession.getInstance().getAccessLevel();
-        switch (accessLevel) {
-            case 1:
-                switchView("UserPanel");
-                break;
-            case 2:
-                switchView("AgentPanel");
-                break;
-            case 3:
-                switchView("AdminPanel");
-                break;
-            default:
-                switchView("Home");
-                break;
+        if (accessLevel == 2) {
+            cardLayout.switchView("UserPanel");
+        }
+        else if (accessLevel == 3) {
+            cardLayout.switchView("AirlineAgentPanel");
+        }
+        else if (accessLevel == 4) {
+            cardLayout.switchView("AdminPanel");
+        }
+        else {
+            cardLayout.switchView("Home");
         }
     }
 
-    public void setUserLabel() {
+    public void setUserLabel() { // Change later
         UserSession session = UserSession.getInstance();
         if (session.isLoggedIn()) {
             userLabel.setText("Logged in as: " + session.getUserName());
@@ -97,33 +102,35 @@ public class Gui extends JFrame {
         }
     }
     
-    private void logout() {
+    private void logout() { //Change later
         UserSession.getInstance().logout();
         setUserLabel();
         switchView("Home");
-    }    
-
-    private Connection establishDatabaseConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/your_database"; // Replace "your_database" with your database name
-        String username = "your_username"; // Replace "your_username" with your username
-        String password = "your_password"; // Replace "your_password" with your password
-        return DriverManager.getConnection(url, username, password);
     }
 
-    // Getter method to retrieve the database connection
-    public Connection getDatabaseConnection() {
-        return databaseConnection;
+    public HomePanel getHomePanel() {
+        return homePanel;
     }
-
+    public SearchFlightPanel getSearchFlightPanel() {
+        return searchFlightPanel;
+    }
+    public LoginPanel getLoginPanel() {
+        return loginPanel;
+    }
+    public CancelFlightPanel getCancelFlightPanel() {
+        return cancelFlightPanel;
+    }
     public CreditCardPanel getCreditCardPanel() {
         return creditCardPanel;
     }
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            Gui frame = new Gui();
-            frame.setVisible(true);
-        });
+    public UserPanel getuserPanel() {
+        return userPanel;
+    }
+    public AirlineAgentPanel getAirlineAgentPanel() {
+        return airlineAgentPanel;
+    }
+    public AdminPanel  getAdminPanel() {
+        return adminPanel;
     }
 }
 
