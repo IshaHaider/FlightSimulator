@@ -20,16 +20,18 @@ import java.awt.event.*;
 
 public class SearchFlightPanel extends JPanel {
     private Gui mainFrame;
+    private SeatController seatController;
     private JFrame seatMapFrame;
     private Connection databaseConnection; // Database connection reference
     private JTable flightTable; // Table to display flight information
     private JTextField searchField; // Field to enter destination
 
-    public SearchFlightPanel(Gui mainFrame) {
-        this.mainFrame = mainFrame;
-        setLayout(new BorderLayout());
 
-        // Create a panel for search controls
+    public SearchFlightPanel(Gui mainFrame, SeatController seatController) {
+        this.mainFrame = mainFrame;
+        this.seatController = seatController;
+
+        setLayout(new BorderLayout());
         JPanel searchPanel = new JPanel();
         searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -39,7 +41,6 @@ public class SearchFlightPanel extends JPanel {
         searchPanel.add(searchButton);
         add(searchPanel, BorderLayout.NORTH);
 
-        // Create a table to display flight information
         flightTable = new JTable();
         JScrollPane scrollPane = new JScrollPane(flightTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -62,9 +63,7 @@ public class SearchFlightPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = flightTable.getSelectedRow();
                 int flightIdColumnIndex = 0; // Assuming flightId is in the first column
-
                 Object flightIDObject = flightTable.getValueAt(selectedRow, flightIdColumnIndex);
-
                 if (flightIDObject != null) {
                     int flightID = Integer.parseInt(flightIDObject.toString());
                     seatMap(flightID);
@@ -74,7 +73,7 @@ public class SearchFlightPanel extends JPanel {
     }
 
     private void executeSearch(String destination) {
-        ArrayList<Flight> currFlights = SeatController.getAllFlights();
+        ArrayList<Flight> currFlights = seatController.getCertainFlights(destination);
 
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Flight ID");
@@ -105,19 +104,19 @@ public class SearchFlightPanel extends JPanel {
         flightTable.setModel(tableModel);
     }
 
-    private void seatMap(int flightID) { // Change this later
+    private void seatMap(int flightID) {
 
-        ArrayList<Seat> allSeats = 
+        ArrayList<Seat> allSeats = seatController.getCertainSeats(flightID);
 
         seatMapFrame = new JFrame("Seat Map for Flight ID: " + flightID);
-        seatMapFrame.setLayout(new GridLayout(7, 7)); // 7 columns for seats, 7 rows
+        seatMapFrame.setLayout(new GridLayout(9, 7)); // 7 columns for seats, 7 rows
 
-        JButton[][] seatButtons = new JButton[7][7]; // 2-D array for seat buttons
+        JButton[][] seatButtons = new JButton[9][7]; // 2-D array for seat buttons
 
         int seatNumber = 0;
         char seatLetter = (char) ('A');
         int seatLetterCounter = 0;
-        for (int row = 0; row < 7; row++) {
+        for (int row = 0; row < 9; row++) {
             seatNumber += 1;
             seatLetterCounter = 0;
             for (int col = 0; col < 7; col++) {
@@ -135,16 +134,34 @@ public class SearchFlightPanel extends JPanel {
                     seatLetterCounter += 1;
                     String seatName = seatNumber + "" + seatLetter;
                     JButton seatButton = new JButton(seatName);
+                    boolean isAvailable = false;
                     seatButton.addActionListener(e -> {
                         // Save seat name and perform action
-                        displayPurchaseOptions(seatName, flightID, "Economy"); // Assume economy class for now
+                        for (Seat seats : allSeats) {
+                            if (seats.getSeatName().equals(seatName)) {
+                                if (seats.isAvailable()) {
+                                    seatButton.setBackground(Color.GREEN);
+                                    String clickedSeat = seats.getSeatName();
+                                    int clickedSeatID = seats.getSeatID();
+                                    String clickedSeatClass = seats.getSeatClass();
+                                    isAvailable = true;
+                                } else {
+                                    seatButton.setBackground(Color.RED);
+                                }
+                            }
+                        }
+                        if (isAvailable) {
+                            displayPurchaseOptions(clickedSeat, clickedSeatID, clickedSeatClass); // Assume economy class for now
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Seat is not available.", "Seat Not Available", JOptionPane.WARNING_MESSAGE);
+                        }
                     });
                     seatMapFrame.add(seatButton);
                     seatButtons[row][col] = seatButton;
                 }
             }
         }
-
+        
         seatMapFrame.pack();
         seatMapFrame.setVisible(true);
     }
