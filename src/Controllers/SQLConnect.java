@@ -13,7 +13,7 @@ public class SQLConnect {
     private static Connection flightConnect;
     private static ResultSet flightResult;
 
-    private static final String SQL_URL = "jdbc:mysql://localhost/FS";
+    private static final String SQL_URL = "jdbc:mysql://localhost:3306/FS";
     private static final String USER = "oop";
     private static final String PASS = "password";
 
