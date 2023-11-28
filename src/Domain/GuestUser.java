@@ -1,11 +1,7 @@
 package Domain;
 
-import java.util.ArrayList;
-
-public class RegisteredUser implements User, Observer {
-    ArrayList<Flight> registeredFlights;
-    float balance;
-    void receivePromotion() {}
+public class GuestUser implements User, Observer {
+    void subscribeToMembership() {}
     void reserveFlight(Flight flight, Seat seatInformation) {}
     void viewReservations() {}
     public void update() {}
