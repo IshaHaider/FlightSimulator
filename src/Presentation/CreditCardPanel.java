@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CreditCardPanel extends JPanel {
+    Gui mainFrame;
     private JTextField cardNumberField;
     private JTextField expiryDateField;
     private JTextField cvvField;
@@ -16,6 +17,7 @@ public class CreditCardPanel extends JPanel {
     private String seatClass;
 
     public CreditCardPanel(Gui mainFrame) {
+        this.mainFrame = mainFrame;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -144,5 +146,6 @@ public class CreditCardPanel extends JPanel {
 
         summaryFrame.pack();
         summaryFrame.setVisible(true);
+        mainFrame.switchView("Home");
     }
 }

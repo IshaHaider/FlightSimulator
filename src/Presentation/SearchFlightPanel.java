@@ -10,12 +10,17 @@ package Presentation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import Domain.Seat;
+
 import java.awt.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.awt.event.*;
 
 public class SearchFlightPanel extends JPanel {
     private Gui mainFrame;
+    private JFrame seatMapFrame;
     private Connection databaseConnection; // Database connection reference
     private JTable flightTable; // Table to display flight information
     private JTextField searchField; // Field to enter destination
@@ -121,85 +126,113 @@ public class SearchFlightPanel extends JPanel {
     }
 
     private void seatMap(int flightID) {
-        try {
-            // Query to get seat information based on flightID
-            String sql = "SELECT seat_number, class FROM seats WHERE flight_id = ?"; // Replace 'seats' with your table name
-            PreparedStatement preparedStatement = databaseConnection.prepareStatement(sql);
-            preparedStatement.setInt(1, flightID);
-            ResultSet resultSet = preparedStatement.executeQuery();
+        // try {
+        //     // Query to get seat information based on flightID
+        //     String sql = "SELECT seat_number, class FROM seats WHERE flight_id = ?"; // Replace 'seats' with your table name
+        //     PreparedStatement preparedStatement = databaseConnection.prepareStatement(sql);
+        //     preparedStatement.setInt(1, flightID);
+        //     ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Create a new frame to display seat information
-            JFrame seatMapFrame = new JFrame("Seat Map for Flight " + flightID);
-            seatMapFrame.setLayout(new BorderLayout());
-            JTabbedPane tabbedPane = new JTabbedPane();
+        //     // Create a new frame to display seat information
+        //     JFrame seatMapFrame = new JFrame("Seat Map for Flight " + flightID);
+        //     seatMapFrame.setLayout(new BorderLayout());
+        //     JTabbedPane tabbedPane = new JTabbedPane();
 
-            // Create tables for each class
-            JTable economyTable = new JTable(new DefaultTableModel(new Object[]{"Seat Number"}, 0));
-            JTable firstClassTable = new JTable(new DefaultTableModel(new Object[]{"Seat Number"}, 0));
-            JTable businessTable = new JTable(new DefaultTableModel(new Object[]{"Seat Number"}, 0));
+        //     // Create tables for each class
+        //     JTable economyTable = new JTable(new DefaultTableModel(new Object[]{"Seat Number"}, 0));
+        //     JTable firstClassTable = new JTable(new DefaultTableModel(new Object[]{"Seat Number"}, 0));
+        //     JTable businessTable = new JTable(new DefaultTableModel(new Object[]{"Seat Number"}, 0));
 
-            while (resultSet.next()) {
-                String seatNumber = resultSet.getString("seat_number");
-                String seatClass = resultSet.getString("class");
+        //     while (resultSet.next()) {
+        //         String seatNumber = resultSet.getString("seat_number");
+        //         String seatClass = resultSet.getString("class");
 
-                // Add rows to respective tables based on class
-                switch (seatClass.toLowerCase()) {
-                    case "economy":
-                        ((DefaultTableModel) economyTable.getModel()).addRow(new Object[]{seatNumber});
-                        break;
-                    case "first class":
-                        ((DefaultTableModel) firstClassTable.getModel()).addRow(new Object[]{seatNumber});
-                        break;
-                    case "business":
-                        ((DefaultTableModel) businessTable.getModel()).addRow(new Object[]{seatNumber});
-                        break;
+        //         // Add rows to respective tables based on class
+        //         switch (seatClass.toLowerCase()) {
+        //             case "economy":
+        //                 ((DefaultTableModel) economyTable.getModel()).addRow(new Object[]{seatNumber});
+        //                 break;
+        //             case "first class":
+        //                 ((DefaultTableModel) firstClassTable.getModel()).addRow(new Object[]{seatNumber});
+        //                 break;
+        //             case "business":
+        //                 ((DefaultTableModel) businessTable.getModel()).addRow(new Object[]{seatNumber});
+        //                 break;
+        //         }
+        //     }
+
+        //     // Add tables to tabbed pane
+        //     tabbedPane.addTab("Economy", new JScrollPane(economyTable));
+        //     tabbedPane.addTab("First Class", new JScrollPane(firstClassTable));
+        //     tabbedPane.addTab("Business", new JScrollPane(businessTable));
+
+        //     // Add tabbed pane to the frame
+        //     seatMapFrame.add(tabbedPane, BorderLayout.CENTER);
+        //     seatMapFrame.pack();
+        //     seatMapFrame.setVisible(true);
+
+        //     MouseAdapter seatSelectionHandler = new MouseAdapter() {
+        //         @Override
+        //         public void mouseClicked(MouseEvent e) {
+        //             if (e.getClickCount() == 2) { // Double-click to select a seat
+        //                 JTable sourceTable = (JTable) e.getSource();
+        //                 int selectedRow = sourceTable.getSelectedRow();
+        //                 int seatNumberColumnIndex = 0; // Assuming seatNumber is in the first column
+        //                 Object seatIDObject = sourceTable.getValueAt(selectedRow, seatNumberColumnIndex);
+    
+        //                 if (seatIDObject != null) {
+        //                     String seatID = seatIDObject.toString();
+        //                     seatMapFrame.dispose(); // Close the seat map frame
+        //                     String seatClass = ""; // Determine the seat class based on the source table
+        //                     if (e.getSource() == economyTable) {
+        //                         seatClass = "Economy";
+        //                     } else if (e.getSource() == firstClassTable) {
+        //                         seatClass = "First Class";
+        //                     } else if (e.getSource() == businessTable) {
+        //                         seatClass = "Business";
+        //                     }
+        //                     displayPurchaseOptions(seatID, flightID, seatClass);
+        //                 }
+        //             }
+        //         }
+        //     };
+    
+        //     // Add mouse listeners to each table
+        //     economyTable.addMouseListener(seatSelectionHandler);
+        //     firstClassTable.addMouseListener(seatSelectionHandler);
+        //     businessTable.addMouseListener(seatSelectionHandler);    
+
+        // } catch (SQLException e) {
+        //     e.printStackTrace();
+        // }
+
+        seatMapFrame = new JFrame("Seat Map for Flight ID: " + flightID);
+        seatMapFrame.setLayout(new GridLayout(7, 7)); // 7 columns for seats, 7 rows
+    
+        JButton[][] seatButtons = new JButton[7][7]; // 2-D array for seat buttons
+    
+        for (int row = 0; row < 7; row++) {
+            for (int col = 0; col < 7; col++) {
+                if (col == 3) { // Middle column for aisle
+                    JLabel aisleLabel = new JLabel("Aisle");
+                    aisleLabel.setHorizontalAlignment(JLabel.CENTER);
+                    seatMapFrame.add(aisleLabel);
+                } else {
+                    // Naming the seats like 1A, 1B, 1C, etc.
+                    String seatName = (row + 1) + "" + (char) ('A' + (col > 3 ? col - 1 : col));
+                    JButton seatButton = new JButton(seatName);
+                    seatButton.addActionListener(e -> {
+                        // Save seat name and perform action
+                        displayPurchaseOptions(seatName, flightID, "Economy"); // Assume economy class for now
+                    });
+                    seatMapFrame.add(seatButton);
+                    seatButtons[row][col] = seatButton;
                 }
             }
-
-            // Add tables to tabbed pane
-            tabbedPane.addTab("Economy", new JScrollPane(economyTable));
-            tabbedPane.addTab("First Class", new JScrollPane(firstClassTable));
-            tabbedPane.addTab("Business", new JScrollPane(businessTable));
-
-            // Add tabbed pane to the frame
-            seatMapFrame.add(tabbedPane, BorderLayout.CENTER);
-            seatMapFrame.pack();
-            seatMapFrame.setVisible(true);
-
-            MouseAdapter seatSelectionHandler = new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getClickCount() == 2) { // Double-click to select a seat
-                        JTable sourceTable = (JTable) e.getSource();
-                        int selectedRow = sourceTable.getSelectedRow();
-                        int seatNumberColumnIndex = 0; // Assuming seatNumber is in the first column
-                        Object seatIDObject = sourceTable.getValueAt(selectedRow, seatNumberColumnIndex);
-    
-                        if (seatIDObject != null) {
-                            String seatID = seatIDObject.toString();
-                            seatMapFrame.dispose(); // Close the seat map frame
-                            String seatClass = ""; // Determine the seat class based on the source table
-                            if (e.getSource() == economyTable) {
-                                seatClass = "Economy";
-                            } else if (e.getSource() == firstClassTable) {
-                                seatClass = "First Class";
-                            } else if (e.getSource() == businessTable) {
-                                seatClass = "Business";
-                            }
-                            displayPurchaseOptions(seatID, flightID, seatClass);
-                        }
-                    }
-                }
-            };
-    
-            // Add mouse listeners to each table
-            economyTable.addMouseListener(seatSelectionHandler);
-            firstClassTable.addMouseListener(seatSelectionHandler);
-            businessTable.addMouseListener(seatSelectionHandler);    
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+
+        seatMapFrame.pack();
+        seatMapFrame.setVisible(true);
     }
 
     private void displayPurchaseOptions(String seatID, int flightID, String seatClass) {
@@ -217,6 +250,7 @@ public class SearchFlightPanel extends JPanel {
             creditCardPanel.setFlightNumber(flightID);
             creditCardPanel.setSeatID(seatID);
             creditCardPanel.setSeatClass(seatClass);
+            seatMapFrame.dispose();
             mainFrame.switchView("Payment");
         });
     

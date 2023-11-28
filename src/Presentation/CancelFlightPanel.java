@@ -91,13 +91,18 @@ public class CancelFlightPanel extends JPanel {
             // For demonstration purposes, printing to the console
             System.out.println("Cancelling Flight: " + flightNumber + ", From: " + from + ", To: " + to + ", Time: " + time);
             // Here you would typically handle the cancellation logic
-
+            
             // Show flight cancellation confirmation
             JOptionPane.showMessageDialog(
-                    this,
-                    "Flight Cancellation Confirmed",
-                    "Cancellation",
-                    JOptionPane.INFORMATION_MESSAGE);
+                this,
+                "Flight Cancellation Confirmed\n" +
+                "Flight Number: " + flightNumber + "\n" +
+                "From: " + from + "\n" +
+                "To: " + to + "\n" +
+                "Time: " + time,
+                "Cancellation",
+                JOptionPane.INFORMATION_MESSAGE
+            );
         }
     }
 }
