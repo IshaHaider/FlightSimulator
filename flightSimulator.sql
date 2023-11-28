@@ -34,12 +34,12 @@ CREATE TABLE PROMOTIONS (
 	primary key (promotionID)
 );
 
-INSERT INTO PROMOTIONS VALUES
-(1, 'Summer Sale', '15%', '2023-06-01', '2023-08-31'),
-(2, 'Holiday Special', '20%', '2023-12-01', '2023-12-31'),
-(3, 'Back-to-School', '10%', '2023-08-15', '2023-09-15'),
-(4, "New Year's Sale", '18%', '2023-01-01', '2023-01-07'),
-(5, 'Fall Discount', '12%', '2023-09-01', '2023-11-30');
+INSERT INTO PROMOTIONS (name, discount, startDate, endDate) VALUES
+('Summer Sale', '15%', '2023-06-01', '2023-08-31'),
+('Holiday Special', '20%', '2023-12-01', '2023-12-31'),
+('Back-to-School', '10%', '2023-08-15', '2023-09-15'),
+("New Year's Sale", '18%', '2023-01-01', '2023-01-07'),
+('Fall Discount', '12%', '2023-09-01', '2023-11-30');
 
 DROP TABLE IF EXISTS AIRCRAFT;
 CREATE TABLE AIRCRAFT (
