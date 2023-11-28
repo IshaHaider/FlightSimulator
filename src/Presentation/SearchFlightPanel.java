@@ -1,4 +1,4 @@
-package Presentation;
+package src.Presentation;
 
 
 // Search for flights to certain destinations and I want you to be able to search for flights in certain times in my database 
@@ -11,7 +11,7 @@ package Presentation;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import Domain.Seat;
+import src.Domain.Seat;
 
 import java.awt.*;
 import java.sql.*;

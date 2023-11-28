@@ -1,4 +1,4 @@
-package Domain;
+package src.Domain;
 
 public class Address {
     String street;

@@ -1,4 +1,4 @@
-package Presentation;
+package src.Presentation;
 
 public class UserSession {
     private static UserSession instance;

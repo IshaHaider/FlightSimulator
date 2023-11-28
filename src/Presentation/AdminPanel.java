@@ -1,4 +1,4 @@
-package Presentation;
+package src.Presentation;
 
 import javax.swing.*;
 import java.awt.*;

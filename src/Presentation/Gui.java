@@ -1,6 +1,7 @@
-package Presentation;
+package src.Presentation;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package Domain;
+package src.Domain;
 
 public class GuestUser implements User, Observer {
     void subscribeToMembership() {}
