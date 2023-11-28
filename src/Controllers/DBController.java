@@ -312,6 +312,17 @@ public class DBController {
         return flightResult;
     }
 
+    public ResultSet selectUSER(String email, String password) {
+        try {
+            String statement = "SELECT * FROM ALLUSERS WHERE email=" + email + " AND " + "password=" + password + ";";
+            flightQuery = flightConnect.prepareStatement(statement);
+            flightResult = flightQuery.executeQuery();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return flightResult;
+    }
+
     public static void main(String[] args) {
         DBController temp = DBController.getOnlyInstance();
         if (temp.getFlightConnect() != null) {

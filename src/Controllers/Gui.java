@@ -1,6 +1,10 @@
-package src.Presentation;
+package Presentation;
 
+import javax.security.auth.login.LoginContext;
 import javax.swing.*;
+
+import src.Controllers.SeatController;
+import src.Presentation.UserSession;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -23,7 +27,7 @@ public class Gui extends JFrame {
     private JLabel userLabel; // Label to display the user's name
     private JButton loginButton, logoutButton;
 
-    public Gui() {
+    public Gui(LoginController loginController, RegistrationController registrationController, SeatController seatController, TicketController ticketController, DBController dbController) {
         
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
@@ -44,10 +48,10 @@ public class Gui extends JFrame {
 
         // Add the panels (views)
         this.homePanel = new HomePanel(this);
-        this.searchFlightPanel = new SearchFlightPanel(this);
-        this.loginPanel = new LoginPanel(this);
+        this.searchFlightPanel = new SearchFlightPanel(this, seatController);
+        this.loginPanel = new LoginPanel(this, loginController);
         this.cancelFlightPanel = new CancelFlightPanel(this);
-        this.creditCardPanel = new CreditCardPanel(this);
+        this.creditCardPanel = new CreditCardPanel(this, seatController);
         this.userPanel = new UserPanel(this);
         this.airlineAgentPanel = new AirlineAgentPanel(this);
         this.adminPanel = new AdminPanel(this);
@@ -89,7 +93,7 @@ public class Gui extends JFrame {
         }
     }
 
-    public void setUserLabel() { // Change later
+    public void setUserLabel() {
         UserSession session = UserSession.getInstance();
         if (session.isLoggedIn()) {
             userLabel.setText("Logged in as: " + session.getUserName());
@@ -102,7 +106,7 @@ public class Gui extends JFrame {
         }
     }
     
-    private void logout() { //Change later
+    private void logout() {
         UserSession.getInstance().logout();
         setUserLabel();
         switchView("Home");

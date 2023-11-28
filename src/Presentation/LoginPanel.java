@@ -2,6 +2,7 @@ package src.Presentation;
 import Controllers.*;
 import Domain.*;
 
+import javax.security.auth.login.LoginContext;
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,6 +13,7 @@ public class LoginPanel extends JPanel {
     private LoginController loginController;
     
     public LoginPanel(Gui mainFrame, LoginController loginController) {
+        this.loginController = loginController;
         setLayout(new GridLayout(5, 2));
         usernameField = new JTextField();
         passwordField = new JPasswordField();
@@ -38,29 +40,22 @@ public class LoginPanel extends JPanel {
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            if (loginController.validLogin(username, password)) {
-                mainFrame.setUserLabel(); // Update the user label in the main GUI
-                mainFrame.switchView("Home");
-                // mainFrame.switchViewBasedOnAccessLevel();
-            } else {
-                statusLabel.setText("Login failed.");
-            }
+            loginController.validLogin(username, password);
         });
 
         registerButton.addActionListener(e -> {
-            // Simulated login logic
             String username = usernameField.getText();
-            // int retrievedAccessLevel = // get access level from database
-            // Here, you would normally check the password, etc.
-            if (!username.isEmpty()) { // Simple check for demonstration
-                UserSession.getInstance().setUserName(username); // Set the user name in the UserSession
-                // UserSession.getInstance().setAccessLevel(retrievedAccessLevel);
-                mainFrame.setUserLabel(); // Update the user label in the main GUI
-                mainFrame.switchView("Home");
-                // mainFrame.switchViewBasedOnAccessLevel();
-            } else {
-                statusLabel.setText("Login failed.");
-            }
+            String password = new String(passwordField.getPassword());
+            loginController.createLogin(username, password);
         });
+    }
+    
+    public void setStatusLabel(String txt) {
+        statusLabel.setText(txt);
+    }
+
+    public void clearFields() {
+        usernameField.setText("");
+        passwordField.setText("");
     }
 }

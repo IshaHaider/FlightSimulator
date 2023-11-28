@@ -1,6 +1,11 @@
 package src.Controllers;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import Domain.*;
 import Presentation.*;
+import src.Controllers.DBController;
 
 public class SeatController {
 
@@ -8,11 +13,17 @@ public class SeatController {
     private ArrayList<Seat> currentSeats = new ArrayList<Seat>();
     private DBController db;
     private SearchFlightPanel searchFlightPanel;
+    private Gui mainFrame;
 
-    public SeatController (DBController db) {
+    public SeatController (Gui mainFrame, DBController db) {
+        this.mainFrame = mainFrame;
         this.db = db;
         loadFlights();
     } 
+
+    public void setSearchFlightPanel(SearchFlightPanel panel) {
+        this.searchFlightPanel = panel;
+    }
 
     private void loadFlights() {
         try {
@@ -37,19 +48,11 @@ public class SeatController {
         }
     }
 
-    private ArrayList<Flight> getAllFlights() {
-        return currentFlights;
-    }
-
-    public void setSearchFlightPanel(SearchFlightPanel panel) {
-        this.loginPanel = panel;
-    }
-
     private void loadSeats(int givenAircraftID) {
         try {
             ResultSet givenFlight = db.selectSeatsFromAircraftID(givenAircraftID);
             while (givenFlight.next()) {
-                int seatID = listedFlights.getInt("flightID");
+                int seatID = listedFlights.getInt("seatID");
                 int aircraftID = listedFlights.getInt("aircraftID");
                 String seatName = listedFlights.getString("seatName");
                 String typeOfSeat = listedFlights.getString("class");
@@ -65,7 +68,38 @@ public class SeatController {
         }
     }
 
-    private ArrayList<Seat> getAllSeat() {
-        return currentSeats;
+    private ArrayList<Flight> getCertainFlights(String destination) {
+        ArrayList<Flight> tmp = new ArrayList<Flight>();
+        for (Flight flight : currentFlights) {
+            if (flight.getDestination().equals(destination)) {
+                tmp.add(flight);
+            }
+        }
+        return tmp;
     }
+
+    private ArrayList<Seat> getCertainSeats(int seatID) {
+        ArrayList<Seat> tmp = new ArrayList<Seat>();
+        for (Seat seat : currentSeats) {
+            if (seat.getSeatID() == seatID) {
+                tmp.add(seat);
+            }
+        }
+        return tmp;
+    }
+
+    // private ArrayList<Seat> getSeatsFromFlightID(int flightID) {
+    //     ArrayList<Seat> seats = new ArrayList<Seat>();
+    //     for (Seat seat : currentSeats) {
+    //         if (seat.getFlightID() == flightID) {
+    //             seats.add(seat);
+    //         }
+    //     }
+    //     return seats;
+    // }
+
+    private void purchaseSeat() {
+        
+    }
+
 }

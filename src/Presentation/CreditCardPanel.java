@@ -3,12 +3,17 @@ package src.Presentation;
 import javax.swing.*;
 import javax.swing.text.*;
 
+import src.Controllers.SeatController;
+import src.Domain.Seat;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CreditCardPanel extends JPanel {
     Gui mainFrame;
+    SeatController seatController;
+
     private JTextField cardNumberField;
     private JTextField expiryDateField;
     private JTextField cvvField;
@@ -17,7 +22,7 @@ public class CreditCardPanel extends JPanel {
     private String seatID;
     private String seatClass;
 
-    public CreditCardPanel(Gui mainFrame) {
+    public CreditCardPanel(Gui mainFrame, SeatController seatController) {
         this.mainFrame = mainFrame;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
