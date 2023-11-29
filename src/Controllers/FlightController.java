@@ -75,7 +75,7 @@ public class FlightController {
 
     public List<Integer> getFlightCrew(final Flight flight) {
         List<Integer> flightCrew = new ArrayList<>();
-
+        
         try {
             ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT","flightID", flight.getFlightID());
 

@@ -61,7 +61,7 @@ public class SeatController{
         }
     }
 
-    public ArrayList<Flight> getCertainFlights(String departLocation) {
+    public ArrayList<Flight> getCertainFlights(String arrivalLoc) {
         // ArrayList<Flight> tmp = new ArrayList<Flight>();
         // loadFlights();
         // for (Flight flight : currentFlights) {
@@ -74,7 +74,7 @@ public class SeatController{
         ArrayList<Flight> currentFlights = new ArrayList<>();
         Status[] statusValues = Status.values(); // Check if flightStatus is in the Status enum
         try {
-            ResultSet listedFlights = db.selectTableFromAttribute("FLIGHT", "destination", departLocation);
+            ResultSet listedFlights = db.selectTableFromAttribute("FLIGHT", "arriveLocation", arrivalLoc);
             while (listedFlights.next()) {
                 int flightID = listedFlights.getInt("flightID");
                 int aircraftID = listedFlights.getInt("aircraftID");
@@ -82,7 +82,7 @@ public class SeatController{
                 LocalTime departTime = listedFlights.getTime("departTime").toLocalTime();
                 LocalDate arrivalDate = listedFlights.getDate("arriveDate").toLocalDate();
                 LocalTime arrivalTime = listedFlights.getTime("arriveTime").toLocalTime();
-                String arrivalLocation = listedFlights.getString("arriveLocation");
+                String departLocation = listedFlights.getString("departLocation");
                 String flightStatusString = listedFlights.getString("flightStatus");
                 float cost = listedFlights.getFloat("cost");
                 boolean meal = listedFlights.getBoolean("meal");
@@ -98,7 +98,7 @@ public class SeatController{
                     }
                 }
         
-                Flight flight = new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal, CM1, CM2, CM3);
+                Flight flight = new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLoc, flightStatus, cost, meal, CM1, CM2, CM3);
                 currentFlights.add(flight);
             }
         } catch (SQLException e) {
@@ -107,7 +107,7 @@ public class SeatController{
         return currentFlights;
     }
 
-    public ArrayList<Seat> getCertainSeats(int seatID) {
+    public ArrayList<Seat> getCertainSeats(int aircraftID) {
         // ArrayList<Seat> tmp = new ArrayList<Seat>();
         // loadSeats();
         // for (Seat seat : currentSeats) {
@@ -121,9 +121,9 @@ public class SeatController{
         AirplaneClass[] classValues = AirplaneClass.values(); // Check if class is in the AirplaneClass enum
         try {
             currentSeats.clear();
-            ResultSet givenFlight = db.selectTableFromAttribute("SEAT","seatID", seatID);
+            ResultSet givenFlight = db.selectTableFromAttribute("SEAT","aircraftID", aircraftID);
             while (givenFlight.next()) {
-                int aircraftID = givenFlight.getInt("aircraftID");
+                int seatID = givenFlight.getInt("seatID");
                 String seatName = givenFlight.getString("seatName");
                 String seatClassString = givenFlight.getString("class");
                 float cost = givenFlight.getFloat("cost");
