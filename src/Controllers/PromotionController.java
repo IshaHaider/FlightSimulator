@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class PromotionController {
-
+    private UserPanel userPanel;
     private DBController db = DBController.getOnlyInstance();
     private ArrayList<Promotions> currentPromotions = new ArrayList<>();
 
@@ -41,7 +41,8 @@ public class PromotionController {
     }
 
     public void updatePromotion(Promotions promotion) {
-        db.updatePromotion(promotion);
+
+        db.updatePromotion(promotion.getPromotionID());
         // for (int i = 0; i < currentPromotions.size(); i++) {
         //     if (currentPromotions.get(i).getPromotionID() == promotion.getPromotionID()) {
         //         currentPromotions.set(i, promotion);
@@ -74,4 +75,8 @@ public class PromotionController {
 
     public ArrayList<Promotions> getCurrentPromotions() {return this.currentPromotions; }
     public void setCurrentPromotions(ArrayList<Promotions> cp) { this.currentPromotions = cp; }
+
+    public void setUserPanel( UserPanel panel ) { this.userPanel = panel; }
+
 }
+

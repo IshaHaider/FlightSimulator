@@ -46,10 +46,10 @@ public class LoginPanel extends JPanel {
         statusLabel = new JLabel(" ");
         // add(new JLabel("Username:"));
         // add(usernameField);
-        add(new JLabel("Password:"));
-        add(passwordField);
         add(new JLabel("Email:"));
         add(emailField);
+        add(new JLabel("Password:"));
+        add(passwordField);
         add(new JLabel("Birth Date (dd mm year):"));
         add(dofbField);
         add(new JLabel("First Name:"));

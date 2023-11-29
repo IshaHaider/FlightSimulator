@@ -29,7 +29,7 @@ public class CancelFlightPanel extends JPanel {
         ticketNumField = new JTextField(15);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(ticketNumField, gbc);
+        add(ticketNumberLabel, gbc);
         gbc.gridx = 1;
         add(ticketNumField, gbc);
 

@@ -28,7 +28,7 @@ public class Gui extends JFrame {
     private JLabel userLabel;
     private JButton loginButton, logoutButton;
 
-    public Gui(LoginController loginController, FlightController flightController, SeatController seatController, DBController dbController) {
+    public Gui(LoginController loginController, FlightController flightController, SeatController seatController, DBController dbController, PromotionController promotionController) {
         
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
@@ -53,7 +53,7 @@ public class Gui extends JFrame {
         this.loginPanel = new LoginPanel(this, loginController);
         this.cancelFlightPanel = new CancelFlightPanel(this, seatController);
         this.creditCardPanel = new CreditCardPanel(this, seatController);
-        this.userPanel = new UserPanel(this);
+        this.userPanel = new UserPanel(this, promotionController);
         this.airlineAgentPanel = new AirlineAgentPanel(this, flightController);
         this.adminPanel = new AdminPanel(this, flightController);
 
