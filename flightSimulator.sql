@@ -756,9 +756,9 @@ SET SQL_SAFE_UPDATES = 0;
 -- END;
 
 UPDATE SEAT
-SET available = 1
+SET available = false
 WHERE seatID IN (SELECT seatID FROM ticket);
 
 UPDATE SEAT
-SET available = 0
+SET available = true
 WHERE seatID NOT IN (SELECT seatID FROM ticket);
