@@ -87,42 +87,6 @@ public class FlightController {
         return currentCrew;
     }
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public ArrayList<Flight> browseAircrafts(){
         try {
             ResultSet listedAircrafts = db.selectTable("AIRCRAFT");
