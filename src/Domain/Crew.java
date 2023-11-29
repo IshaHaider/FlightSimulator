@@ -27,6 +27,16 @@ public class Crew extends User{
         this.phoneNumber = phoneNumber;
     }
     
+    public Crew (int userID, Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber){
+        this.userID = userID;
+        this.accessLevel = 3;
+        this.name = name;     
+        this.address = address;      
+        this.email = email;    
+        this.password = password; 
+        this.birthDate = birthDate; 
+        this.phoneNumber = phoneNumber;
+    }
 
     public Crew (Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, ArrayList<Flight> assignedFlight){
         this.accessLevel = 3;
