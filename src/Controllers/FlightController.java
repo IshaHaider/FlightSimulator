@@ -8,8 +8,7 @@ import src.Presentation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -93,7 +92,7 @@ public class FlightController {
     }
 
     public String[] retrivePassangerList() {
-        String [] tmp;
+        List<String> userList = new ArrayList<>();
         try {
             ResultSet listUsers = db.selectTable("FLIGHT");
             while (listUsers.next()) {
@@ -104,12 +103,13 @@ public class FlightController {
                 String email = listUsers.getString("email");
                 LocalDate birthDate = listUsers.getDate("birthDate").toLocalDate();
                 String phoneNum = listUsers.getString("phoneNumber");
-                
-                currentPassangerList.add(tmpUser);
+
+                String userDetails = userID + ": " + firstName + " " + lastName + ", " + address + ", " + email + ", " + birthDate + ", " + phoneNum;
+                userList.add(userDetails);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return tmp;
+        return userList.toArray(new String[0]);
     }
 }
