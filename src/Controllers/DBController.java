@@ -10,12 +10,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.sql.Date;
 import java.sql.Time;
-
 
 
 public class DBController <T>{
@@ -48,7 +46,6 @@ public class DBController <T>{
     }
 
     public Connection getFlightConnect(){ return flightConnect; }
-
 
     public void insertAircraft(AirPlane aircraft){
         try {
@@ -491,85 +488,90 @@ public class DBController <T>{
         else {System.out.println("Connection unsuccessful");}
 
 
-        // ------------ TESTING REMOVE FUNCTIONS ------------
-        temp.removeAircraft(1);
-        temp.removeFlight(4);
-        temp.removePromotion(2);
-        temp.removeSeat(50);
-        temp.removeTicket(1);
-        temp.removeUser(41);
+        // // ------------ TESTING REMOVE FUNCTIONS ------------
+        // temp.removeAircraft(1);
+        // temp.removeFlight(4);
+        // temp.removePromotion(2);
+        // temp.removeSeat(50);
+        // temp.removeTicket(1);
+        // temp.removeUser(41);
 
-        // ------------ TESTING SELECT FUNCTIONS ------------
-        temp.selectTableFromAttribute("FLIGHT", "departLocation", "New York");
-        temp.printResultSet(temp.flightResult);
+        // // ------------ TESTING SELECT FUNCTIONS ------------
+        // temp.selectTableFromAttribute("FLIGHT", "departLocation", "New York");
+        // temp.printResultSet(temp.flightResult);
 
-        temp.selectTableFromAttribute("AIRCRAFT", "aircraftID", 1);
-        temp.printResultSet(temp.flightResult);
+        // temp.selectTableFromAttribute("AIRCRAFT", "aircraftID", 1);
+        // temp.printResultSet(temp.flightResult);
 
-        temp.selectTableFromAttribute("SEAT", "available", false);
-        temp.printResultSet(temp.flightResult);
+        // temp.selectTableFromAttribute("SEAT", "available", false);
+        // temp.printResultSet(temp.flightResult);
 
-        temp.selectTableFromAttribute("ALLUSERS", "balance", 75.5);
-        temp.printResultSet(temp.flightResult);
+        // temp.selectTableFromAttribute("ALLUSERS", "balance", 75.5);
+        // temp.printResultSet(temp.flightResult);
 
-        LocalDate newDate = LocalDate.of(2023, 06, 01);
-        // DDate newDate = new DDate(01,06,);
-        temp.selectTableFromAttribute("PROMOTIONS", "startDate", newDate);
-        temp.printResultSet(temp.flightResult);
+        // LocalDate newDate = LocalDate.of(2023, 06, 01);
+        // // DDate newDate = new DDate(01,06,);
+        // temp.selectTableFromAttribute("PROMOTIONS", "startDate", newDate);
+        // temp.printResultSet(temp.flightResult);
 
-        LocalTime newTime = LocalTime.of(10, 0, 0);
-        // TTime newtime = new TTime();
-        temp.selectTableFromAttribute("FLIGHT", "arriveTime", newTime);
-        temp.printResultSet(temp.flightResult);
+        // LocalTime newTime = LocalTime.of(10, 0, 0);
+        // // TTime newtime = new TTime();
+        // temp.selectTableFromAttribute("FLIGHT", "arriveTime", newTime);
+        // temp.printResultSet(temp.flightResult);
 
-        temp.selectTableFromTwoAttributes("ALLUSERS", "firstName", "John","lastName","Doe");
-        temp.printResultSet(temp.flightResult);
+        // temp.selectTableFromTwoAttributes("ALLUSERS", "firstName", "John","lastName","Doe");
+        // temp.printResultSet(temp.flightResult);
 
         
-        // ------------ TESTING INSERT FUNCTIONS ------------
-        AirPlane newPlane = new AirPlane("test");
-        temp.insertAircraft(newPlane);
+        // // ------------ TESTING INSERT FUNCTIONS ------------
+        // AirPlane newPlane = new AirPlane("test");
+        // temp.insertAircraft(newPlane);
 
-        Ticket newTicket = new Ticket(1, 1, 5, 26);
-        temp.insertTicket(newTicket);
+        // Ticket newTicket = new Ticket(1, 1, 5, 26);
+        // temp.insertTicket(newTicket);
 
-        Name guestUserName = new Name("Isha", "Haider");
-        Address guestUserAddress = new Address("213", "Sherwood Gate");
-        LocalDate guestUserDate = LocalDate.of(2002, 06, 01);
-        // DDate guestUserDate = new DDate(01,06,2002);
-        GuestUser newGuestUser = new GuestUser(guestUserName, guestUserAddress,  "isha.haider@ucalgary.ca", guestUserDate , "587-890-8532");
-        temp.insertGuestUser(newGuestUser);
+        // Name guestUserName = new Name("Isha", "Haider");
+        // Address guestUserAddress = new Address("213", "Sherwood Gate");
+        // LocalDate guestUserDate = LocalDate.of(2002, 06, 01);
+        // // DDate guestUserDate = new DDate(01,06,2002);
+        // GuestUser newGuestUser = new GuestUser(guestUserName, guestUserAddress,  "isha.haider@ucalgary.ca", guestUserDate , "587-890-8532");
+        // temp.insertGuestUser(newGuestUser);
 
-        Name regUserName = new Name("Abdel", "Rahman");
-        Address regUserAddress = new Address("527", "Springbank Circle");
-        LocalDate regUserDate = LocalDate.of(2004, 04, 29);
-        // DDate regUserDate = new DDate(29,04,2004);
-        RegisteredUser newRegUser = new RegisteredUser(2, regUserName, regUserAddress, "abdel.rahman@ucalgary.ca", "abdel1256", regUserDate , "403-532-2309", 73.5f);
-        temp.insertRegisteredUser(newRegUser);
+        // Name regUserName = new Name("Abdel", "Rahman");
+        // Address regUserAddress = new Address("527", "Springbank Circle");
+        // LocalDate regUserDate = LocalDate.of(2004, 04, 29);
+        // // DDate regUserDate = new DDate(29,04,2004);
+        // RegisteredUser newRegUser = new RegisteredUser(2, regUserName, regUserAddress, "abdel.rahman@ucalgary.ca", "abdel1256", regUserDate , "403-532-2309", 73.5f);
+        // temp.insertRegisteredUser(newRegUser);
 
-        Name crewUserName = new Name("Eric", "Mei");
-        Address crewUserAddress = new Address("402", "Everhollow Crest");
-        LocalDate crewUserDate = LocalDate.of(2001, 03, 27);
-        // DDate crewUserDate = new DDate(27,03,2001);
-        Crew newCrewUser = new Crew(crewUserName, crewUserAddress, "eric.mei@ucalgary.ca", "eric1234", crewUserDate , "587-098-1234");
-        temp.insertCrewUser(newCrewUser);
+        // Name crewUserName = new Name("Eric", "Mei");
+        // Address crewUserAddress = new Address("402", "Everhollow Crest");
+        // LocalDate crewUserDate = LocalDate.of(2001, 03, 27);
+        // // DDate crewUserDate = new DDate(27,03,2001);
+        // Crew newCrewUser = new Crew(crewUserName, crewUserAddress, "eric.mei@ucalgary.ca", "eric1234", crewUserDate , "587-098-1234");
+        // temp.insertCrewUser(newCrewUser);
 
-        Name adminUserName = new Name("Aksh", "Singh");
-        Address adminUserAddress = new Address("12", "Somerset Bridlewood");
-        LocalDate adminUserDate = LocalDate.of(2001, 07, 13);
-        // DDate adminUserDate = new DDate(13,07,2001);
-        Admin newAdminUser = new Admin(adminUserName, adminUserAddress, "aksh.singh@gmail.com", "akshSingh34", adminUserDate , "403-678-0345");
-        temp.insertAdminUser(newAdminUser);
+        // Name adminUserName = new Name("Aksh", "Singh");
+        // Address adminUserAddress = new Address("12", "Somerset Bridlewood");
+        // LocalDate adminUserDate = LocalDate.of(2001, 07, 13);
+        // // DDate adminUserDate = new DDate(13,07,2001);
+        // Admin newAdminUser = new Admin(adminUserName, adminUserAddress, "aksh.singh@gmail.com", "akshSingh34", adminUserDate , "403-678-0345");
+        // temp.insertAdminUser(newAdminUser);
 
-        Flight newFlight = new Flight(1, adminUserDate, LocalTime.of(3, 23, 00), "Calgary", adminUserDate, LocalTime.of(7, 40, 00), "Vancouver", 
-        Status.OnTime, 250.0f, true, 41, 42, 43);
-        temp.insertFlight(newFlight);
+        // Flight newFlight = new Flight(1, adminUserDate, LocalTime.of(3, 23, 00), "Calgary", adminUserDate, LocalTime.of(7, 40, 00), "Vancouver", 
+        // Status.OnTime, 250.0f, true, 41, 42, 43);
+        // temp.insertFlight(newFlight);
 
-        Promotions newPromotion = new Promotions("Valentine's Sale", "13%", crewUserDate, regUserDate);
-        temp.insertPromotion(newPromotion);
+        // Promotions newPromotion = new Promotions("Valentine's Sale", "13%", crewUserDate, regUserDate);
+        // temp.insertPromotion(newPromotion);
 
-        Seat newSeat = new Seat(4, "17A", AirplaneClass.Economy, 200.0f, true, true);
-        temp.insertSeat(newSeat);
+        // Seat newSeat = new Seat(4, "17A", AirplaneClass.Economy, 200.0f, true, true);
+        // temp.insertSeat(newSeat);
 
+        // new MainController();
+
+        FlightController flight = new FlightController(temp);
+       
     }
+
 }

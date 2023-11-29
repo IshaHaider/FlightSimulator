@@ -29,12 +29,7 @@ public class Admin extends User {
     public String getPassword() {return password;}
     public void setPassword(final String password) {this.password = password;}
     
-    @Override
-    public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };
-    @Override
-    public void manageReservation(final Flight flight) {};  
 
-    
     // public ArrayList<User> getFlightPassengers(Flight flight) {
     //     ArrayList<User> passengers = flight.getPassengerList();
     //     return passengers;

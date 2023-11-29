@@ -1,14 +1,14 @@
 package src.Presentation;
+import src.Domain.*;
+import src.Controllers.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
 import javax.swing.table.DefaultTableModel;
 
-import src.Controllers.FlightController;
-import src.Controllers.Gui;
-import src.Domain.RegisteredUser;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class AdminPanel extends JPanel {
     private Gui mainFrame;

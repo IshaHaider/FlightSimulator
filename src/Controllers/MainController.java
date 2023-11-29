@@ -11,12 +11,13 @@ public class MainController {
     private FlightController flightController;
 
     public MainController () {
-        Gui frame = new Gui();
 
         this.dbController = getOnlyInstance();
         this.loginController = new LoginController(frame, dbController);
         this.seatController = new SeatController(frame, dbController);
         this.flightController = new FlightController(frame, dbController);
+
+        Gui frame = new Gui(loginController,flightController, seatController, dbController);
 
         this.loginController.setLoginPanel(frame.getLoginPanel());
         

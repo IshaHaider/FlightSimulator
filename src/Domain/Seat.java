@@ -19,7 +19,8 @@ public class Seat {
         this.available = false;
     }
    
-    public Seat(int aircraftID, String seatName, AirplaneClass seatClass, float cost, boolean baggage, boolean available) {
+    public Seat(int seatID, int aircraftID, String seatName, AirplaneClass seatClass, float cost, boolean baggage, boolean available) {
+        this.seatID = seatID;
         this.aircraftID = aircraftID;
         this.seatName = seatName;
         this.seatClass = seatClass;

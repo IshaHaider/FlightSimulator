@@ -28,7 +28,7 @@ public class Gui extends JFrame {
     private JLabel userLabel;
     private JButton loginButton, logoutButton;
 
-    public Gui(LoginController loginController, FlightController flightController, SeatController seatController, TicketController ticketController, DBController dbController) {
+    public Gui(LoginController loginController, FlightController flightController, SeatController seatController, DBController dbController) {
         
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
@@ -81,16 +81,16 @@ public class Gui extends JFrame {
     public void switchViewBasedOnAccessLevel() {
         int accessLevel = UserSession.getInstance().getAccessLevel();
         if (accessLevel == 2) {
-            cardLayout.switchView("UserPanel");
+            switchView("UserPanel");
         }
         else if (accessLevel == 3) {
-            cardLayout.switchView("AirlineAgentPanel");
+            switchView("AirlineAgentPanel");
         }
         else if (accessLevel == 4) {
-            cardLayout.switchView("AdminPanel");
+            switchView("AdminPanel");
         }
         else {
-            cardLayout.switchView("Home");
+            switchView("Home");
         }
     }
 

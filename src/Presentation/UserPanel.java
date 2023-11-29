@@ -1,9 +1,12 @@
 package src.Presentation;
 
-import javax.swing.*;
+import src.Domain.*;
+import src.Controllers.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class UserPanel extends JPanel {
     public UserPanel(Gui mainFrame) {
@@ -33,7 +36,7 @@ public class UserPanel extends JPanel {
 
         // Search Flights Button
         JButton searchFlightButton = new JButton("Search Flights");
-        searchFlightButton.addActionListener(e -> mainFrame.switchView("SearchFlightPanel"));
+        searchFlightButton.addActionListener(e -> mainFrame.switchView("Search Flight"));
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_START;

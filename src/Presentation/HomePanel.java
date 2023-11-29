@@ -1,8 +1,12 @@
 package src.Presentation;
 
 import javax.swing.*;
-
 import java.awt.*;
+import src.Domain.*;
+import src.Controllers.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class HomePanel extends JPanel {
     public HomePanel(Gui mainFrame) {

@@ -1,4 +1,4 @@
-package src.Presentation;
+package src.Domain;
 
 public class UserSession {
     private static UserSession instance;

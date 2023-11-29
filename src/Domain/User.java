@@ -27,6 +27,6 @@ public abstract class User {
     public void setBirthDate(final LocalDate birthDate) {this.birthDate = birthDate;}
     public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
 
-    public abstract ArrayList<Flight> getFlights(final String destination);
-    public abstract void manageReservation(final Flight flight);   
+    // public abstract ArrayList<Flight> getFlights(final String destination);
+    // public abstract void manageReservation(final Flight flight);   
 }

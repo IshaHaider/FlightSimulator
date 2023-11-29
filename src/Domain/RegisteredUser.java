@@ -24,6 +24,7 @@ public class RegisteredUser extends User{
         this.balance = 0.0f;
     }
 
+    // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the userID is auto-increment)
     public RegisteredUser (int promotionID, Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, float balance)  {
         this.accessLevel = 2;
         this.promotionID = promotionID;
@@ -36,6 +37,18 @@ public class RegisteredUser extends User{
         this.balance = balance;
     }
 
+    // USE THIS FOR LOCAL STORAGE (to manually add userID)
+    public RegisteredUser (int userID, int promotionID, Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, float balance)  {
+        this.accessLevel = 2;
+        this.promotionID = promotionID;
+        this.name = name;     
+        this.address = address;      
+        this.email = email;      
+        this.password = password;   
+        this.birthDate = birthDate; 
+        this.phoneNumber = phoneNumber; 
+        this.balance = balance;
+    }
     
     public final int getPromotionID() {return promotionID;}
     public final String getPassword() {return password;}
@@ -44,11 +57,6 @@ public class RegisteredUser extends User{
     public void setPromotionID(final int promotionID) {this.promotionID = promotionID;}
     public void setPassword(final String password) {this.password = password;}
     public void setBalance(final float balance) {this.balance = balance;}
-    
-    @Override
-    public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };
-    @Override
-    public void manageReservation(final Flight flight) {};  
 
 
 //     // public final float getDiscountPercentage() {return discountPercentage;}

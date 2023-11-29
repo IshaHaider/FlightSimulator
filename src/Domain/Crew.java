@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class Crew extends User{
-    ArrayList<Flight> assignedFlights;
     private String password;  
 
     public Crew() {
@@ -13,10 +12,10 @@ public class Crew extends User{
         this.address = new Address();      
         this.email = "";  
         this.password = ""; 
-        this.phoneNumber = ""; 
-        this.assignedFlights = new ArrayList<>();
+        this.phoneNumber = "";
     }
 
+    // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the userID is auto-increment)
     public Crew (Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber){
         this.accessLevel = 3;
         this.name = name;     
@@ -26,7 +25,8 @@ public class Crew extends User{
         this.birthDate = birthDate; 
         this.phoneNumber = phoneNumber;
     }
-    
+
+    // USE THIS FOR LOCAL STORAGE (to manually add userID)
     public Crew (int userID, Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber){
         this.userID = userID;
         this.accessLevel = 3;
@@ -38,26 +38,6 @@ public class Crew extends User{
         this.phoneNumber = phoneNumber;
     }
 
-    public Crew (Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, ArrayList<Flight> assignedFlight){
-        this.accessLevel = 3;
-        this.name = name;     
-        this.address = address;      
-        this.email = email; 
-        this.password = password;      
-        this.birthDate = birthDate; 
-        this.phoneNumber = phoneNumber;
-        this.assignedFlights = assignedFlight;
-    }
-
     public String getPassword() {return password;}
-    public ArrayList<Flight> getAssignedFlights() {return assignedFlights;}
-
     public void setPassword(final String password) {this.password = password;}
-    public void setAssignedFlights(final ArrayList<Flight> assignedFlights) {this.assignedFlights = assignedFlights;}
-
-    @Override
-    public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };
-    @Override
-    public void manageReservation(final Flight flight) {};  
-
 }

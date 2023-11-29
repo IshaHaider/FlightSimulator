@@ -6,7 +6,6 @@ import src.Presentation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import java.time.LocalDate;
 
 public class LoginController {
@@ -65,7 +64,7 @@ public class LoginController {
         }
     }
     
-    public void validLogin(String email, String password) {
+    public void validLogin(final String email, final String password) {
         if (!email.isEmpty() && !password.isEmpty() ) { // should be checking database here
             ResultSet result = db.selectTableFromTwoAttributes("ALLUSERS", "email", email, "password", password);
             int retrievedAccessLevel = result.getInt("accessLevel");
@@ -76,7 +75,7 @@ public class LoginController {
         mainFrame.switchViewBasedOnAccessLevel();
     }
 
-    public void createLogin(String DOFB, String password, String email, String fName, String lName, String address, String phoneNum) {
+    public void createLogin(final String DOFB, final String password, final String email, final String fName, final String lName, final String address, final String phoneNum) {
         if (email.isEmpty() || password.isEmpty() || DOFB.isEmpty() || fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNum.isEmpty()) {
             loginPanel.setStatusLabel("Please fill in all fields.");
         }

@@ -16,6 +16,7 @@ public class GuestUser extends User{
         this.phoneNumber = "";  
     }
 
+    // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the userID is auto-increment)
     public GuestUser(Name name, Address address, String email, LocalDate birthDate, String phoneNumber) {
         this.accessLevel = 1;
         this.name = name;     
@@ -25,10 +26,16 @@ public class GuestUser extends User{
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };
-    @Override
-    public void manageReservation(final Flight flight) {};  
+    // USE THIS FOR LOCAL STORAGE (to manually add userID)
+    public GuestUser(int userID, Name name, Address address, String email, LocalDate birthDate, String phoneNumber) {
+        this.accessLevel = 1;
+        this.userID = userID;
+        this.name = name;     
+        this.address = address;      
+        this.email = email;       
+        this.birthDate = birthDate; 
+        this.phoneNumber = phoneNumber;
+    }
 
     // void reserveFlight(final Flight flight, final Seat seat) {
     //     if(payBill(flight, this)) {

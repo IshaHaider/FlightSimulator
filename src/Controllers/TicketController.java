@@ -4,9 +4,9 @@ import src.Domain.*;
 import src.Presentation.*;
 
 public class TicketController {
-    Gui mainFrame;
-    DBController db;
-    CancelFlightPanel cancelFlightPanel;
+    private Gui mainFrame;
+    private DBController db;
+    private CancelFlightPanel cancelFlightPanel;
 
     public TicketController (Gui mainFrame, DBController db) {
         this.mainFrame = mainFrame;

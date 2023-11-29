@@ -37,7 +37,7 @@ public class PromotionController {
         }
     }
 
-    public void addPromotion(Promotions promotion) {
+    public void addPromotion(final Promotions promotion) {
         db.insertPromotion(promotion);
         currentPromotions.add(promotion);
     }

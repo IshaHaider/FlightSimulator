@@ -1,7 +1,6 @@
 package src.Controllers;
 
 import src.Domain.*;
-import src.Domain.Observer;
 import src.Presentation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +11,8 @@ import java.time.LocalTime;
 import java.sql.Date;
 import java.sql.Time;
 
-public class SeatController implements Observer<T>{
+// public class SeatController implements Observer<T>{
+public class SeatController{
 
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Seat> currentSeats = new ArrayList<Seat>();
@@ -42,8 +42,8 @@ public class SeatController implements Observer<T>{
 
     private void loadFlights() {
         try {
+            currentFlights.clear();
             ResultSet listedFlights = db.selectTable("FLIGHT");
-
             while (listedFlights.next()) {
                 int flightID = listedFlights.getInt("flightID");
                 int aircraftID = listedFlights.getInt("aircraftID");
@@ -75,6 +75,7 @@ public class SeatController implements Observer<T>{
 
     private void loadSeats(int givenAircraftID) {
         try {
+            currentSeats.clear();
             ResultSet givenFlight = db.selectTableFromAttribute("SEAT","aircraftID",givenAircraftID);
             while (givenFlight.next()) {
                 int seatID = listedFlights.getInt("seatID");
@@ -94,8 +95,9 @@ public class SeatController implements Observer<T>{
 
     public ArrayList<Flight> getCertainFlights(String destination) {
         ArrayList<Flight> tmp = new ArrayList<Flight>();
+        loadFlights();
         for (Flight flight : currentFlights) {
-            if (flight.getDestination().equals(destination)) {
+            if (flight.getDepartLocation().equals(destination)) {
                 tmp.add(flight);
             }
         }
@@ -104,6 +106,7 @@ public class SeatController implements Observer<T>{
 
     public ArrayList<Seat> getCertainSeats(int seatID) {
         ArrayList<Seat> tmp = new ArrayList<Seat>();
+        loadSeats();
         for (Seat seat : currentSeats) {
             if (seat.getSeatID() == seatID) {
                 tmp.add(seat);
@@ -115,10 +118,12 @@ public class SeatController implements Observer<T>{
     public void purchaseSeat( int flightID, int aircraftID, int userID, int seatID ) {
         Ticket tmp = new Ticket(flightID, aircraftID, userID, seatID);
         db.insertTicket(tmp);
+        loadSeats();
     }
 
     public void cancelFlight(int ticketNum, int flightID, int seatID) {
         db.removeTicket(ticketNum);
+        loadFlights();
     }
 
 }
