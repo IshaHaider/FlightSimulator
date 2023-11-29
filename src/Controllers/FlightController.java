@@ -5,6 +5,7 @@ import src.Controllers.Gui;
 import src.Domain.*;
 import src.Presentation.*;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class FlightController {
     }
 
     public ArrayList<Flight> browseFlights(){
+        ArrayList<Flight> currentFlights = new ArrayList<>();
         try {
             ResultSet listedFlights = db.selectTable("FLIGHT");
             while (listedFlights.next()) {
@@ -60,36 +62,123 @@ public class FlightController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return currentFlights;
     }
 
-    public ArrayList<Flight> browseCrew(){
+    public ArrayList<Crew> browseCrew(final Flight flight){
+        ArrayList<Flight> assignedFlight = new ArrayList<>();
+        List<Integer> flightCrewIDs = getFlightCrew(flight);
         try {
             ResultSet listedCrew = db.selectTable("ALLUSERS");
             while (listedCrew.next()) {
                 int accessLevel = listedCrew.getInt("accessLevel");
-                if(accessLevel == 3){
-                    String crewID = listedCrew.getInt("userID");
+                int crewID = Integer.parseInt(listedCrew.getInt("userID"));
+                if(accessLevel == 3 && flightCrewIDs.contains(crewID)){
                     Name crewName = new Name(listedCrew.getString("firstName"), listedCrew.getString("lastName"));
-                    Address crewAddress = new Address(listedCrew.getString("street"), listedCrew.getString("city"), 
-                                                        listedCrew.getString("state"), listedCrew.getString("zip"));
+                    Address crewAddress = new Address(listedCrew.getString("address"));
                     String crewEmail = listedCrew.getString("email");
-                    
-                    Crew crew = new Crew(crewID, crewName, crewType, crewStatus, flightID);
+                    String password = listedCrew.getString("password");
+                    Date birthDate = listedCrew.getDate("birthDate");
+                    String phoneNumber = listedCrew.getString("phoneNumber");
+                    float balance = listedCrew.getFloat("balance");
+                    assignedFlight.add(flight);
+                    Crew crew = new Crew(crewID, accessLevel, crewName, crewAddress, crewEmail, password, birthDate, phoneNumber, assignedFlight);
                     currentCrew.add(crew);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return currentCrew;
     }
     
-    public ArrayList<Flight> browseAircrafts(){
+    public List<Integer> getFlightCrew(final Flight flight) {
+        List<Integer> flightCrew = new ArrayList<>();
 
+        try {
+            ResultSet listedCrew = db.selectTable("FLIGHT");
+
+            while (listedCrew.next()) {
+                int flightID = listedCrew.getInt("flightID");
+
+                if (flightID == flight.getFlightID()) {
+                    flightCrew.add(listedCrew.getInt("crewMember1"));
+                    flightCrew.add(listedCrew.getInt("crewMember2"));
+                    flightCrew.add(listedCrew.getInt("crewMember3"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flightCrew;
     }
 
-    public void addCrew(final Flight flight, final Crew crew){
+    public ArrayList<Airplane> browseAircrafts(){
+        ArrayList<Airplane> airplanes = new ArrayList<>();
 
+        try {
+            ResultSet listedCrew = db.selectTable("AIRCRAFT");
+            while (listedCrew.next()) {
+                int aircraftID = listedCrew.getInt("aircraftID");
+                int name = listedCrew.getString("name");
+                Airplane airplane = new Airplane(aircraftID, name);
+                airplanes.add(airplane);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return airplanes;
     }
+
+    public void addCrew(final Crew crew){
+        try {
+            db.insertCrewUser(crew);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeCrew(final Crew crew){
+        try {
+            db.removeUser(crew.getUserID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addAirCraft(final Airplane airplane){
+        try {
+            db.insertAircraft(airplane);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeAirCraft(final Airplane airplane){
+        try {
+            db.removeAircraft(airplane.getAircraftID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addFlight(final Flight flight){
+        try {
+            db.insertFlight(flight);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeFlight(final Flight flight){
+        try {
+            db.removeFlight(flight.getFlightID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 
     public String[] retrivePassangerList() {
         List<String> userList = new ArrayList<>();
