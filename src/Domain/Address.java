@@ -20,7 +20,10 @@ public class Address {
             this.number = parts[0];
         }if (parts.length >= 2) {
             this.street = parts[1];
+        }if (parts.length >= 3) {
+            this.street += " " + parts[2];
         }
+
     }
 
     public final String getNumber() {return number;}

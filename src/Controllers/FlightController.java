@@ -8,34 +8,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.spi.DirStateFactory.Result;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class FlightController {
     private Gui mainFrame; 
-    private DBController db;
+    
     private UserSession userInstance;
     private AirlineAgentPanel airlineAgentPanel;
     private AdminPanel adminPanel;
-
+    private DBController db = DBController.getOnlyInstance();
+    
+    private ArrayList<AirPlane> airplanes = new ArrayList<AirPlane>();
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Crew> currentCrew = new ArrayList<Crew>();
     private ArrayList<User> currentPassengers = new ArrayList<User>();
 
-    public FlightController (DBController db) {
-        this.db = db;
-        this.userInstance = UserSession.getInstance();
-    }
+    public FlightController () { this.userInstance = UserSession.getInstance();}
 
-    public FlightController (Gui mainFrame, DBController db) {
+    public FlightController (Gui mainFrame) {
         this.mainFrame = mainFrame;
-        this.db = db;
         this.userInstance = UserSession.getInstance();
     }
-
-    public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel;}
-    public void setAdminPanel(AdminPanel panel) { this.adminPanel = panel; }
 
     public ArrayList<Flight> browseFlights(){
         ArrayList<Flight> currentFlights = new ArrayList<>();
@@ -68,8 +64,6 @@ public class FlightController {
         
                 Flight flight = new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal, CM1, CM2, CM3);
                 currentFlights.add(flight);
-
-                
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,10 +114,7 @@ public class FlightController {
         return currentCrew;
     }
     
-    
     public ArrayList<AirPlane> browseAircrafts(){
-        ArrayList<AirPlane> airplanes = new ArrayList<>();
-
         try {
             ResultSet listedAircrafts = db.selectTable("AIRCRAFT");
             while (listedAircrafts.next()) {
@@ -137,13 +128,6 @@ public class FlightController {
         }
         return airplanes;
     }
-
-    public void addCrew(final Crew crew){ db.insertCrewUser(crew);}
-    public void removeCrew(final Crew crew){ db.removeUser(crew.getUserID());}
-    public void addAirCraft(final AirPlane airplane){ db.insertAircraft(airplane);}
-    public void removeAirCraft(final AirPlane airplane){ db.removeAircraft(airplane.getAircraftID()); }
-    public void addFlight(final Flight flight){ db.insertFlight(flight); }
-    public void removeFlight(final Flight flight){ db.removeFlight(flight.getFlightID()); }
 
     public ArrayList<User> retrievePassengerList(final Flight flight) {
         try {
@@ -169,7 +153,7 @@ public class FlightController {
                 while(allRegUsers.next()){
                     if (allRegUsers.getInt("userID") == userID){
                         int promotionID = allRegUsers.getInt("promotionID");
-                        Name regUserName = new Name(allRegUsers.getString("firstName"), allGuestUsers.getString("lastName"));
+                        Name regUserName = new Name(allRegUsers.getString("firstName"), allRegUsers.getString("lastName"));
                         Address userAddress = new Address(allRegUsers.getString("address"));
                         String email = allRegUsers.getString("email");
                         String pass = allRegUsers.getString("password");
@@ -187,4 +171,70 @@ public class FlightController {
         return currentPassengers;
         // return userList.toArray(new String[0]);
     }
+
+    public ArrayList<User> retrievePassengerList(final int flightID) {
+        try {
+            ResultSet usersInFlight = db.selectTableFromAttribute("TICKET", "flightID", flightID);
+            ResultSet allGuestUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 1);
+            ResultSet allRegUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 2);
+
+            while (usersInFlight.next()) {
+                int userID = usersInFlight.getInt("userID");
+
+                while(allGuestUsers.next()){
+                    if (allGuestUsers.getInt("userID") == userID){
+                        Name guestUserName = new Name(allGuestUsers.getString("firstName"), allGuestUsers.getString("lastName"));
+                        Address guestAddress = new Address(allGuestUsers.getString("address"));
+                        String email = allGuestUsers.getString("email");
+                        LocalDate birthDate = allGuestUsers.getDate("birthDate").toLocalDate();
+                        String phoneNum = allGuestUsers.getString("phoneNumber");  
+                        GuestUser guest = new GuestUser(userID, guestUserName, guestAddress, email, birthDate, phoneNum);
+                        currentPassengers.add(guest);    
+                    }
+                }
+
+                while(allRegUsers.next()){
+                    if (allRegUsers.getInt("userID") == userID){
+                        int promotionID = allRegUsers.getInt("promotionID");
+                        Name regUserName = new Name(allRegUsers.getString("firstName"), allRegUsers.getString("lastName"));
+                        Address userAddress = new Address(allRegUsers.getString("address"));
+                        String email = allRegUsers.getString("email");
+                        String pass = allRegUsers.getString("password");
+                        LocalDate birthDate = allRegUsers.getDate("birthDate").toLocalDate();
+                        String phoneNum = allRegUsers.getString("phoneNumber");  
+                        Float balance = allRegUsers.getFloat("balance");  
+                        RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress, email, pass, birthDate, phoneNum, balance);
+                        currentPassengers.add(regUser);    
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return currentPassengers;
+        // return userList.toArray(new String[0]);
+    }
+
+    public void addCrew(final Crew crew){ db.insertCrewUser(crew);}
+    public void removeCrew(final Crew crew){ db.removeUser(crew.getUserID());}
+    public void addAirCraft(final AirPlane airplane){ db.insertAircraft(airplane);}
+    public void removeAirCraft(final AirPlane airplane){ db.removeAircraft(airplane.getAircraftID()); }
+    public void addFlight(final Flight flight){ db.insertFlight(flight); }
+    public void removeFlight(final Flight flight){ db.removeFlight(flight.getFlightID()); }
+
+    /* SETTERS AND GETTERS */
+    public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel;}
+    public void setAdminPanel(AdminPanel panel) { this.adminPanel = panel; }
+    public void setAirplanes(ArrayList<AirPlane> ap) { this.airplanes = ap; }
+    public void setCurrentFlights(ArrayList<Flight> cf) { this.currentFlights = cf; }
+    public void setCurrentCrew(ArrayList<Crew> cc) { this.currentCrew = cc; }
+    public void setCurrentPassengers(ArrayList<User> cp) { this.currentPassengers = cp; }
+
+    public AirlineAgentPanel getAirlineAgentPanel() { return this.airlineAgentPanel;}
+    public AdminPanel getAdminPanel() { return this.adminPanel; }
+    public ArrayList<AirPlane>  getAirplanes() { return this.airplanes; }
+    public ArrayList<Flight> getCurrentFlights() { return this.currentFlights; }
+    public ArrayList<Crew>  getCurrentCrew() { return this.currentCrew; }
+    public ArrayList<User> getCurrentPassengers() { return this.currentPassengers; }
+
 }

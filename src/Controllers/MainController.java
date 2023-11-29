@@ -1,23 +1,22 @@
 package src.Controllers;
 
+import Controllers.FlightController;
 import src.Domain.*;
 import src.Presentation.*;
 
 public class MainController {
-    private DBController dbController;
+    private DBController db = DBController.getOnlyInstance();;
 
     private LoginController loginController;
     private SeatController seatController;
     private FlightController flightController;
 
-    public MainController () {
+    public MainController() { 
+        this.loginController = new LoginController(frame, db);
+        this.seatController = new SeatController(frame, db);
+        this.flightController = new FlightController(frame, db);
 
-        this.dbController = getOnlyInstance();
-        this.loginController = new LoginController(frame, dbController);
-        this.seatController = new SeatController(frame, dbController);
-        this.flightController = new FlightController(frame, dbController);
-
-        Gui frame = new Gui(loginController,flightController, seatController, dbController);
+        Gui frame = new Gui(loginController,flightController, seatController, db);
 
         this.loginController.setLoginPanel(frame.getLoginPanel());
         

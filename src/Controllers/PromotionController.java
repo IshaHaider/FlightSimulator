@@ -1,21 +1,20 @@
 package src.Controllers;
 
 import src.Domain.*;
+import src.Presentation.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+ 
 import java.time.LocalDate;
 
 public class PromotionController {
 
-    private DBController db;
+    private DBController db = DBController.getOnlyInstance();
     private ArrayList<Promotions> currentPromotions = new ArrayList<>();
 
-    public PromotionController(DBController db) {
-        this.db = db;
-        loadPromotions();
-    }
+    public PromotionController() { loadPromotions(); }
 
     private void loadPromotions() {
         try {
@@ -28,8 +27,7 @@ public class PromotionController {
                 LocalDate startDate = promotions.getDate("startDate").toLocalDate();
                 LocalDate endDate = promotions.getDate("endDate").toLocalDate();
 
-                Promotions promo = new Promotions(name, discount, startDate, endDate);
-                promo.setPromotionID(promotionID);
+                Promotions promo = new Promotions(promotionID, name, discount, startDate, endDate);
                 currentPromotions.add(promo);
             }
         } catch (SQLException e) {
@@ -39,35 +37,41 @@ public class PromotionController {
 
     public void addPromotion(final Promotions promotion) {
         db.insertPromotion(promotion);
-        currentPromotions.add(promotion);
+        // currentPromotions.add(promotion);
     }
 
     public void updatePromotion(Promotions promotion) {
         db.updatePromotion(promotion);
-        for (int i = 0; i < currentPromotions.size(); i++) {
-            if (currentPromotions.get(i).getPromotionID() == promotion.getPromotionID()) {
-                currentPromotions.set(i, promotion);
-                break;
-            }
-        }
+        // for (int i = 0; i < currentPromotions.size(); i++) {
+        //     if (currentPromotions.get(i).getPromotionID() == promotion.getPromotionID()) {
+        //         currentPromotions.set(i, promotion);
+        //         break;
+        //     }
+        // }
     }
 
     public Promotions getPromotion(int promotionID) {
-        for (Promotions promo : currentPromotions) {
-            if (promo.getPromotionID() == promotionID) {
-                return promo;
+        try {
+            ResultSet promos = db.selectTableFromAttribute("PROMOTIONS", "promotionID", promotionID);
+            if (promos.next()){
+                return new Promotions(promotionID, promos.getString("name"), 
+                promos.getString("discount"), promos.getDate("startDate").toLocalDate(), promos.getDate("endDate").toLocalDate());
             }
+        } catch (SQLException e) {
+        e.printStackTrace();
         }
+        // for (Promotions promo : currentPromotions) {
+        //     if (promo.getPromotionID() == promotionID) {
+        //         return promo;
+        //     }
+        // }
         return null;
     }
 
-    public void deletePromotion(int promotionID) {
-        db.removePromotion(promotionID);
-        currentPromotions.removeIf(p -> p.getPromotionID() == promotionID);
+    public void deletePromotion(int promotionID) { db.removePromotion(promotionID);
+        // currentPromotions.removeIf(p -> p.getPromotionID() == promotionID);
     }
 
-    public ArrayList<Promotions> getAllPromotions() {
-        return new ArrayList<>(currentPromotions);
-    }
-
+    public ArrayList<Promotions> getCurrentPromotions() {return this.currentPromotions; }
+    public void setCurrentPromotions(ArrayList<Promotions> cp) { this.currentPromotions = cp; }
 }

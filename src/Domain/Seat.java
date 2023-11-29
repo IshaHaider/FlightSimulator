@@ -17,10 +17,21 @@ public class Seat {
         this.cost = 0.0f;
         this.baggage = false;
         this.available = false;
-    }
+    } 
    
+    // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the seatID is auto-increment)
     public Seat(int seatID, int aircraftID, String seatName, AirplaneClass seatClass, float cost, boolean baggage, boolean available) {
         this.seatID = seatID;
+        this.aircraftID = aircraftID;
+        this.seatName = seatName;
+        this.seatClass = seatClass;
+        this.cost = cost;
+        this.baggage = baggage;
+        this.available = available;
+    }
+
+    // USE THIS FOR LOCAL STORAGE (to manually add userID)
+    public Seat(int aircraftID, String seatName, AirplaneClass seatClass, float cost, boolean baggage, boolean available) {
         this.aircraftID = aircraftID;
         this.seatName = seatName;
         this.seatClass = seatClass;

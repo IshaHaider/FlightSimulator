@@ -110,6 +110,6 @@ public class LoginPanel extends JPanel {
     private void logoutPanel() {
         UserSession.getInstance().logout();
         mainFrame.setUserLabel();
-        switchView("Home");
+        mainFrame.switchView("Home");
     }
 }
