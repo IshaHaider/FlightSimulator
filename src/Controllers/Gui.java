@@ -12,7 +12,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-
 public class Gui extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardsPanel;

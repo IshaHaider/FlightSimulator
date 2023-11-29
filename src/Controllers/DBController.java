@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 import java.sql.Date;
 import java.sql.Time;
 
@@ -387,9 +386,9 @@ public class DBController <T>{
             } else if (value instanceof Double) {
                 flightQuery.setDouble(1, (Double) value);
             } else if (value instanceof LocalDate) {
-                flightQuery.setDate(2, java.sql.Date.valueOf((value)));
+                flightQuery.setDate(1, java.sql.Date.valueOf((LocalDate)value));
             } else if (value instanceof LocalTime) {
-                flightQuery.setTime(2, java.sql.Time.valueOf((value)));
+                flightQuery.setTime(1, java.sql.Time.valueOf((LocalTime)value));
             } else {
                 throw new SQLException("Unsupported data type");
             }
@@ -419,9 +418,9 @@ public class DBController <T>{
             } else if (value1 instanceof Double) {
                 flightQuery.setDouble(1, (Double) value1);
             } else if (value1 instanceof LocalDate) {
-                flightQuery.setDate(2, java.sql.Date.valueOf((value1)));
+                flightQuery.setDate(1, java.sql.Date.valueOf((LocalDate)value1));
             } else if (value1 instanceof LocalTime) {
-                flightQuery.setTime(2, java.sql.Time.valueOf((value1)));
+                flightQuery.setTime(1, java.sql.Time.valueOf((LocalTime)value1));
             } else {
                 throw new SQLException("Unsupported data type");
             }
@@ -438,9 +437,9 @@ public class DBController <T>{
             } else if (value2 instanceof Double) {
                 flightQuery.setDouble(2, (Double) value2);
             } else if (value2 instanceof LocalDate) {
-                flightQuery.setDate(2, java.sql.Date.valueOf((value2)));
+                flightQuery.setDate(2, java.sql.Date.valueOf((LocalDate)value2));
             } else if (value2 instanceof LocalTime) {
-                flightQuery.setTime(2, java.sql.Time.valueOf((value2)));
+                flightQuery.setTime(2, java.sql.Time.valueOf((LocalTime)value2));
             } else {
                 throw new SQLException("Unsupported data type");
             }

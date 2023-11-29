@@ -1,12 +1,18 @@
 package src.Controllers;
 
+import src.Controllers.DBController;
+import src.Controllers.Gui;
 import src.Domain.*;
 import src.Presentation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
+
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 public class FlightController {
     private Gui mainFrame; 
@@ -41,16 +47,13 @@ public class FlightController {
                 int flightID = listedFlights.getInt("flightID");
                 int aircraftID = listedFlights.getInt("aircraftID");
                 
-                Date departDate1 = listedFlights.getString("departDate");
-                DDate departDate = new DDate(departDate1);
-
-                Time departTime1 = listedFlights.getString("departTime");
-                TTime 
-                Time arrivalDate = listedFlights.getString("arrivalDate");
-                Time arrivalTime = listedFlights.getStrign("arrivalTime");
-                String arrivalLocation = listedFlights.getStrign("arrivalLocation");
-                Status flightStatus = listedFlights.getStrign("flightStatus");
-                float cost = listedFlights.getStrign("cost");
+                LocalDate departDate = listedFlights.getDate("departDate").toLocalDate();
+                LocalTime departTime = listedFlights.getTime("departTime").toLocalTime();
+                LocalDate arrivalDate = listedFlights.getDate("arrivalDate").toLocalDate();
+                LocalTime arrivalTime = listedFlights.getTime("arrivalTime").toLocalTime();
+                String arrivalLocation = listedFlights.getString("arrivalLocation");
+                Status flightStatus = listedFlights.getString("flightStatus");
+                float cost = listedFlights.getString("cost");
 
                 Flight flight = new Flight(flightID, aircraftID, departDate, departTime, arrivalDate, arrivalTime, arrivalLocation, flightID, cost);
                 currentFlights.add(flight);
@@ -99,7 +102,7 @@ public class FlightController {
                 String lastName = listUsers.getString("lastName");
                 String address = listUsers.getString("address");
                 String email = listUsers.getString("email");
-                String birthDate = listUsers.getString("birthDate");
+                LocalDate birthDate = listUsers.getDate("birthDate").toLocalDate();
                 String phoneNum = listUsers.getString("phoneNumber");
                 
                 currentPassangerList.add(tmpUser);

@@ -5,7 +5,7 @@ import src.Presentation.*;
 
 public class MainController {
     private DBController dbController;
-    // private CommunicationSystem communicationSystemController;
+
     private LoginController loginController;
     private SeatController seatController;
     private FlightController flightController;

@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import java.time.LocalDate;
+
 public class LoginController {
     private Gui mainFrame; 
     private DBController db;
@@ -29,18 +31,18 @@ public class LoginController {
             while (allUsers.next()) {
                 int userID = allUsers.getInt("userID");
                 int accessLevel = allUsers.getInt("accessLevel");
-                int promotionID = allUsers.getString("promotionID");
+                int promotionID = allUsers.getInt("promotionID");
                 String firstName = allUsers.getString("firstName");
-                String lasttName = allUsers.getString("lastName");
-                String address = allUsers.getStrign("address");
-                String email = allUsers.getStrign("email");
-                enums.Status password = allUsers.getString("password");
-                Date birthDate = allUsers.getStrign("birthDate");
-                String phoneNumber = allUsers.getStrign("phoneNumber");
-                float balance = allUsers.getStrign("balance");
+                String lastName = allUsers.getString("lastName");
+                String address = allUsers.getString("address");
+                String email = allUsers.getString("email");
+                String password = allUsers.getString("password");
+                LocalDate birthDate = allUsers.getDate("birthDate").toLocalDate();
+                String phoneNumber = allUsers.getString("phoneNumber");
+                float balance = allUsers.getFloat("balance");
 
                 if (accessLevel == 1) {
-                    GuestUser guestUser = new GuestUser(userID, accessLevel, promotionID, firstName, lasttName, address, email, password, birthDate, phoneNumber, balance);
+                    GuestUser guestUser = new GuestUser(userID, accessLevel, promotionID, firstName, lastName, address, email, password, birthDate, phoneNumber, balance);
                     guestUsers.addUser(guestUser);
                 }
                 else if (accessLevel == 2) {
@@ -90,7 +92,7 @@ public class LoginController {
                 int day = Integer.parseInt(components[0]);
                 int month = Integer.parseInt(components[1]);
                 int year = Integer.parseInt(components[2]);
-                Date tmpDate = new Date(day,month,year);
+                LocalDate tmpDate;
 
                 String[] components2 = address.split(" "); // Split the string by space
                 String street = components2[0];

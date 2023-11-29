@@ -6,14 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Flight{
     private int flightID;
     private int aircraftID;
-    private DDate departDate;
-    private TTime departTime;
+    private LocalDate departDate;
+    private LocalTime departTime;
     private String departLocation;
-    private DDate arriveDate;
-    private TTime arriveTime;
+    private LocalDate arriveDate;
+    private LocalTime arriveTime;
     private String arriveLocation;
     private Status flightStatus;
     private float cost;
@@ -25,11 +28,7 @@ public class Flight{
     public Flight(){
         this.flightID = 0;
         this.aircraftID = 0;
-        this.departDate = new DDate();
-        this.departTime = new TTime();
         this.departLocation = "";
-        this.arriveDate = new DDate();
-        this.arriveTime = new TTime();
         this.arriveLocation = "";
         this.flightStatus = Status.OnTime;
         this.cost = 0.0f;
@@ -39,7 +38,7 @@ public class Flight{
         this.crewMember3 = 0;
     }
 
-    public Flight(int aircraftID, DDate departDate, TTime departTime, String departLocation, DDate arriveDate, TTime arriveTime,
+    public Flight(int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
     String arriveLocation, Status flightStatus, float cost, boolean meal, int crewMember1, int crewMember2, int crewMember3){
         this.aircraftID = aircraftID;
         this.departDate = departDate;
@@ -59,10 +58,10 @@ public class Flight{
 
     public final int getFlightID() {return flightID;}
     public final int getAircraftID() {return aircraftID;}
-    public final DDate getDepartDate() {return departDate;}
-    public final DDate getArriveDate() {return arriveDate;}
-    public final TTime getDepartTime() {return departTime;}
-    public final TTime getArriveTime() {return arriveTime;}
+    public final LocalDate getDepartDate() {return departDate;}
+    public final LocalDate getArriveDate() {return arriveDate;}
+    public final LocalTime getDepartTime() {return departTime;}
+    public final LocalTime getArriveTime() {return arriveTime;}
     public final String getDepartLocation() {return departLocation;}
     public final String getArriveLocation() {return arriveLocation;}
     public final Status getFlightStatus() {return flightStatus;}
@@ -74,10 +73,10 @@ public class Flight{
 
     public void setFlightID(final int flightID) {this.flightID = flightID;}
     public void setAircraftID(final int aircraftID) {this.aircraftID = aircraftID;}
-    public void setDepartDate(final DDate departDate) {this.departDate = departDate;}
-    public void setArriveDate(final DDate arriveDate) {this.arriveDate = arriveDate;}
-    public void setDepartTime(final TTime departTime) {this.departTime = departTime;}
-    public void setArriveTime(final TTime arriveTime) {this.arriveTime = arriveTime;}
+    public void setDepartDate(final LocalDate departDate) {this.departDate = departDate;}
+    public void setArriveDate(final LocalDate arriveDate) {this.arriveDate = arriveDate;}
+    public void setDepartTime(final LocalTime departTime) {this.departTime = departTime;}
+    public void setArriveTime(final LocalTime arriveTime) {this.arriveTime = arriveTime;}
     public void setDepartLocation(final String departLocation) {this.departLocation = departLocation;}
     public void setArriveLocation(final String arriveLocation) {this.arriveLocation = arriveLocation;}
     public void setFlightStatus(final Status flightStatus) {this.flightStatus = flightStatus;}

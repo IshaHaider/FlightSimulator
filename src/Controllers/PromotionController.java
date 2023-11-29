@@ -4,7 +4,8 @@ import src.Domain.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 public class PromotionController {
 
@@ -24,8 +25,8 @@ public class PromotionController {
                 int promotionID = promotions.getInt("promotionID");
                 String name = promotions.getString("name");
                 String discount = promotions.getString("discount");
-                Date startDate = promotions.getDate("startDate");
-                Date endDate = promotions.getDate("endDate");
+                LocalDate startDate = promotions.getDate("startDate").toLocalDate();
+                LocalDate endDate = promotions.getDate("endDate").toLocalDate();
 
                 Promotions promo = new Promotions(name, discount, startDate, endDate);
                 promo.setPromotionID(promotionID);

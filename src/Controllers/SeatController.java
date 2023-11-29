@@ -1,12 +1,16 @@
 package src.Controllers;
 
 import src.Domain.*;
+import src.Domain.Observer;
 import src.Presentation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.sql.Date;
+import java.sql.Time;
 
 public class SeatController implements Observer<T>{
 
@@ -43,13 +47,23 @@ public class SeatController implements Observer<T>{
             while (listedFlights.next()) {
                 int flightID = listedFlights.getInt("flightID");
                 int aircraftID = listedFlights.getInt("aircraftID");
-                Date departDate = listedFlights.getString("departDate");
-                String departTime = listedFlights.getString("departTime");
-                Time arrivalDate = listedFlights.getString("arrivalDate");
-                Time arrivalTime = listedFlights.getStrign("arrivalTime");
-                String arrivalLocation = listedFlights.getStrign("arrivalLocation");
-                Status flightStatus = listedFlights.getStrign("flightStatus");
-                float cost = listedFlights.getStrign("cost");
+                LocalDate departDate = listedFlights.getDate("departDate").toLocalDate();
+                LocalTime departTime = listedFlights.getTime("departTime").toLocalTime();
+                LocalDate arrivalDate = listedFlights.getDate("arrivalDate").toLocalDate();
+                LocalTime arrivalTime = listedFlights.getTime("arrivalTime").toLocalTime();
+                String arrivalLocation = listedFlights.getString("arrivalLocation");
+                String flightStatusString = listedFlights.getString("flightStatus");
+                float cost = listedFlights.getFloat("cost");
+                
+                // convert the flight status into status object
+                Status flightStatus;
+                Status[] statusValues = Status.values();
+                for (Status status : statusValues){
+                    if (flightStatusString.equals(status.toString())){
+                        flightStatus = status;  
+                        break;
+                    }
+                }
 
                 Flight flight = new Flight(flightID, aircraftID, departDate, departTime, arrivalDate, arrivalTime, arrivalLocation, flightID, cost);
                 currentFlights.add(flight);
@@ -69,8 +83,8 @@ public class SeatController implements Observer<T>{
                 String typeOfSeat = listedFlights.getString("class");
                 float cost = listedFlights.getStrign("cost");
                 boolean baggage = listedFlights.getStrign("baggage");
-                boolean avaliable = listedFlights.getStrign("avaliable");
-                Seat seat = new Seat( seatID, aircraftID,  seatName,  typeOfSeat,  cost,  baggage,  avaliable);
+                boolean available = listedFlights.getStrign("available");
+                Seat seat = new Seat( seatID, aircraftID,  seatName,  typeOfSeat,  cost,  baggage,  available);
                 currentSeats.add(seat);
             }
         } catch (SQLException e) {

@@ -3,7 +3,6 @@ package src.Domain;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
- 
 public class Crew extends User{
     ArrayList<Flight> assignedFlights;
     private String password;  

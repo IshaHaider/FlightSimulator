@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import java.time.LocalDate;
 import src.Controllers.DBController;
 
 public class RegisteredUser extends User{
@@ -18,13 +19,12 @@ public class RegisteredUser extends User{
         this.name = new Name();     
         this.address = new Address();      
         this.email = "";       
-        this.password = "";   
-        this.birthDate = new DDate(); 
+        this.password = "";
         this.phoneNumber = "";  
         this.balance = 0.0f;
     }
 
-    public RegisteredUser (int promotionID, Name name, Address address, String email, String password, DDate birthDate, String phoneNumber, float balance)  {
+    public RegisteredUser (int promotionID, Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, float balance)  {
         this.accessLevel = 2;
         this.promotionID = promotionID;
         this.name = name;     

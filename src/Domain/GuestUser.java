@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import java.time.LocalDate;
+
 public class GuestUser extends User{
     
     public GuestUser() {
         this.accessLevel = 1;
         this.name = new Name();     
         this.address = new Address();      
-        this.email = "";  
-        this.birthDate = new DDate(); 
+        this.email = ""; 
         this.phoneNumber = "";  
     }
 
-    public GuestUser(Name name, Address address, String email, DDate birthDate, String phoneNumber) {
+    public GuestUser(Name name, Address address, String email, LocalDate birthDate, String phoneNumber) {
         this.accessLevel = 1;
         this.name = name;     
         this.address = address;      
