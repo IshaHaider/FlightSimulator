@@ -26,12 +26,12 @@ public class CancelFlightPanel extends JPanel {
 
         // Ticket Number Field
         JLabel ticketNumberLabel = new JLabel("Ticket Number:");
-        ticketNumberField = new JTextField(15);
+        ticketNumField = new JTextField(15);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(ticketNumberLabel, gbc);
+        add(ticketNumField, gbc);
         gbc.gridx = 1;
-        add(ticketNumberField, gbc);
+        add(ticketNumField, gbc);
 
         // Flight ID Field
         JLabel flightIDLabel = new JLabel("Flight ID:");
@@ -78,24 +78,46 @@ public class CancelFlightPanel extends JPanel {
         int flightID = Integer.parseInt(flightIDField.getText());
         int seatID = Integer.parseInt(seatIDField.getText());
 
-        boolean confirmedCancel = seatController.cancelFlight(ticketNumber, flightID, seatID);
+        // boolean confirmedCancel = seatController.cancelFlight(ticketNumber, flightID, seatID);
+        
+        try {
+            seatController.cancelFlight(ticketNumber, flightID, seatID);
 
-        if (confirmedCancel){
             JOptionPane.showMessageDialog(
                 this,
                 "Flight Cancellation Confirmed\n" +
-                "Ticket Number: " + ticketNumberField.getText() + "\n" +
+                "Ticket Number: " + ticketNumField.getText() + "\n" +
                 "FlightID: " + flightIDField.getText() + "\n" +
-                "SeatID: " + seatIDField.getText() + "\n" +
-                "Cancellation",
+                "SeatID: " + seatIDField.getText() + "\n",
+                "Cancellation Confirmation",
                 JOptionPane.INFORMATION_MESSAGE
             );
-        } else {
-                JOptionPane.showMessageDialog(
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
                 this,
                 "ERROR CHECK INPUTS",
+                "Error",
                 JOptionPane.INFORMATION_MESSAGE
             );
         }
+
+        // if (confirmedCancel){
+        //     JOptionPane.showMessageDialog(
+        //         this,
+        //         "Flight Cancellation Confirmed\n" +
+        //         "Ticket Number: " + ticketNumberField.getText() + "\n" +
+        //         "FlightID: " + flightIDField.getText() + "\n" +
+        //         "SeatID: " + seatIDField.getText() + "\n" +
+        //         "Cancellation",
+        //         JOptionPane.INFORMATION_MESSAGE
+        //     );
+        // } else {
+        //         JOptionPane.showMessageDialog(
+        //         this,
+        //         "ERROR CHECK INPUTS",
+        //         JOptionPane.INFORMATION_MESSAGE
+        //     );
+        // }
     }
 }

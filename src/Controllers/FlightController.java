@@ -25,11 +25,13 @@ public class FlightController {
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Crew> currentCrew = new ArrayList<Crew>();
     private ArrayList<User> currentPassengers = new ArrayList<User>();
+    private ArrayList<RegisteredUser> currentRegisteredUsers = new ArrayList<RegisteredUser>();
 
-    public FlightController () { this.userInstance = UserSession.getInstance();}
+    // public FlightController () { this.userInstance = UserSession.getInstance();}
 
-    public FlightController (Gui mainFrame) {
-        this.mainFrame = mainFrame;
+    // public FlightController (Gui mainFrame) {
+    public FlightController () {
+        // this.mainFrame = mainFrame;
         this.userInstance = UserSession.getInstance();
     }
 
@@ -213,6 +215,32 @@ public class FlightController {
         }
         return currentPassengers;
         // return userList.toArray(new String[0]);
+    }
+
+    public ArrayList<RegisteredUser> browseRegisteredUsers(){
+        try {
+            ResultSet listedRegUser = db.selectTable("ALLUSERS");
+            while (listedRegUser.next()) {
+                int accessLevel = listedRegUser.getInt("accessLevel");
+
+                if(accessLevel ==2){
+                    int userID = listedRegUser.getInt("userID");
+                    int promotionID = listedRegUser.getInt("promotionID");
+                    Name regUserName = new Name(listedRegUser.getString("firstName"), listedRegUser.getString("lastName"));
+                    Address userAddress = new Address(listedRegUser.getString("address"));
+                    String email = listedRegUser.getString("email");
+                    String password = listedRegUser.getString("password");
+                    LocalDate birthDate = listedRegUser.getDate("birthDate").toLocalDate();
+                    String phoneNumber = listedRegUser.getString("phoneNumber");
+                    float balance = listedRegUser.getFloat("balance");
+                    RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress, email, password, birthDate, phoneNumber, balance);
+                    currentRegisteredUsers.add(regUser);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return currentRegisteredUsers;
     }
 
     public void addCrew(final Crew crew){ db.insertCrewUser(crew);}

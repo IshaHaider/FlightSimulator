@@ -54,7 +54,7 @@ public class AirlineAgentPanel extends JPanel {
 
         JButton browsePassangerListbutton = new JButton("Browse Passanger List"); //NEEDA DO SOMETHING TO SHOW LIST IDK YET
         browsePassangerListbutton.addActionListener( 
-            browsePassangerList() 
+            e -> browsePassangerList() 
         );
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -64,10 +64,16 @@ public class AirlineAgentPanel extends JPanel {
 
     public void browsePassangerList() {
         int flightId = Integer.parseInt(flightIdField.getText()); // Get flight ID from the text field
-        String [] passengerArray = flightController.retrivePassangerList(flightId);
+        ArrayList<User> passengerArray = flightController.retrievePassengerList(flightId);
 
+        String[] passengerNames = new String[passengerArray.size()];
+        for (int i = 0; i < passengerArray.size(); i++) {
+            String firstName = passengerArray.get(i).getName().getFirstName();
+            String lastName = passengerArray.get(i).getName().getLastName();
+            passengerNames[i] = firstName + " " + lastName;
+        }
         // Create a JList with the array of Strings
-        JList<String> passengerList = new JList<>(passengerArray);
+        JList<String> passengerList = new JList<>(passengerNames);
 
         // Put JList in a JScrollPane for scrollability
         JScrollPane scrollPane = new JScrollPane(passengerList);

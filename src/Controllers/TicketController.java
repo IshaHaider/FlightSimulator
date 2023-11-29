@@ -18,7 +18,7 @@ public class TicketController {
     }
 
     public boolean cancelFlight(String ticketNum, String flightID, String seatID) {
-        ArrayList<Ticket> tmp = Ticket.getTickets();
+        ArrayList<Ticket> tmp = Ticket.getTickets(); //
         return false;
     }
 }

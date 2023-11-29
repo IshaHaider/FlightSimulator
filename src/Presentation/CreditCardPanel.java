@@ -93,7 +93,8 @@ public class CreditCardPanel extends JPanel {
                 // If all validations pass
                 JOptionPane.showMessageDialog(CreditCardPanel.this,"Purchase Confirmed!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
                 displayPurchaseSummary();
-                seatController.purchaseSeat(flightID, aircraftID, null ,seatID); // What would i give for userID if its self-incrementing????????
+                // CHANGE THIS LINE
+                seatController.purchaseSeat(flightID, aircraftID, 0 ,seatID); // What would i give for userID if its self-incrementing????????
             }
         });
         gbc.gridx = 0;

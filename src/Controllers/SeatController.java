@@ -26,10 +26,10 @@ public class SeatController{
         // currentFlights = new FlightController().browseFlights(); 
     } 
 
-    public SeatController (Gui mainFrame) { 
-        this.mainFrame = mainFrame;
-        // currentFlights = new FlightController().browseFlights(); 
-    } 
+    // public SeatController (Gui mainFrame) { 
+    //     this.mainFrame = mainFrame;
+    //     // currentFlights = new FlightController().browseFlights(); 
+    // } 
 
     private void loadSeats(int givenAircraftID) {
         AirplaneClass[] classValues = AirplaneClass.values(); // Check if class is in the AirplaneClass enum
