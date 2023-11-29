@@ -1,6 +1,8 @@
 package src.Domain;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
+
  
 public class Crew extends User{
     ArrayList<Flight> assignedFlights;
@@ -11,13 +13,12 @@ public class Crew extends User{
         this.name = new Name();     
         this.address = new Address();      
         this.email = "";  
-        this.password = "";  
-        this.birthDate = new DDate(); 
+        this.password = ""; 
         this.phoneNumber = ""; 
         this.assignedFlights = new ArrayList<>();
     }
 
-    public Crew (Name name, Address address, String email, String password, DDate birthDate, String phoneNumber){
+    public Crew (Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber){
         this.accessLevel = 3;
         this.name = name;     
         this.address = address;      
@@ -28,7 +29,7 @@ public class Crew extends User{
     }
     
 
-    public Crew (Name name, Address address, String email, String password, DDate birthDate, String phoneNumber, ArrayList<Flight> assignedFlight){
+    public Crew (Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, ArrayList<Flight> assignedFlight){
         this.accessLevel = 3;
         this.name = name;     
         this.address = address;      

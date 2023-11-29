@@ -1,4 +1,5 @@
 package src.Domain;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public abstract class User {
@@ -7,7 +8,7 @@ public abstract class User {
     protected Name name;
     protected Address address;
     protected String email;
-    protected DDate birthDate;
+    protected LocalDate birthDate;
     protected String phoneNumber;
      
     public int getUserID() {return userID;}
@@ -15,7 +16,7 @@ public abstract class User {
     public Name getName() {return name;}
     public Address getAddress() {return address;}
     public String getEmail() {return email;}
-    public DDate getBirthDate() {return birthDate;}
+    public LocalDate getBirthDate() {return birthDate;}
     public String getPhoneNumber() {return phoneNumber;}
     
     public void setUserID(final int userID) {this.userID = userID;}
@@ -23,7 +24,7 @@ public abstract class User {
     public void setName(final Name name) {this.name = name;}
     public void setAddress(final Address address) {this.address = address;}
     public void setEmail(final String email) {this.email = email;}
-    public void setBirthDate(final DDate birthDate) {this.birthDate = birthDate;}
+    public void setBirthDate(final LocalDate birthDate) {this.birthDate = birthDate;}
     public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
 
     public abstract ArrayList<Flight> getFlights(final String destination);

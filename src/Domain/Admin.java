@@ -1,6 +1,8 @@
 package src.Domain;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
+
 
 public class Admin extends User {
     private String password;  
@@ -10,12 +12,11 @@ public class Admin extends User {
         this.name = new Name();     
         this.address = new Address();      
         this.email = "";  
-        this.password = "";  
-        this.birthDate = new DDate(); 
+        this.password = "";
         this.phoneNumber = ""; 
     }
 
-    public Admin(Name name, Address address, String email, String password, DDate birthDate, String phoneNumber){
+    public Admin(Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber){
         this.accessLevel = 4;
         this.name = name;     
         this.address = address;      
