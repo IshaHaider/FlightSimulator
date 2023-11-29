@@ -3,14 +3,13 @@ package src.Presentation;
 import javax.swing.*;
 
 import java.awt.*;
-import java.time.LocalDate; // Import LocalDate
+import java.time.LocalDate;
 
 public class UserPanel extends JPanel {
     public UserPanel(Gui mainFrame) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Welcome label
         JLabel welcomeLabel = new JLabel("Welcome to the Flight Reservation System", SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -19,11 +18,11 @@ public class UserPanel extends JPanel {
         gbc.anchor = GridBagConstraints.PAGE_START;
         add(welcomeLabel, gbc);
 
-        // Check if today is the first day of the month
+        // Promotions
         LocalDate today = LocalDate.now();
         if (today.getDayOfMonth() == 1) {
-            JLabel promotionsLabel = new JLabel("Here's your monthly promotion news! Discounts at airport lounges and 1 free companion ticket once a year.", SwingConstants.CENTER);
-            gbc.gridy = 1; // Adjust grid position for the label
+            JLabel promotionsLabel = new JLabel("Here's your monthly promotion news! Discounts at airport lounges and more!", SwingConstants.CENTER);
+            gbc.gridy = 1;
             gbc.insets = new Insets(20, 10, 10, 10);
             add(promotionsLabel, gbc);
         }

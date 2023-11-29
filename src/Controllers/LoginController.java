@@ -1,14 +1,11 @@
 package src.Controllers;
+
+import src.Domain.*;
+import src.Presentation.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import Domain.*;
-import Presentation.*;
-import src.Controllers.DBController;
-import src.Domain.GuestUser;
-import src.Domain.User;
-import src.Presentation.UserSession;
 
 public class LoginController {
     private Gui mainFrame; 
@@ -37,7 +34,7 @@ public class LoginController {
                 String lasttName = allUsers.getString("lastName");
                 String address = allUsers.getStrign("address");
                 String email = allUsers.getStrign("email");
-                Status password = allUsers.getStrign("password");
+                enums.Status password = allUsers.getString("password");
                 Date birthDate = allUsers.getStrign("birthDate");
                 String phoneNumber = allUsers.getStrign("phoneNumber");
                 float balance = allUsers.getStrign("balance");
@@ -66,47 +63,44 @@ public class LoginController {
         }
     }
     
-    public void validLogin(String username, String password) {
-        if (!username.isEmpty() && !password.isEmpty() ) { // should be checking databse here
-
+    public void validLogin(String email, String password) {
+        if (!email.isEmpty() && !password.isEmpty() ) { // should be checking databse here
             ResultSet result = db.selectUSER(email, password);
             int retrievedAccessLevel = result.getInt("accessLevel");
-            userInstance.setUserName(username);
+            userInstance.setUserName(email);
             userInstance.setAccessLevel(retrievedAccessLevel);
-            
         }
-        
-        if (userInstance.getAccessLevel() != 0) {
-            mainFrame.setUserLabel(); // Update the user label in the main GUI
-            if (userInstance.getAccessLevel() == 1) {
-                mainFrame.switchView("Home");
-            }
-            else if (userInstance.getAccessLevel() == 2) {
-                mainFrame.switchView("UserPanel");
-            }
-            else if (userInstance.getAccessLevel() == 3) {
-                mainFrame.switchView("AirlineAgentPanel");
-            }
-            else if (userInstance.getAccessLevel() == 4) {
-                mainFrame.switchView("AdminPanel");
-            }
-        } else {
-            loginPanel.setStatusLabel("Login failed.");
-        }
+        loginPanel.clearFields();
+        mainFrame.switchViewBasedOnAccessLevel();
     }
 
-    public void createLogin(String username, String password) {
-        if (username.isEmpty() || password.isEmpty()) {
+    public void createLogin(String DOFB, String password, String email, String fName, String lName, String address, String phoneNum) {
+        if (email.isEmpty() || password.isEmpty() || DOFB.isEmpty() || fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNum.isEmpty()) {
             loginPanel.setStatusLabel("Please fill in all fields.");
         }
         for (RegisteredUsers user : registeredUsers) {
-            if (user.getUserName().equals(username)) {
-                loginPanel.setStatusLabel("Username already exists.");
+            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                loginPanel.setStatusLabel("User already exists.");
                 return;
             }
-            else {
-                // NEED TO CREATE NEW USER IN DATABASE AND OBJECT ADD TO ARRAYLIST AND DB
-                // db.insertUser(username, password);
+            else {                
+                Name tmpName = new Name(fName, lName);
+                
+                String[] components = DOFB.split(" "); // Split the string by space
+                int day = Integer.parseInt(components[0]);
+                int month = Integer.parseInt(components[1]);
+                int year = Integer.parseInt(components[2]);
+                Date tmpDate = new Date(day,month,year);
+
+                String[] components2 = address.split(" "); // Split the string by space
+                String street = components2[0];
+                String city = components2[1];
+                String postalCode = components2[2];
+                String Country = components2[3];
+                Address tmpAddy = new Address(street, city, postalCode, Country);
+                
+                RegisteredUser tmpRegUser = new RegisteredUser(tmpName, tmpDate, tmpAddy, phoneNum, email, password, 2, null);
+                db.insertRegisteredUser(tmpRegUser);
                 mainFrame.switchView("UserPanel");
                 loginPanel.setStatusLabel("Registration successful.");
                 loginPanel.clearFields();

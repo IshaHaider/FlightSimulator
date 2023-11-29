@@ -7,101 +7,88 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CancelFlightPanel extends JPanel {
-    private JTextField flightNumberField;
-    private JTextField fromField;
-    private JTextField toField;
-    private JTextField timeField;
+    private JTextField ticketNumField;
+    private JTextField flightIDField;
+    private JTextField seatIDField;
 
-    public CancelFlightPanel(Gui mainFrame) {
+    SeatController seatController;
+
+    public CancelFlightPanel(Gui mainFrame, SeatController seatController) {
+        this.seatController = seatController;
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Flight Number Field
-        JLabel flightNumberLabel = new JLabel("Flight Number:");
-        flightNumberField = new JTextField(15);
+        // Ticket Number Field
+        JLabel ticketNumberLabel = new JLabel("Ticket Number:");
+        ticketNumberField = new JTextField(15);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(flightNumberLabel, gbc);
+        add(ticketNumberLabel, gbc);
         gbc.gridx = 1;
-        add(flightNumberField, gbc);
+        add(ticketNumberField, gbc);
 
-        // From Field
-        JLabel fromLabel = new JLabel("From:");
-        fromField = new JTextField(15);
+        // Flight ID Field
+        JLabel flightIDLabel = new JLabel("Flight ID:");
+        flightIDField = new JTextField(15);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(fromLabel, gbc);
+        add(flightIDLabel, gbc);
         gbc.gridx = 1;
-        add(fromField, gbc);
+        add(flightIDField, gbc);
 
-        // To Field
-        JLabel toLabel = new JLabel("To:");
-        toField = new JTextField(15);
+        // Seat ID Field
+        JLabel seatIDLabel = new JLabel("Seat ID:");
+        seatIDField = new JTextField(15);
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(toLabel, gbc);
+        add(seatIDLabel, gbc);
         gbc.gridx = 1;
-        add(toField, gbc);
-
-        // Time of Flight Field
-        JLabel timeLabel = new JLabel("Time of Flight:");
-        timeField = new JTextField(15);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        add(timeLabel, gbc);
-        gbc.gridx = 1;
-        add(timeField, gbc);
+        add(seatIDField, gbc);
 
         // Cancel Flight Button
         JButton cancelFlightButton = new JButton("Cancel Flight");
         cancelFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cancelFlight();
+                confirmAndCancelFlight();
             }
         });
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
         add(cancelFlightButton, gbc);
 
         // Back Button
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> mainFrame.switchView("Home"));
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 4;
+        gbc.gridwidth = 2;
         add(backButton, gbc);
     }
 
-    private void cancelFlight() {
-        String flightNumber = flightNumberField.getText();
-        String from = fromField.getText();
-        String to = toField.getText();
-        String time = timeField.getText();
+    private void confirmAndCancelFlight() {
+        int ticketNumber = Integer.parseInt(ticketNumField.getText());
+        int flightID = Integer.parseInt(flightIDField.getText());
+        int seatID = Integer.parseInt(seatIDField.getText());
 
-        // Confirmation dialog
-        int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to cancel the flight?",
-            "Confirm Cancellation",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
+        boolean confirmedCancel = seatController.cancelFlight(ticketNumber, flightID, seatID);
 
-        // Check if user confirmed the cancellation
-        if (confirm == JOptionPane.YES_OPTION) {
-            // For demonstration purposes, printing to the console
-            System.out.println("Cancelling Flight: " + flightNumber + ", From: " + from + ", To: " + to + ", Time: " + time);
-            // Here you would typically handle the cancellation logic
-            
-            // Show flight cancellation confirmation
+        if (confirmedCancel){
             JOptionPane.showMessageDialog(
                 this,
                 "Flight Cancellation Confirmed\n" +
-                "Flight Number: " + flightNumber + "\n" +
-                "From: " + from + "\n" +
-                "To: " + to + "\n" +
-                "Time: " + time,
+                "Ticket Number: " + ticketNumberField.getText() + "\n" +
+                "FlightID: " + flightIDField.getText() + "\n" +
+                "SeatID: " + seatIDField.getText() + "\n" +
                 "Cancellation",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+                JOptionPane.showMessageDialog(
+                this,
+                "ERROR CHECK INPUTS",
                 JOptionPane.INFORMATION_MESSAGE
             );
         }

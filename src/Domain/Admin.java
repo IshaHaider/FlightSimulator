@@ -4,46 +4,70 @@ import java.util.ArrayList;
 
 public class Admin extends User {
 
-    public Admin(int userID, Name name, Date dateOfBirth, Address address, int phoneNumber, Email email, String password, int accessLevel) {
-        this.userID = userID; 
+    public Admin(){
+        this.accessLevel = "4";
+        this.promotionID = 0;
+        this.name = new Name();     
+        this.address = new Address();      
+        this.email = "";       
+        this.password = "";   
+        this.birthDate = new Date(); 
+        this.phoneNumber = "";  
+        this.balance = 1000000000.0;
+    }
+
+    public Admin(Name name, Date birthDate, Address address, String phoneNumber, String email, String password, int accessLevel) {
+        this.accessLevel = accessLevel;
         this.name = name;     
-        this.dateOfBirth = dateOfBirth; 
-        this.address = address;       
-        this.phoneNumber = phoneNumber; 
-        this.email = email;            
-        this.password = password;     
-        this.accessLevel = accessLevel; 
+        this.address = address;      
+        this.email = email;       
+        this.password = password;   
+        this.birthDate = birthDate; 
+        this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public void viewFlightInformation(final Flight flight) {
-    }
+    public int getUserID() {return userID;}
+    public int getAccessLevel() {return accessLevel;}
+    public Name getName() {return name;}
+    public Address getAddress() {return address;}
+    public String getEmail() {return email;}
+    public String getPassword() {return password;}
+    public Date getBirthDate() {return birthDate;}
+    public String getPhoneNumber() {return phoneNumber;}
 
-    @Override
-    public void manageReservation(Flight flight, Seat seat){
-        if(flight.getSeat(Admin.getUserID()).getavailability()){
-            assignSeat(null, flight.getSeat(this.userId) , flight); // unassign the seat
-            flight.getSeat().setavailability(true); // change the seat to available
-            assignSeat(Admin.getUserID(), seat, flight); // assign the seat
+    public void setUserID(final int userID) {this.userID = userID;}
+    public void setAccessLevel(final int accessLevel) {this.accessLevel = accessLevel;}
+    public void setName(final Name name) {this.name = name;}
+    public void setAddress(final Address address) {this.address = address;}
+    public void setEmail(final String email) {this.email = email;}
+    public void setPassword(final String password) {this.password = password;}
+    public void setBirthDate(final Date birthDate) {this.birthDate = birthDate;}
+    public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
 
-            // update the arraylist of registered flights
-            for(int i = 0; i < registeredFlights.size(); i++){
-                if(registeredFlights.get(i).getFlightNumber() == flight.getFlightNumber()){
-                    registeredFlights.set(i, flight);
-                }
-            }
-        }
-    }
+    // public ArrayList<User> getFlightPassengers(Flight flight) {
+    //     ArrayList<User> passengers = flight.getPassengerList();
+    //     return passengers;
+    // }
 
-    void viewFlightPassengers(Flight flight) {
-    }
+    // public ArrayList<RegisteredUser> getRegisteredUsers() {
+        
+    // }
 
-    void manageAircraft() {
-    }
+    // public void addAircraft(AirPlane airplane) {}
 
-    void manageFlight(Flight flight) {
-    }
+    // public void addFlight(Flight flight) {}
 
-    void assignCrew(Crew crew) {
-    }
+    // public void removeAircraft(AirPlane airplane) {}
+
+    // public void removeFlight(Flight flight) {}
+
+    // public void modifyAircraft(AirPlane airplane) {}
+
+    // public void modifyFlight(Flight flight) {}
+
+    // public void modifyUser(AirPlane airplane) {}
+
+    // public void modifyTicket(Flight flight) {}
+
+    // public void assignCrew(Crew crew) {}
 }

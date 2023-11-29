@@ -2,11 +2,11 @@ package src.Presentation;
 
 public class UserSession {
     private static UserSession instance;
-    private String userName;
+    private String email;
     private int accessLevel; // 1 for user, 2 for airline agent, 3 for admin
 
     private UserSession() {
-        userName = ""; // Initially, no user is logged in
+        email = ""; // Initially, no user is logged in
     }
 
     public static UserSession getInstance() {
@@ -17,11 +17,11 @@ public class UserSession {
     }
 
     public String getUserName() {
-        return userName;
+        return email;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String email) {
+        this.email = email;
     }
 
     public int getAccessLevel() {
@@ -33,10 +33,10 @@ public class UserSession {
     }
     
     public boolean isLoggedIn() {
-        return !userName.isEmpty();
+        return !email.isEmpty();
     }
 
     public void logout() {
-        userName = "";
+        email = "";
     }
 }

@@ -6,118 +6,126 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
-public class Flight implements Subject {
-    private String flightNumber;
-    private Airplane assignedPlane;
-    private Map<Seat, User> assignedSeats;
-    private Date departureDate;
-    private Date arrivalDate;
-    private Time departureTime;
-    private Time arrivalTime;
-    private String departureLocation;
-    private String arrivalLocation;
+public class Flight{
+    private int flightID;
+    private int aircraftID;
+    private Date departDate;
+    private Time departTime;
+    private String departLocation;
+    private Date arriveDate;
+    private Time arriveTime;
+    private String arriveLocation;
     private Status flightStatus;
     private float cost;
-    private int flightID;
-    private List<Observer> observers = new ArrayList<>();
+    private boolean meal;
+    private int crewMember1;
+    private int crewMember2;
+    private int crewMember3;
 
-    public Flight() {
-        this.flightNumber = "";
-        this.assignedPlane = new Airplane();
-        this.assignedSeats = new Map<Seat, User>();
-        this.departureDate = new Date();
-        this.arrivalDate = new Date();
-        this.departureTime = new Time(0);
-        this.arrivalTime = new Time(0);
-        this.departureLocation = "";
-        this.arrivalLocation = "";
-        this.flightStatus = Status.SCHEDULED;
-        this.cost = 0.0f;
+    public Flight(){
         this.flightID = 0;
+        this.aircraftID = 0;
+        this.departDate = new Date();
+        this.departTime = new Time(0);
+        this.departLocation = "";
+        this.arriveDate = new Date();
+        this.arriveTime = new Time(0);
+        this.arriveLocation = "";
+        this.flightStatus = Status.OnTime;
+        this.cost = 0.0f;
+        this.meal = false;
+        this.crewMember1 = 0;
+        this.crewMember2 = 0;
+        this.crewMember3 = 0;
     }
 
-    public Flight(final String flightNumber, final Airplane assignedPlane, final Map<Seat, User> assignedSeats, final Date departureDate, 
-    final Date arrivalDate, final Time departureTime, final Time arrivalTime, final String departureLocation, final String arrivalLocation, 
-    final Status flightStatus, final float cost, final int flightID) {
-        this.flightNumber = flightNumber;
-        this.assignedPlane = assignedPlane;
-        this.assignedSeats = assignedSeats;
-        this.departureDate = departureDate;
-        this.arrivalDate = arrivalDate;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
-        this.departureLocation = departureLocation;
-        this.arrivalLocation = arrivalLocation;
+    public Flight(int aircraftID, Date departDate, Time departTime, String departLocation, Date arriveDate, Time arriveTime,
+    String arriveLocation, Status flightStatus, float cost, boolean meal, int crewMember1, int crewMember2, int crewMember3){
+        this.aircraftID = aircraftID;
+        this.departDate = departDate;
+        this.departTime = departTime;
+        this.departLocation = departLocation;
+        this.arriveDate = arriveDate;
+        this.arriveTime = arriveTime;
+        this.arriveLocation = arriveLocation;
         this.flightStatus = flightStatus;
         this.cost = cost;
-        this.flightID = flightID;
+        this.meal = meal;
+        this.crewMember1 = crewMember1;
+        this.crewMember2 = crewMember2;
+        this.crewMember3 = crewMember3;
     }
 
-    public final String getFlightNumber() {return flightNumber;}
-    public final Date getDepartureDate() {return departureDate;}
-    public final Date getArrivalDate() {return arrivalDate;}
-    public final Time getDepartureTime() {return departureTime;}
-    public final Time getArrivalTime() {return arrivalTime;}
-    public final String getDepartureLocation() {return departureLocation;}
-    public final String getArrivalLocation() {return arrivalLocation;}
+
+    public final int getFlightID() {return flightID;}
+    public final int getAircraftID() {return aircraftID;}
+    public final Date getDepartDate() {return departDate;}
+    public final Date getArriveDate() {return arriveDate;}
+    public final Time getDepartTime() {return departTime;}
+    public final Time getArriveTime() {return arriveTime;}
+    public final String getDepartLocation() {return departLocation;}
+    public final String getArriveLocation() {return arriveLocation;}
     public final Status getFlightStatus() {return flightStatus;}
     public final float getCost() {return cost;}
-    public final int getFlightID() {return flightID;}
-    public final Airplane getAssignedPlane() {return assignedPlane;}
-    public final Map<Seat, User> getAssignedSeats() {return assignedSeats;}
-    
-    public void setFlightNumber(final String flightNumber) {this.flightNumber = flightNumber;}
-    public void setDepartureDate(final Date departureDate) {this.departureDate = departureDate;}
-    public void setArrivalDate(final Date arrivalDate) {this.arrivalDate = arrivalDate;}
-    public void setDepartureTime(final Time departureTime) {this.departureTime = departureTime;}
-    public void setArrivalTime(final Time arrivalTime) {this.arrivalTime = arrivalTime;}
-    public void setDepartureLocation(final String departureLocation) {this.departureLocation = departureLocation;}
-    public void setArrivalLocation(final String arrivalLocation) {this.arrivalLocation = arrivalLocation;}
+    public final boolean getMeal() {return meal;}
+    public final int getCrewMember1() {return crewMember1;}
+    public final int getCrewMember2() {return crewMember2;}
+    public final int getCrewMember3() {return crewMember3;}
+
+    public void setFlightID(final int flightID) {this.flightID = flightID;}
+    public void setAircraftID(final int aircraftID) {this.aircraftID = aircraftID;}
+    public void setDepartDate(final Date departDate) {this.departDate = departDate;}
+    public void setArriveDate(final Date arriveDate) {this.arriveDate = arriveDate;}
+    public void setDepartTime(final Time departTime) {this.departTime = departTime;}
+    public void setArriveTime(final Time arriveTime) {this.arriveTime = arriveTime;}
+    public void setDepartLocation(final String departLocation) {this.departLocation = departLocation;}
+    public void setArriveLocation(final String arriveLocation) {this.arriveLocation = arriveLocation;}
     public void setFlightStatus(final Status flightStatus) {this.flightStatus = flightStatus;}
     public void setCost(final float cost) {this.cost = cost;}
-    public void setFlightID(final Flight flight) {this.assignedPlane = assignedPlane;}
-    public void setAssignedSeats(final Map<Seat, User> assignedSeats) {this.assignedSeats = assignedSeats;}
-    public void setAssignedPlane(final Airplane assignedPlane) {this.assignedPlane = assignedPlane;}
+    public void setMeal(final boolean meal) {this.meal = meal;}
+    public void setCrewMember1(final int crewMember1) {this.crewMember1 = crewMember1;}
+    public void setCrewMember2(final int crewMember2) {this.crewMember2 = crewMember2;}
+    public void setCrewMember3(final int crewMember3) {this.crewMember3 = crewMember3;}
 
-    public final ArrayList<User> getPassengerList() {
-        ArrayList<User> passengerList = new ArrayList<>();
-        for (Map.Entry<Seat, User> entry : assignedSeats.entrySet()) {
-            passengerList.add(entry.getValue());
-        }
-        return passengerList;
-    }
+    // public final ArrayList<User> getPassengerList() {
+    //     ArrayList<User> passengerList = new ArrayList<>();
+    //     for (Map.Entry<Seat, User> entry : assignedSeats.entrySet()) {
+    //         passengerList.add(entry.getValue());
+    //     }
+    //     return passengerList;
+    // }
 
-    public final Seat getSeat(final int userID) {
-        for (Map.Entry<Seat, User> entry : assignedSeats.entrySet()) {
-            if (entry.getValue().getUserID() == userID) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
+    // public final Seat getSeat(final int userID) {
+    //     for (Map.Entry<Seat, User> entry : assignedSeats.entrySet()) {
+    //         if (entry.getValue().getUserID() == userID) {
+    //             return entry.getKey();
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
-    public void assignSeat(final int userID, final Seat seat) {
-        seat.setUserID(userID);
-        seat.setIsAvailable(false);
-    }
+    // public void assignSeat(final int userID, final Seat seat) {
+    //     seat.setUserID(userID);
+    //     seat.setIsAvailable(false);
+    // }
 
-    @Override
-    public void addObserver(Observer o) {
-        if(!observers.contains(o)) {
-            observers.add(o);
-        }
-    }
+    // @Override
+    // public void addObserver(Observer o) {
+    //     if(!observers.contains(o)) {
+    //         observers.add(o);
+    //     }
+    // }
 
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
+    // @Override
+    // public void removeObserver(Observer o) {
+    //     observers.remove(o);
+    // }
 
-    @Override
-    public void notifyAllObservers() {
-        for(Observer o : observers) {
-            o.update(this, null);
-        }
-    }
+    // @Override
+    // public void notifyAllObservers() {
+    //     for(Observer o : observers) {
+    //         o.update(this, null);
+    //     }
+    // }
 }

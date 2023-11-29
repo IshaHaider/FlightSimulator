@@ -1,18 +1,20 @@
 package src.Controllers;
+
+import src.Domain.*;
+import src.Presentation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Domain.*;
-import Presentation.*;
-import src.Controllers.DBController;
 
-public class SeatController {
+public class SeatController implements Observer<T>{
 
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Seat> currentSeats = new ArrayList<Seat>();
     private DBController db;
     private SearchFlightPanel searchFlightPanel;
+    private CreditCardPanel creditCardPanel;
+    private CancelFlightPanel cancelFlightPanel;
     private Gui mainFrame;
 
     public SeatController (Gui mainFrame, DBController db) {
@@ -23,6 +25,14 @@ public class SeatController {
 
     public void setSearchFlightPanel(SearchFlightPanel panel) {
         this.searchFlightPanel = panel;
+    }
+
+    public void setCreditCardPanel(CreditCardPanel panel) {
+        this.creditCardPanel = panel;
+    }
+
+    public void setCancelFlightPanel(CancelFlightPanel panel) {
+        this.cancelFlightPanel = panel;
     }
 
     private void loadFlights() {
@@ -40,7 +50,7 @@ public class SeatController {
                 Status flightStatus = listedFlights.getStrign("flightStatus");
                 float cost = listedFlights.getStrign("cost");
 
-                Flight flight = new Flight(flightID, aircraftID, departDate, departTime /* other parameters idk yet */);
+                Flight flight = new Flight(flightID, aircraftID, departDate, departTime, arrivalDate, arrivalTime, arrivalLocation, flightID, cost);
                 currentFlights.add(flight);
             }
         } catch (SQLException e) {
@@ -50,7 +60,7 @@ public class SeatController {
 
     private void loadSeats(int givenAircraftID) {
         try {
-            ResultSet givenFlight = db.selectSeatsFromAircraftID(givenAircraftID);
+            ResultSet givenFlight = db.selectTableFromAttribute("SEAT","aircraftID",givenAircraftID);
             while (givenFlight.next()) {
                 int seatID = listedFlights.getInt("seatID");
                 int aircraftID = listedFlights.getInt("aircraftID");
@@ -59,8 +69,7 @@ public class SeatController {
                 float cost = listedFlights.getStrign("cost");
                 boolean baggage = listedFlights.getStrign("baggage");
                 boolean avaliable = listedFlights.getStrign("avaliable");
-
-                Seat seat = new Seat(flightID, aircraftID, departDate, departTime /* other parameters idk yet */);
+                Seat seat = new Seat( seatID, aircraftID,  seatName,  typeOfSeat,  cost,  baggage,  avaliable);
                 currentSeats.add(seat);
             }
         } catch (SQLException e) {
@@ -68,7 +77,7 @@ public class SeatController {
         }
     }
 
-    private ArrayList<Flight> getCertainFlights(String destination) {
+    public ArrayList<Flight> getCertainFlights(String destination) {
         ArrayList<Flight> tmp = new ArrayList<Flight>();
         for (Flight flight : currentFlights) {
             if (flight.getDestination().equals(destination)) {
@@ -78,7 +87,7 @@ public class SeatController {
         return tmp;
     }
 
-    private ArrayList<Seat> getCertainSeats(int seatID) {
+    public ArrayList<Seat> getCertainSeats(int seatID) {
         ArrayList<Seat> tmp = new ArrayList<Seat>();
         for (Seat seat : currentSeats) {
             if (seat.getSeatID() == seatID) {
@@ -88,18 +97,13 @@ public class SeatController {
         return tmp;
     }
 
-    // private ArrayList<Seat> getSeatsFromFlightID(int flightID) {
-    //     ArrayList<Seat> seats = new ArrayList<Seat>();
-    //     for (Seat seat : currentSeats) {
-    //         if (seat.getFlightID() == flightID) {
-    //             seats.add(seat);
-    //         }
-    //     }
-    //     return seats;
-    // }
+    public void purchaseSeat( int flightID, int aircraftID, int userID, int seatID ) {
+        Ticket tmp = new Ticket(flightID, aircraftID, userID, seatID);
+        db.insertTicket(tmp);
+    }
 
-    private void purchaseSeat() {
-        
+    public void cancelFlight(int ticketNum, int flightID, int seatID) {
+        db.removeTicket(ticketNum);
     }
 
 }

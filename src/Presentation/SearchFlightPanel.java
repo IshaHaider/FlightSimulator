@@ -128,7 +128,6 @@ public class SearchFlightPanel extends JPanel {
                     seatNumber += 1;
                     seatLetterCounter = 0;
                 } 
-                
                 else {
                     seatLetter = (char) ('A' + seatLetterCounter);
                     seatLetterCounter += 1;

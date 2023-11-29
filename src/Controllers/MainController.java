@@ -1,28 +1,31 @@
 package src.Controllers;
-import Domain.*;
-import Presentation.*;
-import src.Controllers.DBController;
+
+import src.Domain.*;
+import src.Presentation.*;
 
 public class MainController {
     private DBController dbController;
     // private CommunicationSystem communicationSystemController;
     private LoginController loginController;
-    // private RegistrationController registrationController;
     private SeatController seatController;
-    private TicketController ticketController;
+    private FlightController flightController;
 
     public MainController () {
         Gui frame = new Gui();
 
         this.dbController = getOnlyInstance();
-        // this.communicationSystemController = new CommunicationSystem();
-        this.loginController = new LoginController(Gui, DBController);
-        // this.registrationController = new RegistrationController();
-        this.seatController = new SeatController(Gui, DBController);
-        // this.ticketController = new TicketController(Gui, DBController);
+        this.loginController = new LoginController(frame, dbController);
+        this.seatController = new SeatController(frame, dbController);
+        this.flightController = new FlightController(frame, dbController);
 
         this.loginController.setLoginPanel(frame.getLoginPanel());
+        
         this.seatController.setSearchFlightPanel(frame.getSearchFlightPanel());
+        this.seatController.setCreditCardPanel(frame.getCreditCardPanel());
+        this.seatController.setCreditCardPanel(frame.getCancelFlightPanel());
+
+        this.flightController.setAdminPanel(frame.getAdminPanel());
+        this.flightController.setAirlineAgentPanel(frame.getAirlineAgentPanel());
 
         frame.setVisible(true);
     }

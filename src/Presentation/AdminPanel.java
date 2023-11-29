@@ -4,7 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AdminPanel extends JPanel {
-    public AdminPanel(Gui mainFrame) {
+    private Gui mainFrame;
+    private FlightController flightController;
+
+    public AdminPanel(Gui mainFrame, FlightController flightController) {
+        this.mainFrame = mainFrame;
+        this.flightController = flightController;
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -22,39 +28,67 @@ public class AdminPanel extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         // Search Flights Button
-        JButton searchFlightButton = new JButton("Search Flights");
-        searchFlightButton.addActionListener(e -> mainFrame.switchView("Payment"));
+        JButton searchFlightButton = new JButton("Browse Flights");
+        searchFlightButton.addActionListener(e -> mainFrame.switchView("Browse Flights"));
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         add(searchFlightButton, gbc);
 
-        // Cancel Flights Button
-        JButton cancelFlightButton = new JButton("Cancel Flights");
-        cancelFlightButton.addActionListener(e -> mainFrame.switchView("Cancel Flight"));
+        // Browse Crews Button
+        JButton browseCrewsButton = new JButton("Browse Crews");
+        browseCrewsButton.addActionListener(e -> mainFrame.switchView("Browse Crews"));
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
-        add(cancelFlightButton, gbc);
+        add(browseCrewsButton, gbc);
 
-        // Admin Functionalities
-        addButton("Browse Flights", 0, 2, gbc);
-        addButton("Browse Crew", 1, 2, gbc);
-        addButton("Browse Aircrafts", 0, 3, gbc);
-        addButton("Manage Crew", 1, 3, gbc);
-        addButton("Manage Aircraft", 0, 4, gbc);
-        addButton("Manage Destinations", 1, 4, gbc);
-        addButton("Manage Flights", 0, 5, gbc);
-        addButton("Print User List", 1, 5, gbc);
-    }
+        // Browse Aircrafts Button
+        JButton browseAircraftsButton = new JButton("Browse Aircrafts");
+        browseAircraftsButton.addActionListener(e -> mainFrame.switchView("Browse Aircrafts"));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        add(browseAircraftsButton, gbc);
 
-    private void addButton(String text, int gridx, int gridy, GridBagConstraints gbc) {
-        JButton button = new JButton(text);
-        button.addActionListener(e -> {
-            // Placeholder for functionality
-        });
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
-        add(button, gbc);
+        // Add/Remove Crew Button
+        JButton addRemoveCrewButton = new JButton("Add/Remove Crew");
+        addRemoveCrewButton.addActionListener(e -> mainFrame.switchView("Add/Remove Crew"));
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(addRemoveCrewButton, gbc);
+
+        // Add/Remove Aircraft Button
+        JButton addRemoveAircraftButton = new JButton("Add/Remove Aircraft");
+        addRemoveAircraftButton.addActionListener(e -> mainFrame.switchView("Add/Remove Aircraft"));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        add(addRemoveAircraftButton, gbc);
+
+        // Add/Remove Flight Destinations Button
+        JButton addRemoveDestinationsButton = new JButton("Add/Remove Flight Destinations");
+        addRemoveDestinationsButton.addActionListener(e -> mainFrame.switchView("Add/Remove Flight Destinations"));
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(addRemoveDestinationsButton, gbc);
+
+        // Add/Remove/Modify Flights Information Button
+        JButton modifyFlightsInfoButton = new JButton("Add/Remove/Modify Flights Information");
+        modifyFlightsInfoButton.addActionListener(e -> mainFrame.switchView("Modify Flights Information"));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        add(modifyFlightsInfoButton, gbc);
+
+        // Print List of Users Button
+        JButton printUsersButton = new JButton("Print List of Users");
+        printUsersButton.addActionListener(e -> mainFrame.switchView("Print List of Users"));
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(printUsersButton, gbc);
     }
 }
