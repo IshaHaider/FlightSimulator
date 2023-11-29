@@ -64,8 +64,8 @@ public class LoginController {
     }
     
     public void validLogin(String email, String password) {
-        if (!email.isEmpty() && !password.isEmpty() ) { // should be checking databse here
-            ResultSet result = db.selectUSER(email, password);
+        if (!email.isEmpty() && !password.isEmpty() ) { // should be checking database here
+            ResultSet result = db.selectTableFromTwoAttributes("ALLUSERS", "email", email, "password", password);
             int retrievedAccessLevel = result.getInt("accessLevel");
             userInstance.setUserName(email);
             userInstance.setAccessLevel(retrievedAccessLevel);

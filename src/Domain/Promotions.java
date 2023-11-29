@@ -1,24 +1,23 @@
 package src.Domain;
 
-import java.util.Date;
 
 
 public class Promotions {
     private int promotionID;
     private String name;
     private String discount; 
-    private Date startDate;
-    private Date endDate;
+    private DDate startDate;
+    private DDate endDate;
     
     public Promotions() {
         this.promotionID = 0;
         this.name = "";
         this.discount = "";
-        this.startDate = new Date();
-        this.endDate = new Date();
+        this.startDate = new DDate();
+        this.endDate = new DDate();
     }
 
-    public Promotions(String name, String discount, Date startDate, Date endDate) {
+    public Promotions(String name, String discount, DDate startDate, DDate endDate) {
         this.name = name;
         this.discount = discount;
         this.startDate = startDate;
@@ -28,18 +27,18 @@ public class Promotions {
     public final int getPromotionID() {return promotionID;}
     public final String getName() {return name;}
     public final String getDiscount() {return discount;}
-    public final Date getStartDate() {return startDate;}
-    public final Date getEndDate() {return endDate;}
+    public final DDate getStartDate() {return startDate;}
+    public final DDate getEndDate() {return endDate;}
 
     public void setPromotionID(final int promotionID) {this.promotionID = promotionID;}
     public void setName(final String name) {this.name = name;}
     public void setDiscount(final String discount) {this.discount = discount;}
-    public void setStartDate(final Date startDate) {this.startDate = startDate;}
-    public void setEndDate(final Date endDate) {this.endDate = endDate;}
+    public void setStartDate(final DDate startDate) {this.startDate = startDate;}
+    public void setEndDate(final DDate endDate) {this.endDate = endDate;}
 
     public boolean isValid() { 
-        Date currentDate = new Date();
-        if (this.startDate.before(currentDate) && this.endDate.after(currentDate)) {
+        DDate currentDate = new DDate();
+        if (this.startDate.getDate().before(currentDate.getDate()) && this.endDate.getDate().after(currentDate.getDate())) {
             return true;
         }
         return false;

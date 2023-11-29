@@ -19,46 +19,37 @@ public class RegisteredUser extends User{
         this.address = new Address();      
         this.email = "";       
         this.password = "";   
-        this.birthDate = new Date(); 
+        this.birthDate = new DDate(); 
         this.phoneNumber = "";  
         this.balance = 0.0f;
     }
 
-    public RegisteredUser (Name name, Address address, String email, Date birthDate, String phoneNumber, String password, float balance, int promotionID)  {
+    public RegisteredUser (int promotionID, Name name, Address address, String email, String password, DDate birthDate, String phoneNumber, float balance)  {
         this.accessLevel = 2;
         this.promotionID = promotionID;
         this.name = name;     
         this.address = address;      
-        this.email = email;       
+        this.email = email;      
         this.password = password;   
         this.birthDate = birthDate; 
-        this.phoneNumber = phoneNumber;  
+        this.phoneNumber = phoneNumber; 
         this.balance = balance;
     }
 
-    public final int getUserID() {return userID;}
-    public final int getAccessLevel() {return accessLevel;}
+    
     public final int getPromotionID() {return promotionID;}
-    public final Name getName() {return name;}
-    public final Address getAddress() {return address;}
-    public final String getEmail() {return email;}
     public final String getPassword() {return password;}
-    public final Date getBirthDate() {return birthDate;}
-    public final String getPhoneNumber() {return phoneNumber;}
     public final float getBalance() {return balance;}
 
-    public void setUserID(final int userID) {this.userID = userID;}
-    public void setAccessLevel(final int accessLevel) {this.accessLevel = accessLevel;}
     public void setPromotionID(final int promotionID) {this.promotionID = promotionID;}
-    public void setName(final Name name) {this.name = name;}
-    public void setAddress(final Address address) {this.address = address;}
-    public void setEmail(final String email) {this.email = email;}
     public void setPassword(final String password) {this.password = password;}
-    public void setBirthDate(final Date birthDate) {this.birthDate = birthDate;}
-    public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
     public void setBalance(final float balance) {this.balance = balance;}
     
-    
+    @Override
+    public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };
+    @Override
+    public void manageReservation(final Flight flight) {};  
+
 
 //     // public final float getDiscountPercentage() {return discountPercentage;}
 //     public final ArrayList<Flight> getRegisteredFlights() {return registeredFlights;}

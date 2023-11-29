@@ -1,18 +1,19 @@
 package src.Presentation;
 
 import javax.swing.*;
-
+import java.util.ArrayList;
 import java.awt.*;
 import java.time.LocalDate; // Import LocalDate
 
 public class AirlineAgentPanel extends JPanel {
     private Gui mainFrame;
     private FlightController flightController;
+    private JTextField flightIdField; // TextField for entering flight ID
 
     public AirlineAgentPanel(Gui mainFrame, FlightController flightController) {
         this.mainFrame = mainFrame;
         this.flightController = flightController;
-        
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -41,9 +42,15 @@ public class AirlineAgentPanel extends JPanel {
         gbc.anchor = GridBagConstraints.LINE_END;
         add(cancelFlightButton, gbc);
 
-        // Cancel Flights Button
+        flightIdField = new JTextField(10); // Specify the width of the text field
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        add(flightIdField, gbc);
+
         JButton browsePassangerListbutton = new JButton("Browse Passanger List"); //NEEDA DO SOMETHING TO SHOW LIST IDK YET
-        browsePassangerListbutton.addActionListener( browsePassangerList() );
+        browsePassangerListbutton.addActionListener( 
+            browsePassangerList() 
+        );
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -51,10 +58,11 @@ public class AirlineAgentPanel extends JPanel {
     }
 
     public void browsePassangerList() {
-        String[] passengers = {"Passenger 1", "Passenger 2", "Passenger 3", "Passenger 4"};
+        int flightId = Integer.parseInt(flightIdField.getText()); // Get flight ID from the text field
+        String [] passengerArray = flightController.retrivePassangerList(flightId);
 
-        // Create a JList
-        JList<String> passengerList = new JList<>(passengers);
+        // Create a JList with the array of Strings
+        JList<String> passengerList = new JList<>(passengerArray);
 
         // Put JList in a JScrollPane for scrollability
         JScrollPane scrollPane = new JScrollPane(passengerList);
@@ -70,4 +78,5 @@ public class AirlineAgentPanel extends JPanel {
         frame.setLocationRelativeTo(null); // Center the frame
         frame.setVisible(true);
     }
+
 }

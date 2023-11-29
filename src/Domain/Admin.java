@@ -3,47 +3,37 @@ package src.Domain;
 import java.util.ArrayList;
 
 public class Admin extends User {
+    private String password;  
 
     public Admin(){
-        this.accessLevel = "4";
-        this.promotionID = 0;
+        this.accessLevel = 4;
         this.name = new Name();     
         this.address = new Address();      
-        this.email = "";       
-        this.password = "";   
-        this.birthDate = new Date(); 
-        this.phoneNumber = "";  
-        this.balance = 1000000000.0;
+        this.email = "";  
+        this.password = "";  
+        this.birthDate = new DDate(); 
+        this.phoneNumber = ""; 
     }
 
-    public Admin(Name name, Date birthDate, Address address, String phoneNumber, String email, String password, int accessLevel) {
-        this.accessLevel = accessLevel;
+    public Admin(Name name, Address address, String email, String password, DDate birthDate, String phoneNumber){
+        this.accessLevel = 4;
         this.name = name;     
         this.address = address;      
-        this.email = email;       
-        this.password = password;   
+        this.email = email;    
+        this.password = password; 
         this.birthDate = birthDate; 
         this.phoneNumber = phoneNumber;
     }
 
-    public int getUserID() {return userID;}
-    public int getAccessLevel() {return accessLevel;}
-    public Name getName() {return name;}
-    public Address getAddress() {return address;}
-    public String getEmail() {return email;}
     public String getPassword() {return password;}
-    public Date getBirthDate() {return birthDate;}
-    public String getPhoneNumber() {return phoneNumber;}
-
-    public void setUserID(final int userID) {this.userID = userID;}
-    public void setAccessLevel(final int accessLevel) {this.accessLevel = accessLevel;}
-    public void setName(final Name name) {this.name = name;}
-    public void setAddress(final Address address) {this.address = address;}
-    public void setEmail(final String email) {this.email = email;}
     public void setPassword(final String password) {this.password = password;}
-    public void setBirthDate(final Date birthDate) {this.birthDate = birthDate;}
-    public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
+    
+    @Override
+    public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };
+    @Override
+    public void manageReservation(final Flight flight) {};  
 
+    
     // public ArrayList<User> getFlightPassengers(Flight flight) {
     //     ArrayList<User> passengers = flight.getPassengerList();
     //     return passengers;

@@ -9,11 +9,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import java.sql.Date;
+import java.sql.Time;
+
 
 
 public class DBController <T>{
@@ -98,7 +101,7 @@ public class DBController <T>{
             flightQuery.setString(5, (gUser.getAddress().getNumber() + " " + gUser.getAddress().getStreet()));
             flightQuery.setString(6, gUser.getEmail()); 
             flightQuery.setNull(7, java.sql.Types.INTEGER);
-            flightQuery.setDate(8, java.sql.Date.valueOf((LocalDate) gUser.getBirthDate().getDate()));
+            flightQuery.setDate(8, java.sql.Date.valueOf(gUser.getBirthDate()));
             flightQuery.setString(9, gUser.getPhoneNumber());
             flightQuery.setNull(10, java.sql.Types.FLOAT);      
             flightQuery.executeUpdate();
@@ -118,7 +121,7 @@ public class DBController <T>{
             flightQuery.setString(5, (rUser.getAddress().getNumber() + " " + rUser.getAddress().getStreet()));
             flightQuery.setString(6, rUser.getEmail()); 
             flightQuery.setString(7, rUser.getPassword());
-            flightQuery.setDate(8, java.sql.Date.valueOf((LocalDate) rUser.getBirthDate().getDate()));
+            flightQuery.setDate(8, java.sql.Date.valueOf(rUser.getBirthDate()));
             flightQuery.setString(9, rUser.getPhoneNumber());
             flightQuery.setFloat(10, rUser.getBalance());      
             flightQuery.executeUpdate();
@@ -138,7 +141,7 @@ public class DBController <T>{
             flightQuery.setString(5, (cUser.getAddress().getNumber() + " " + cUser.getAddress().getStreet()));
             flightQuery.setString(6, cUser.getEmail()); 
             flightQuery.setString(7, cUser.getPassword());
-            flightQuery.setDate(8, java.sql.Date.valueOf((LocalDate) cUser.getBirthDate().getDate()));
+            flightQuery.setDate(8, java.sql.Date.valueOf(cUser.getBirthDate()));
             flightQuery.setString(9, cUser.getPhoneNumber());
             flightQuery.setNull(10, java.sql.Types.FLOAT);     
             flightQuery.executeUpdate();
@@ -158,7 +161,7 @@ public class DBController <T>{
             flightQuery.setString(5, (aUser.getAddress().getNumber() + " " + aUser.getAddress().getStreet()));
             flightQuery.setString(6, aUser.getEmail()); 
             flightQuery.setString(7, aUser.getPassword());
-            flightQuery.setDate(8, java.sql.Date.valueOf((LocalDate) aUser.getBirthDate().getDate()));
+            flightQuery.setDate(8, java.sql.Date.valueOf(aUser.getBirthDate()));
             flightQuery.setString(9, aUser.getPhoneNumber());
             flightQuery.setNull(10, java.sql.Types.FLOAT);     
             flightQuery.executeUpdate();
@@ -166,7 +169,7 @@ public class DBController <T>{
             e.printStackTrace();
         }
     }
-    
+
     public void removeUser(int userID){
         try {
             String statement = "DELETE FROM TICKET WHERE userID = ?";
@@ -200,28 +203,28 @@ public class DBController <T>{
     }
 
 
-    // public void insertFlight(Flight flight){
-    //     try {
-    //         String statement = "INSERT INTO FLIGHT (aircraftID, departDate, departTime, departLocation, arriveDate, arriveTime, arriveLocation, flightStatus, cost, meal, crewMember1, crewMember2, crewMember3) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    //         flightQuery = flightConnect.prepareStatement(statement);
-    //         flightQuery.setInt(1, flight.getAirCraftID()); //fixed access level
-    //         flightQuery.setDate(2, flight.getDepartureDate());
-    //         flightQuery.setTime(3, flight.getDepartureTime());
-    //         flightQuery.setString(4, flight.getDepartureLocation());
-    //         flightQuery.setDate(5, flight.getArrivalDate());
-    //         flightQuery.setTime(6, flight.getArrivalTime()); 
-    //         flightQuery.setString(7, flight.getArrivalLocation());
-    //         flightQuery.setString(8, flight.getFlightStatus());
-    //         flightQuery.setFloat(9, flight.getCost());
-    //         flightQuery.setBoolean(10, flight.getMeal());    
-    //         flightQuery.setInt(11, flight.getCrewMember1());
-    //         flightQuery.setInt(12, flight.getCrewMember2());
-    //         flightQuery.setInt(13, flight.getCrewMember3());     
-    //         flightQuery.executeUpdate();
-    //     } catch(SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    public void insertFlight(Flight flight){
+        try {
+            String statement = "INSERT INTO FLIGHT (aircraftID, departDate, departTime, departLocation, arriveDate, arriveTime, arriveLocation, flightStatus, cost, meal, crewMember1, crewMember2, crewMember3) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            flightQuery = flightConnect.prepareStatement(statement);
+            flightQuery.setInt(1, flight.getAircraftID()); //fixed access level
+            flightQuery.setDate(2, java.sql.Date.valueOf(flight.getDepartDate()));
+            flightQuery.setTime(3, java.sql.Time.valueOf(flight.getDepartTime()));
+            flightQuery.setString(4, flight.getDepartLocation());
+            flightQuery.setDate(5, java.sql.Date.valueOf(flight.getArriveDate()));
+            flightQuery.setTime(6, java.sql.Time.valueOf(flight.getArriveTime())); 
+            flightQuery.setString(7, flight.getArriveLocation());
+            flightQuery.setString(8, flight.getFlightStatus().toString());
+            flightQuery.setFloat(9, flight.getCost());
+            flightQuery.setBoolean(10, flight.getMeal());    
+            flightQuery.setInt(11, flight.getCrewMember1());
+            flightQuery.setInt(12, flight.getCrewMember2());
+            flightQuery.setInt(13, flight.getCrewMember3());     
+            flightQuery.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     public void removeFlight(int flightID){
         try {
@@ -240,19 +243,19 @@ public class DBController <T>{
     }
 
 
-    // public void insertPromotion(Promotions promotion){
-    //     try {
-    //         String statement = "INSERT INTO PROMOTION (name, discount, startDate, endDate) VALUES (?,?,?,?)";
-    //         flightQuery = flightConnect.prepareStatement(statement);
-    //         flightQuery.setString(1, promotion.getName()); //fixed access level
-    //         flightQuery.setString(2, promotion.getDiscountPercentage());
-    //         flightQuery.setDate(3, promotion.getStartDate());
-    //         flightQuery.setDate(4, promotion.getEndDate());  
-    //         flightQuery.executeUpdate();
-    //     } catch(SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    public void insertPromotion(Promotions promotion){
+        try {
+            String statement = "INSERT INTO PROMOTIONS (name, discount, startDate, endDate) VALUES (?,?,?,?)";
+            flightQuery = flightConnect.prepareStatement(statement);
+            flightQuery.setString(1, promotion.getName()); //fixed access level
+            flightQuery.setString(2, promotion.getDiscount());
+            flightQuery.setDate(3, java.sql.Date.valueOf(promotion.getStartDate()));
+            flightQuery.setDate(4, java.sql.Date.valueOf(promotion.getEndDate()));  
+            flightQuery.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     public void removePromotion(int promotionID){
         try {
@@ -271,21 +274,21 @@ public class DBController <T>{
     }
 
 
-    // public void insertSeat(Seat seat){
-    //     try {
-    //         String statement = "INSERT INTO SEAT (aircraftID, seatName, class, cost, baggage, available) VALUES (?,?,?,?,?,?)";
-    //         flightQuery = flightConnect.prepareStatement(statement);
-    //         flightQuery.setInt(1, seat.getAircraftID()); //fixed access level
-    //         flightQuery.setString(2, seat.getSeatName());
-    //         flightQuery.setString(3, seat.getClass());
-    //         flightQuery.setFloat(4, seat.getCost());  
-    //         flightQuery.setBoolean(5, seat.getBaggage());  
-    //         flightQuery.setBoolean(6, seat.getAvailable());  
-    //         flightQuery.executeUpdate();
-    //     } catch(SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    public void insertSeat(Seat seat){
+        try {
+            String statement = "INSERT INTO SEAT (aircraftID, seatName, class, cost, baggage, available) VALUES (?,?,?,?,?,?)";
+            flightQuery = flightConnect.prepareStatement(statement);
+            flightQuery.setInt(1, seat.getAircraftID()); //fixed access level
+            flightQuery.setString(2, seat.getSeatName());
+            flightQuery.setString(3, seat.getSeatClass().toString());
+            flightQuery.setFloat(4, seat.getCost());  
+            flightQuery.setBoolean(5, seat.getBaggage());  
+            flightQuery.setBoolean(6, seat.getAvailable());  
+            flightQuery.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void removeSeat(int seatID){
         try {
@@ -302,6 +305,7 @@ public class DBController <T>{
             e.printStackTrace();
         }
     }
+
 
     public void insertTicket(Ticket ticket){
         try {
@@ -366,9 +370,9 @@ public class DBController <T>{
         return flightResult;
     }
 
-    public ResultSet selectTableFromAttribute(String tableName, String attributeName, T value){
+    public ResultSet selectTableFromAttribute(String tableName, String attribute, T value){
         try {
-            String statement = "SELECT * FROM " + tableName + " WHERE " + attributeName + " = ?";
+            String statement = "SELECT * FROM " + tableName + " WHERE " + attribute + " = ?";
             flightQuery = flightConnect.prepareStatement(statement);
 
             // Set the parameter value based on the type
@@ -383,9 +387,9 @@ public class DBController <T>{
             } else if (value instanceof Double) {
                 flightQuery.setDouble(1, (Double) value);
             } else if (value instanceof LocalDate) {
-                flightQuery.setDate(1, java.sql.Date.valueOf((LocalDate) value));
-            } else if (value instanceof Time) {
-                flightQuery.setTime(1, (Time) value);
+                flightQuery.setDate(2, java.sql.Date.valueOf((value)));
+            } else if (value instanceof LocalTime) {
+                flightQuery.setTime(2, java.sql.Time.valueOf((value)));
             } else {
                 throw new SQLException("Unsupported data type");
             }
@@ -397,43 +401,51 @@ public class DBController <T>{
         return flightResult;
     }
 
-    // public ResultSet selectTableFromTwoAttributes(String tableName, String attribute1, T value1, String attribute2, T value2){
-    //     try {
-    //         // Use a placeholder for the value in the SQL statement
-    //         String statement = "SELECT * FROM " + tableName + " WHERE " + attribute1 + " = ? AND A";
-    //         flightQuery = flightConnect.prepareStatement(statement);
-    //         // Set the parameter value based on the type
-    //         if (value instanceof String) {
-    //             flightQuery.setString(1, (String) value);
-    //         } else if (value instanceof Integer) {
-    //             flightQuery.setInt(1, (Integer) value);
-    //         } else if (value instanceof Boolean) {
-    //             flightQuery.setBoolean(1, (Boolean) value);
-    //         } else if (value instanceof Float) {
-    //             flightQuery.setFloat(1, (Float) value);
-    //         } else if (value instanceof Double) {
-    //             flightQuery.setDouble(1, (Double) value);
-    //         } else if (value instanceof LocalDate) {
-    //             flightQuery.setDate(1, java.sql.Date.valueOf((LocalDate) value));
-    //         } else if (value instanceof Time) {
-    //             flightQuery.setTime(1, (Time) value);
-    //         } else {
-    //             throw new SQLException("Unsupported data type");
-    //         }
-    //         flightResult = flightQuery.executeQuery();
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    //     return flightResult;
-    // }
-
-
-    public ResultSet selectUser(String email, String password) {
+    public ResultSet selectTableFromTwoAttributes(String tableName, String attribute1, T value1, String attribute2, T value2){
         try {
-            String statement = "SELECT * FROM ALLUSERS WHERE email=" + email + " AND " + "password=" + password + ";";
+            // Use a placeholder for the value in the SQL statement
+            String statement = "SELECT * FROM " + tableName + " WHERE " + attribute1 + " = ? AND " + attribute2 + " = ?;";
             flightQuery = flightConnect.prepareStatement(statement);
+
+            // Set the parameter value1 based on the type
+            if (value1 instanceof String) {
+                flightQuery.setString(1, (String) value1);
+            } else if (value1 instanceof Integer) {
+                flightQuery.setInt(1, (Integer) value1);
+            } else if (value1 instanceof Boolean) {
+                flightQuery.setBoolean(1, (Boolean) value1);
+            } else if (value1 instanceof Float) {
+                flightQuery.setFloat(1, (Float) value1);
+            } else if (value1 instanceof Double) {
+                flightQuery.setDouble(1, (Double) value1);
+            } else if (value1 instanceof LocalDate) {
+                flightQuery.setDate(2, java.sql.Date.valueOf((value1)));
+            } else if (value1 instanceof LocalTime) {
+                flightQuery.setTime(2, java.sql.Time.valueOf((value1)));
+            } else {
+                throw new SQLException("Unsupported data type");
+            }
+
+            // Set the parameter value2 based on the type
+            if (value2 instanceof String) {
+                flightQuery.setString(2, (String) value2);
+            } else if (value2 instanceof Integer) {
+                flightQuery.setInt(2, (Integer) value2);
+            } else if (value2 instanceof Boolean) {
+                flightQuery.setBoolean(2, (Boolean) value2);
+            } else if (value2 instanceof Float) {
+                flightQuery.setFloat(2, (Float) value2);
+            } else if (value2 instanceof Double) {
+                flightQuery.setDouble(2, (Double) value2);
+            } else if (value2 instanceof LocalDate) {
+                flightQuery.setDate(2, java.sql.Date.valueOf((value2)));
+            } else if (value2 instanceof LocalTime) {
+                flightQuery.setTime(2, java.sql.Time.valueOf((value2)));
+            } else {
+                throw new SQLException("Unsupported data type");
+            }
             flightResult = flightQuery.executeQuery();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return flightResult;
@@ -479,35 +491,42 @@ public class DBController <T>{
         }
         else {System.out.println("Connection unsuccessful");}
 
+
         // ------------ TESTING REMOVE FUNCTIONS ------------
-        // temp.removeAircraft(1);
-        // temp.removeFlight(4);
-        // temp.removePromotion(2);
-        // temp.removeSeat(50);
-        // temp.removeTicket(1);
-        // temp.removeUser(41);
+        temp.removeAircraft(1);
+        temp.removeFlight(4);
+        temp.removePromotion(2);
+        temp.removeSeat(50);
+        temp.removeTicket(1);
+        temp.removeUser(41);
 
         // ------------ TESTING SELECT FUNCTIONS ------------
-        // temp.selectTableFromAttribute("FLIGHT", "departLocation", "New York");
-        // temp.printResultSet(temp.flightResult);
+        temp.selectTableFromAttribute("FLIGHT", "departLocation", "New York");
+        temp.printResultSet(temp.flightResult);
 
-        // temp.selectTableFromAttribute("AIRCRAFT", "aircraftID", 1);
-        // temp.printResultSet(temp.flightResult);
+        temp.selectTableFromAttribute("AIRCRAFT", "aircraftID", 1);
+        temp.printResultSet(temp.flightResult);
 
-        // temp.selectTableFromAttribute("SEAT", "available", true);
-        // temp.printResultSet(temp.flightResult);
+        temp.selectTableFromAttribute("SEAT", "available", false);
+        temp.printResultSet(temp.flightResult);
 
-        // temp.selectTableFromAttribute("ALLUSERS", "balance", 75.5);
-        // temp.printResultSet(temp.flightResult);
+        temp.selectTableFromAttribute("ALLUSERS", "balance", 75.5);
+        temp.printResultSet(temp.flightResult);
 
-        // Date newDate = new Date(01,06,2023);
-        // temp.selectTableFromAttribute("PROMOTIONS", "startDate", newDate.getDate());
-        // temp.printResultSet(temp.flightResult);
+        LocalDate newDate = LocalDate.of(2023, 06, 01);
+        // DDate newDate = new DDate(01,06,);
+        temp.selectTableFromAttribute("PROMOTIONS", "startDate", newDate);
+        temp.printResultSet(temp.flightResult);
 
-        // TTime newtime = new TTime(10, 0, 0);
-        // temp.selectTableFromAttribute("FLIGHT", "arriveTime", newtime.getTime());
-        // temp.printResultSet(temp.flightResult);
+        LocalTime newTime = LocalTime.of(10, 0, 0);
+        // TTime newtime = new TTime();
+        temp.selectTableFromAttribute("FLIGHT", "arriveTime", newTime);
+        temp.printResultSet(temp.flightResult);
 
+        temp.selectTableFromTwoAttributes("ALLUSERS", "firstName", "John","lastName","Doe");
+        temp.printResultSet(temp.flightResult);
+
+        
         // ------------ TESTING INSERT FUNCTIONS ------------
         AirPlane newPlane = new AirPlane("test");
         temp.insertAircraft(newPlane);
@@ -515,10 +534,43 @@ public class DBController <T>{
         Ticket newTicket = new Ticket(1, 1, 5, 26);
         temp.insertTicket(newTicket);
 
-        Name userName = new Name("Isha", "Haider");
-        Address userAddress = new Address("213", "Sherwood Gate");
-        Date userDate = new Date(01,06,2002);
-        GuestUser newGuestUser = new GuestUser(userName, userAddress,  "isha.haider@ucalgary.ca", userDate , "587-890-8532");
+        Name guestUserName = new Name("Isha", "Haider");
+        Address guestUserAddress = new Address("213", "Sherwood Gate");
+        LocalDate guestUserDate = LocalDate.of(2002, 06, 01);
+        // DDate guestUserDate = new DDate(01,06,2002);
+        GuestUser newGuestUser = new GuestUser(guestUserName, guestUserAddress,  "isha.haider@ucalgary.ca", guestUserDate , "587-890-8532");
         temp.insertGuestUser(newGuestUser);
+
+        Name regUserName = new Name("Abdel", "Rahman");
+        Address regUserAddress = new Address("527", "Springbank Circle");
+        LocalDate regUserDate = LocalDate.of(2004, 04, 29);
+        // DDate regUserDate = new DDate(29,04,2004);
+        RegisteredUser newRegUser = new RegisteredUser(2, regUserName, regUserAddress, "abdel.rahman@ucalgary.ca", "abdel1256", regUserDate , "403-532-2309", 73.5f);
+        temp.insertRegisteredUser(newRegUser);
+
+        Name crewUserName = new Name("Eric", "Mei");
+        Address crewUserAddress = new Address("402", "Everhollow Crest");
+        LocalDate crewUserDate = LocalDate.of(2001, 03, 27);
+        // DDate crewUserDate = new DDate(27,03,2001);
+        Crew newCrewUser = new Crew(crewUserName, crewUserAddress, "eric.mei@ucalgary.ca", "eric1234", crewUserDate , "587-098-1234");
+        temp.insertCrewUser(newCrewUser);
+
+        Name adminUserName = new Name("Aksh", "Singh");
+        Address adminUserAddress = new Address("12", "Somerset Bridlewood");
+        LocalDate adminUserDate = LocalDate.of(2001, 07, 13);
+        // DDate adminUserDate = new DDate(13,07,2001);
+        Admin newAdminUser = new Admin(adminUserName, adminUserAddress, "aksh.singh@gmail.com", "akshSingh34", adminUserDate , "403-678-0345");
+        temp.insertAdminUser(newAdminUser);
+
+        Flight newFlight = new Flight(1, adminUserDate, LocalTime.of(3, 23, 00), "Calgary", adminUserDate, LocalTime.of(7, 40, 00), "Vancouver", 
+        Status.OnTime, 250.0f, true, 41, 42, 43);
+        temp.insertFlight(newFlight);
+
+        Promotions newPromotion = new Promotions("Valentine's Sale", "13%", crewUserDate, regUserDate);
+        temp.insertPromotion(newPromotion);
+
+        Seat newSeat = new Seat(4, "17A", AirplaneClass.Economy, 200.0f, true, true);
+        temp.insertSeat(newSeat);
+
     }
 }

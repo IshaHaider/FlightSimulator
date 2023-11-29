@@ -6,17 +6,16 @@ import java.util.Observer;
 
 public class GuestUser extends User{
     
-
     public GuestUser() {
         this.accessLevel = 1;
         this.name = new Name();     
         this.address = new Address();      
         this.email = "";  
-        this.birthDate = new Date(); 
+        this.birthDate = new DDate(); 
         this.phoneNumber = "";  
     }
 
-    public GuestUser(Name name, Address address, String email, Date birthDate, String phoneNumber) {
+    public GuestUser(Name name, Address address, String email, DDate birthDate, String phoneNumber) {
         this.accessLevel = 1;
         this.name = name;     
         this.address = address;      
@@ -24,24 +23,6 @@ public class GuestUser extends User{
         this.birthDate = birthDate; 
         this.phoneNumber = phoneNumber;
     }
-
-    public int getUserID() {return userID;}
-    public int getAccessLevel() {return accessLevel;}
-    public Name getName() {return name;}
-    public Address getAddress() {return address;}
-    public String getEmail() {return email;}
-    public Date getBirthDate() {return birthDate;}
-    public String getPhoneNumber() {return phoneNumber;}
-    // public ArrayList<Flight> getRegisteredFlights() {return registeredFlights;}
-
-    public void setUserID(final int userID) {this.userID = userID;}
-    public void setAccessLevel(final int accessLevel) {this.accessLevel = accessLevel;}
-    public void setName(final Name name) {this.name = name;}
-    public void setAddress(final Address address) {this.address = address;}
-    public void setEmail(final String email) {this.email = email;}
-    public void setBirthDate(final Date birthDate) {this.birthDate = birthDate;}
-    public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
-    // public void setRegisteredFlights(final ArrayList<Flight> registeredFlights) {this.registeredFlights = registeredFlights;}
 
     @Override
     public ArrayList<Flight> getFlights(final String destination) {return new ArrayList<Flight>(); };

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
+
 public class SeatController implements Observer<T>{
 
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();

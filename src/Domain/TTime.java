@@ -1,4 +1,5 @@
 package src.Domain;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.sql.Time;
 
@@ -8,6 +9,16 @@ public class TTime {
     private int seconds;
     private Time specificTime;
     
+
+    public TTime(){
+        this.hours = 0;
+        this.minutes = 0;
+        this.seconds = 0;
+
+        LocalTime specificLocalTime = LocalTime.of(hours, minutes, seconds);
+        this.specificTime = java.sql.Time.valueOf(specificLocalTime);
+    }
+
 
     public TTime(int hours, int minutes, int seconds) {
         this.hours = hours;
