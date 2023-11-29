@@ -19,16 +19,20 @@ public class LoginController {
     private ArrayList<Crew> crewUsers = new ArrayList<Crew>();
     private ArrayList<Admin> adminUsers = new ArrayList<Admin>();
 
+    // public LoginController (Gui mainFrame, DBController db) {
     public LoginController () {
+        // this.db = db;
         this.userInstance = UserSession.getInstance();
         browseUsers();
     }
 
-    public LoginController (Gui mainFrame) {
-        this.mainFrame = mainFrame;
-        this.userInstance = UserSession.getInstance();
-        browseUsers();
-    }
+    public void setMainFrame(Gui mainFrame) { this.mainFrame = mainFrame; }
+
+    // public LoginController (Gui mainFrame) {
+    //     this.mainFrame = mainFrame;
+    //     this.userInstance = UserSession.getInstance();
+    //     browseUsers();
+    // }
     
     private void browseUsers(){
         try {

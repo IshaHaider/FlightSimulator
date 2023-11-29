@@ -151,7 +151,7 @@ public class SearchFlightPanel extends JPanel {
                         }
 
                         seatButton.addActionListener(e -> {
-                            displayPurchaseOptions(currentSeat.getSeatID(), currentSeat.getAircraftID(), seatName, currentSeat.getSeatClass(), currentSeat.getCost(), currentSeat.getBaggage(), flightId, departDate, departTime, arrivalDate, arrivalTime, arrivalLoc, departLoc);
+                            displayPurchaseOptions(currentSeat.getSeatID(), currentSeat.getAircraftID(), seatName, currentSeat.getSeatClass(), currentSeat.getCost(), currentSeat.getBaggage(), flightID, departDate, departTime, arrivalDate, arrivalTime, arrivalLoc, departLoc);
                         });
 
                         seatMapFrame.add(seatButton);

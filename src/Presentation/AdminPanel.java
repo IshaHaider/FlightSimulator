@@ -92,7 +92,7 @@ public class AdminPanel extends JPanel {
 
         // Print List of Users Button
         JButton printUsersButton = new JButton("Print List of Users");
-        printUsersButton.addActionListener(DisplayRegisteredUsers());
+        printUsersButton.addActionListener(e ->DisplayRegisteredUsers());
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -111,7 +111,7 @@ public class AdminPanel extends JPanel {
             model.addRow(new Object[]{
                 user.getName(),
                 user.getEmail(),
-                user.getID(),
+                user.getUserID(),
                 user.getPhoneNumber(),
                 user.getAddress()
             });

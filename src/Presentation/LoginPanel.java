@@ -104,7 +104,7 @@ public class LoginPanel extends JPanel {
         firstNameField.setText("");
         lastNameField.setText("");
         addressField.setText("");
-        phoneNum.setText("");
+        phoneField.setText("");
     }
 
     private void logoutPanel() {
