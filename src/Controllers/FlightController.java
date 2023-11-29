@@ -24,7 +24,9 @@ public class FlightController {
 
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Flight> currentCrew = new ArrayList<Crew>();
-
+    private ArrayList<AirPlane> currentAircrafts = new ArrayList<AirPlane>();
+    private ArrayList<RegisteredUser> currentRegisteredUsers = new ArrayList<RegisteredUser>();
+    
     public FlightController (Gui mainFrame, DBController db) {
         this.mainFrame = mainFrame;
         this.db = db;
@@ -60,6 +62,7 @@ public class FlightController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return currentFlights;
     }
 
     public ArrayList<Flight> browseCrew(){
@@ -81,20 +84,87 @@ public class FlightController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return currentCrew;
     }
     
     public ArrayList<Flight> browseAircrafts(){
-
+        try {
+            ResultSet listedAircrafts = db.selectTable("AIRCRAFT");
+            while (listedAircrafts.next()) {
+                int aircraftID = listedCrew.getInt("aircraftID");
+                String airplaneName = new Name(listedCrew.getString("name"), listedCrew.getString("lastName"));
+                AirPlane airPlane = new AirPlane(airplaneName);                 
+                currentAircrafts.add(airPlane);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return currentAircrafts;
     }
 
     public void addCrew(final Flight flight, final Crew crew){
+        
+    }
 
+    public void addFlight(final Flight flight){
+        
+    }
+
+    public void addAircraft(final AirPlane aircraft){
+
+    }
+
+    public void removeCrew(final Flight flight, final Crew crew){
+
+    }
+
+    public void removeFlight(final Flight flight){
+
+    }
+
+    public void removeAircraft(final AirPlane aircraft){
+
+    }
+
+    public ArrayList<RegisteredUser> browseRegisteredUsers(){
+        try {
+            ResultSet listedRegUser = db.selectTable("ALLUSERS");
+            while (listedRegUser.next()) {
+                int accessLevel = allUsers.getInt("accessLevel");
+
+                if(accessLevel ==2){
+                    int userID = allUsers.getInt("userID");
+                    int promotionID = allUsers.getInt("promotionID");
+                    String firstName = allUsers.getString("firstName");
+                    String lastName = allUsers.getString("lastName");
+                    String address = allUsers.getString("address");
+                    String email = allUsers.getString("email");
+                    String password = allUsers.getString("password");
+                    LocalDate birthDate = allUsers.getDate("birthDate").toLocalDate();
+                    String phoneNumber = allUsers.getString("phoneNumber");
+                    float balance = allUsers.getFloat("balance");
+                    
+                    RegisteredUser regUser = new RegisteredUser(userID, accessLevel, promotionID, firstName, lasttName, address, email, password, birthDate, phoneNumber, balance);
+                    currentRegisteredUsers.addUser(admin);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return currentRegisteredUsers;
     }
 
     public String[] retrivePassangerList() {
         List<String> userList = new ArrayList<>();
         try {
-            ResultSet listUsers = db.selectTable("FLIGHT");
+            ResultSet listUsers;
+
+            // NOTE: This is the SQL query you need to use to get the list of users for a flight
+            // SELECT ALLUSERS.*
+            // FROM TICKET
+            // JOIN ALLUSERS ON TICKET.userID = ALLUSERS.userID
+            // WHERE TICKET.flightID = [YourFlightID];
+
             while (listUsers.next()) {
                 int userID = listUsers.getInt("userID");
                 String firstName = listUsers.getString("firstName");
