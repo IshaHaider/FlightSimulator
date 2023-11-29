@@ -25,7 +25,9 @@ public class FlightController {
 
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Flight> currentCrew = new ArrayList<Crew>();
-
+    private ArrayList<AirPlane> currentAircrafts = new ArrayList<AirPlane>();
+    private ArrayList<RegisteredUser> currentRegisteredUsers = new ArrayList<RegisteredUser>();
+    
     public FlightController (Gui mainFrame, DBController db) {
         this.mainFrame = mainFrame;
         this.db = db;
@@ -91,7 +93,6 @@ public class FlightController {
         }
         return currentCrew;
     }
-    
     public List<Integer> getFlightCrew(final Flight flight) {
         List<Integer> flightCrew = new ArrayList<>();
 
@@ -144,7 +145,7 @@ public class FlightController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+      }
 
     public void addAirCraft(final Airplane airplane){
         try {
@@ -183,7 +184,14 @@ public class FlightController {
     public String[] retrivePassangerList() {
         List<String> userList = new ArrayList<>();
         try {
-            ResultSet listUsers = db.selectTable("FLIGHT");
+            ResultSet listUsers;
+
+            // NOTE: This is the SQL query you need to use to get the list of users for a flight
+            // SELECT ALLUSERS.*
+            // FROM TICKET
+            // JOIN ALLUSERS ON TICKET.userID = ALLUSERS.userID
+            // WHERE TICKET.flightID = [YourFlightID];
+
             while (listUsers.next()) {
                 int userID = listUsers.getInt("userID");
                 String firstName = listUsers.getString("firstName");

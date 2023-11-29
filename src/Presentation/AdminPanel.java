@@ -2,6 +2,13 @@ package src.Presentation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+
+import javax.swing.table.DefaultTableModel;
+
+import src.Controllers.FlightController;
+import src.Controllers.Gui;
+import src.Domain.RegisteredUser;
 
 public class AdminPanel extends JPanel {
     private Gui mainFrame;
@@ -85,10 +92,43 @@ public class AdminPanel extends JPanel {
 
         // Print List of Users Button
         JButton printUsersButton = new JButton("Print List of Users");
-        printUsersButton.addActionListener(e -> mainFrame.switchView("Print List of Users"));
+        printUsersButton.addActionListener(DisplayRegisteredUsers());
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.LINE_END;
         add(printUsersButton, gbc);
     }
+
+    public void DisplayRegisteredUsers(){
+        ArrayList<RegisteredUser> registeredUsers = flightController.browseRegisteredUsers();
+
+        String[] columnNames = {"Name", "Email", "ID", "Phone Number", "Address"};
+
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        // Add user data to the table model
+        for (RegisteredUser user : registeredUsers) {
+            model.addRow(new Object[]{
+                user.getName(),
+                user.getEmail(),
+                user.getID(),
+                user.getPhoneNumber(),
+                user.getAddress()
+            });
+        }
+
+        JTable table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        table.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Registered Users");
+        dialog.add(scrollPane);
+        dialog.pack(); // Adjusts size to fit the content
+        dialog.setLocationRelativeTo(this); // Center relative to the admin panel
+        dialog.setVisible(true); // Make it visible
+
+    }
+    
 }
