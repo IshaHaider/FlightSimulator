@@ -224,7 +224,7 @@ public class FlightController {
                 int accessLevel = listedRegUser.getInt("accessLevel");
 
                 if(accessLevel ==2){
-                    int userID = listedRegUser.getInt("userID");
+                    int usrID = listedRegUser.getInt("userID");
                     int promotionID = listedRegUser.getInt("promotionID");
                     Name regUserName = new Name(listedRegUser.getString("firstName"), listedRegUser.getString("lastName"));
                     Address userAddress = new Address(listedRegUser.getString("address"));
@@ -233,7 +233,7 @@ public class FlightController {
                     LocalDate birthDate = listedRegUser.getDate("birthDate").toLocalDate();
                     String phoneNumber = listedRegUser.getString("phoneNumber");
                     float balance = listedRegUser.getFloat("balance");
-                    RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress, email, password, birthDate, phoneNumber, balance);
+                    RegisteredUser regUser = new RegisteredUser(usrID, promotionID, regUserName, userAddress, email, password, birthDate, phoneNumber, balance);
                     currentRegisteredUsers.add(regUser);
                 }
             }

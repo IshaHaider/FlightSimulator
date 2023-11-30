@@ -66,7 +66,7 @@ public class CancelFlightPanel extends JPanel {
 
         // Back Button
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> mainFrame.switchView("Home"));
+        backButton.addActionListener(e -> mainFrame.switchViewBasedOnAccessLevel());
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;

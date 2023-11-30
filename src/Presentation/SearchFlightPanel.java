@@ -21,15 +21,20 @@ import java.time.LocalTime;
 public class SearchFlightPanel extends JPanel {
     private Gui mainFrame;
     private SeatController seatController;
+    private PromotionController promotionController;
     private JFrame seatMapFrame;
     private Connection databaseConnection; // Database connection reference
     private JTable flightTable; // Table to display flight information
     private JTextField searchField; // Field to enter destination
 
+    private float newCost;
+    private float percentageDiscount;
 
-    public SearchFlightPanel(Gui mainFrame, SeatController seatController) {
+
+    public SearchFlightPanel(Gui mainFrame, SeatController seatController, PromotionController promotionController) {
         this.mainFrame = mainFrame;
         this.seatController = seatController;
+        this.promotionController = promotionController;
 
         setLayout(new BorderLayout());
         JPanel searchPanel = new JPanel();
@@ -176,7 +181,18 @@ public class SearchFlightPanel extends JPanel {
     private void displayPurchaseOptions(int seatID, int aircraftID, String seatName, AirplaneClass classType, float ticketCost, boolean baggage, int flightID, LocalDate departDate, LocalTime departTime, LocalDate arrivalDate, LocalTime arrivalTime, String arrivalLoc, String departLoc) {
         JFrame optionsFrame = new JFrame("Purchase Options for Seat ID: " + seatID);
         optionsFrame.setLayout(new FlowLayout());
-        optionsFrame.setSize(300, 100);
+        optionsFrame.setSize(600, 500);
+
+        LocalDate today = LocalDate.now();
+        ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
+        for (Promotions promotion : currentPromotions) {
+            if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today)) {
+                percentageDiscount = Float.parseFloat(promotion.getDiscount().replace("%", "")) / 100;
+                newCost = ticketCost * (1 - percentageDiscount);
+            } else {
+                newCost = ticketCost;
+            }
+        }
     
         // JLabel seatLabel = new JLabel("Do you want to buy flight to: " + arrivalLoc  + "\nFrom: " + departLoc + "\nAt: " + departDate.toString() + " " + departTime.toString() + "\nOn Flight ID: " + flightID + "\nSeatType: " + classType + "\nTicket Cost: $" + ticketCost);
         JLabel seatLabel = new JLabel("<html>Do you want to buy flight to: " + arrivalLoc  + 
@@ -184,7 +200,7 @@ public class SearchFlightPanel extends JPanel {
                               "<br>At: " + departDate.toString() + " " + departTime.toString() + 
                               "<br>On Flight ID: " + flightID + 
                               "<br>SeatType: " + classType + 
-                              "<br>Ticket Cost: $" + ticketCost + "</html>");
+                              "<br>Ticket Cost: $" + newCost + "</html>");
         JButton buyButton = new JButton("Buy");
         JButton noBuyButton = new JButton("No Buy");
     
@@ -222,19 +238,16 @@ public class SearchFlightPanel extends JPanel {
     private void seatMap(int flightID, int aircraftID, String arrivalLoc, String departLoc, LocalDate departDate, LocalTime departTime, LocalDate arrivalDate, LocalTime arrivalTime) {
         ArrayList<Seat> allSeats = seatController.getCertainSeats(aircraftID);
 
-        // for (Seat seat : allSeats) {
-        //     if (seat.getSeatClass() == AirplaneClass.Economy) {
-        //         System.out.println("Economy");
-        //     } else if (seat.getSeatClass() == AirplaneClass.Business) {
-        //         System.out.println("Business");
-        //     }
-        // }
+        for (Seat seat : allSeats) {
+            System.out.println(seat.getAvailable());
+        }
 
         seatMapFrame = new JFrame("Seat Map for aircraftID: " + aircraftID);
         JPanel seatPanel = new JPanel(new GridLayout(9, 7)); // 8 columns including aisle
     
-        JButton[][] seatButtons = new JButton[9][7]; // Adjusted to 8 columns
-    
+        JButton[][] seatButtons = new JButton[9][7]; 
+
+        seatPanel.setPreferredSize(new Dimension(600, 500)); 
         int seatIndex = 0;
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 7; col++) {

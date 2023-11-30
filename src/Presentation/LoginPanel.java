@@ -58,7 +58,7 @@ public class LoginPanel extends JPanel {
         add(lastNameField);
         add(new JLabel("Address (Ex: 123 SteelWood):"));
         add(addressField);
-        add(new JLabel("Phone:"));
+        add(new JLabel("Phone (Ex: 403-222-2980):"));
         add(phoneField);
 
         add(loginButton);
@@ -69,7 +69,7 @@ public class LoginPanel extends JPanel {
         add(new JLabel()); // Additional Placeholder
 
         backButton.addActionListener(e -> {
-            mainFrame.switchView("Home");
+            mainFrame.switchViewBasedOnAccessLevel();
         });
 
         loginButton.addActionListener(e -> {
@@ -77,6 +77,7 @@ public class LoginPanel extends JPanel {
             String email = emailField.getText();
             String password = new String(passwordField.getPassword());
             loginController.validLogin(email, password);
+            mainFrame.setUserLabel();
         });
 
         registerButton.addActionListener(e -> {
@@ -88,7 +89,8 @@ public class LoginPanel extends JPanel {
             String lastName = lastNameField.getText();
             String address = addressField.getText();
             String phoneNum = phoneField.getText();
-            loginController.createLogin(password, email, dateOfBirth , firstName, lastName, address, phoneNum);
+            loginController.createLogin(dateOfBirth, password, email , firstName, lastName, address, phoneNum);
+            mainFrame.setUserLabel();
         });
     }
     

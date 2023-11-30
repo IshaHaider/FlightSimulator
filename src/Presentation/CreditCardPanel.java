@@ -12,11 +12,13 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 
 public class CreditCardPanel extends JPanel {
-    Gui mainFrame;
-    SeatController seatController;
+    private Gui mainFrame;
+    private SeatController seatController;
+    private PromotionController promotionController;
 
     private JTextField cardNumberField;
     private JTextField expiryDateField;
@@ -34,10 +36,12 @@ public class CreditCardPanel extends JPanel {
     private LocalTime arriveTime;
     private String arriveLocation;
     private float cost;
+    // private float newCost;
+    // private float percentageDiscount;
 
     private GuestUser tmpGuesUser;
 
-    public CreditCardPanel(Gui mainFrame, SeatController seatController) {
+    public CreditCardPanel(Gui mainFrame, SeatController seatController, PromotionController promotionController) {
         this.mainFrame = mainFrame;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -126,6 +130,16 @@ public class CreditCardPanel extends JPanel {
     private void displayPurchaseSummary() {
         JFrame summaryFrame = new JFrame("Purchase Summary");
         summaryFrame.setLayout(new GridLayout(0, 1));
+        summaryFrame.setSize(800, 800);
+        // Promotions
+        // LocalDate today = LocalDate.now();
+        // ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
+        // for (Promotions promotion : currentPromotions) {
+        //     if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today)) {
+        //         percentageDiscount = Float.parseFloat(promotion.getDiscount().replace("%", "")) / 100;
+        //         newCost = cost * (1 - percentageDiscount);
+        //     }
+        // }
 
         // Displaying all the required information
         summaryFrame.add(new JLabel("Flight Number: " + flightID));
@@ -153,7 +167,8 @@ public class CreditCardPanel extends JPanel {
         guestFrame.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
-
+        guestFrame.setSize(800,600);
+        
         // First Name Field
         JLabel firstNameLabel = new JLabel("First Name:");
         JTextField firstNameField = new JTextField(15);

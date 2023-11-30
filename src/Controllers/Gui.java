@@ -49,10 +49,10 @@ public class Gui extends JFrame {
         
         // Add the panels (views)
         this.homePanel = new HomePanel(this);
-        this.searchFlightPanel = new SearchFlightPanel(this, seatController);
+        this.searchFlightPanel = new SearchFlightPanel(this, seatController, promotionController);
         this.loginPanel = new LoginPanel(this, loginController);
         this.cancelFlightPanel = new CancelFlightPanel(this, seatController);
-        this.creditCardPanel = new CreditCardPanel(this, seatController);
+        this.creditCardPanel = new CreditCardPanel(this, seatController, promotionController);
         this.userPanel = new UserPanel(this, promotionController);
         this.airlineAgentPanel = new AirlineAgentPanel(this, flightController);
         this.adminPanel = new AdminPanel(this, flightController);
