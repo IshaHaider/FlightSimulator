@@ -404,7 +404,6 @@ CREATE TABLE TICKET (
 -- FROM SEAT 
 -- ORDER BY RAND()
 
-
 INSERT INTO TICKET (aircraftID, flightID, seatID, userID) VALUES
 (4,8,128,2),
 (1,1,5,19),

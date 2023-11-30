@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -74,6 +74,7 @@ public class CancelFlightPanel extends JPanel {
     }
 
     private void confirmAndCancelFlight() {
+        
         int ticketNumber = Integer.parseInt(ticketNumField.getText());
         int flightID = Integer.parseInt(flightIDField.getText());
         int seatID = Integer.parseInt(seatIDField.getText());
@@ -82,6 +83,8 @@ public class CancelFlightPanel extends JPanel {
         
         try {
             seatController.cancelFlight(ticketNumber, flightID, seatID);
+            ResultSet confirmTicketCancel =  seatController.getDBController().selectTableFromTwoAttributes("TICKET", "flightID", flightID, "seatID", seatID);
+            if (!confirmTicketCancel.next()){//TICKET CANCEL CONFIRMED}
 
             JOptionPane.showMessageDialog(
                 this,
@@ -90,6 +93,7 @@ public class CancelFlightPanel extends JPanel {
                 "FlightID: " + flightIDField.getText() + "\n" +
                 "SeatID: " + seatIDField.getText() + "\n",
                 "Cancellation Confirmation",
+                
                 JOptionPane.INFORMATION_MESSAGE
             );
 

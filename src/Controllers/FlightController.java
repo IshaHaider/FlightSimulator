@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class FlightController {
+public class FlightController implements Observer {
     private Gui mainFrame; 
     
     private UserSession userInstance;
@@ -27,12 +27,25 @@ public class FlightController {
     private ArrayList<User> currentPassengers = new ArrayList<User>();
     private ArrayList<RegisteredUser> currentRegisteredUsers = new ArrayList<RegisteredUser>();
 
-    // public FlightController () { this.userInstance = UserSession.getInstance();}
+    private Subject subject;
 
-    // public FlightController (Gui mainFrame) {
-    public FlightController () {
-        // this.mainFrame = mainFrame;
+    public FlightController (Subject s) { 
+        this.userInstance = UserSession.getInstance(); 
+        subject = s;
+        subject.register(this);
+    }
+
+    public FlightController (Gui mainFrame, Subject s) {
+        this.mainFrame = mainFrame;
         this.userInstance = UserSession.getInstance();
+        subject = s;
+        subject.register(this);
+    }
+
+    @Override
+    public void update(){
+        this.airplanes = browseAircrafts();
+        this.currentFlights = browseFlights();
     }
 
     public ArrayList<Flight> browseFlights(){

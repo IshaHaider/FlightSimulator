@@ -5,14 +5,13 @@ import src.Presentation.*;
 
 import javax.security.auth.login.LoginContext;
 import javax.swing.*;
-
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public class Gui extends JFrame {
+public class Gui extends JFrame{
     private CardLayout cardLayout;
     private JPanel cardsPanel;
 
@@ -28,8 +27,8 @@ public class Gui extends JFrame {
     private JLabel userLabel;
     private JButton loginButton, logoutButton;
 
+
     public Gui(LoginController loginController, FlightController flightController, SeatController seatController, DBController dbController, PromotionController promotionController) {
-        
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
 
@@ -113,29 +112,13 @@ public class Gui extends JFrame {
         switchView("Home");
     }
 
-    public HomePanel getHomePanel() {
-        return homePanel;
-    }
-    public SearchFlightPanel getSearchFlightPanel() {
-        return searchFlightPanel;
-    }
-    public LoginPanel getLoginPanel() {
-        return loginPanel;
-    }
-    public CancelFlightPanel getCancelFlightPanel() {
-        return cancelFlightPanel;
-    }
-    public CreditCardPanel getCreditCardPanel() {
-        return creditCardPanel;
-    }
-    public UserPanel getuserPanel() {
-        return userPanel;
-    }
-    public AirlineAgentPanel getAirlineAgentPanel() {
-        return airlineAgentPanel;
-    }
-    public AdminPanel  getAdminPanel() {
-        return adminPanel;
-    }
+    public HomePanel getHomePanel() { return homePanel; }
+    public SearchFlightPanel getSearchFlightPanel() { return searchFlightPanel; }
+    public LoginPanel getLoginPanel() { return loginPanel; }
+    public CancelFlightPanel getCancelFlightPanel() { return cancelFlightPanel; }
+    public CreditCardPanel getCreditCardPanel() { return creditCardPanel; }
+    public UserPanel getuserPanel() { return userPanel; }
+    public AirlineAgentPanel getAirlineAgentPanel() { return airlineAgentPanel; }
+    public AdminPanel  getAdminPanel() { return adminPanel; }
 }
 

@@ -13,10 +13,10 @@ public class MainController {
 
     public MainController() { 
         this.db = DBController.getOnlyInstance();
-        this.loginController = new LoginController();
-        this.seatController = new SeatController();
-        this.flightController = new FlightController();
-        this.promotionController = new PromotionController();
+        this.loginController = new LoginController(db);
+        this.seatController = new SeatController(db);
+        this.flightController = new FlightController(db);
+        this.promotionController = new PromotionController(db);
         Gui frame = new Gui(loginController,flightController, seatController, db, promotionController);
 
         loginController.setMainFrame(frame);
