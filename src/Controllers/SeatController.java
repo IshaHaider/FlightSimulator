@@ -142,23 +142,46 @@ public class SeatController implements Observer {
         String email = tmpGuestUser.getEmail();
         try {
             ResultSet retrieveUserID = db.selectTableFromAttribute("ALLUSERS", "email", email);
-            int userID = retrieveUserID.getInt("userID");
-            Ticket tmp = new Ticket(flightID, aircraftID, userID, seatID);
-            db.insertTicket(tmp);
-            loadSeats(aircraftID);
+            while (retrieveUserID.next()) {
+                int userID = retrieveUserID.getInt("userID");
+                Ticket tmp = new Ticket(aircraftID, flightID, userID, seatID);
+                db.insertTicket(tmp);
+                loadSeats(aircraftID);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void purchaseSeat( int flightID, int aircraftID, int userID, int seatID ) {
-        Ticket tmp = new Ticket(flightID, aircraftID, userID, seatID);
+        Ticket tmp = new Ticket( aircraftID, flightID, userID, seatID);
         db.insertTicket(tmp);
         loadSeats(aircraftID);
     }
  
-    public void cancelFlight(int ticketNum, int flightID, int seatID) { db.removeTicket(ticketNum); }
-    public void cancelFlight(int ticketNum) { db.removeTicket(ticketNum); }
+    public String cancelFlight(int ticketNum, int flightID, int seatID) { return db.removeTicket(ticketNum); }
+    
+    
+    public String cancelFlight(int ticketNum) { 
+        try {
+            String returnStatement = db.removeTicket(ticketNum); 
+            ResultSet ticketSet = db.selectTableFromAttribute("TICKET", "ticketNumber", ticketNum);
+            while (ticketSet.next()) {
+                int seatID = ticketSet.getInt("seatID");
+                System.out.println("Seat ID: " + seatID);
+                db.updateRow("SEAT", "available", true, seatID);
+                System.out.println("Ticket found, Seat Avaliable Changed");
+                return returnStatement + " Seat " + seatID + " is now available";
+            }
+            System.out.println("Seat for ticket not found");
+            return returnStatement;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Ticket not found";
+        }
+    }
+
+
     public void cancelFlight(int flightID, int seatID) { 
         try{
             ResultSet cancelTicket  = db.selectTableFromTwoAttributes("TICKET", "flightID", flightID, "seatID", seatID);

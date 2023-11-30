@@ -53,8 +53,7 @@ public class PromotionController implements Observer {
         try {
             ResultSet promos = db.selectTableFromAttribute("PROMOTIONS", "promotionID", promotionID);
             if (promos.next()){
-                return new Promotions(promotionID, promos.getString("name"), 
-                promos.getString("discount"), promos.getDate("startDate").toLocalDate(), promos.getDate("endDate").toLocalDate());
+                return new Promotions(promotionID, promos.getString("name"), promos.getString("discount"), promos.getDate("startDate").toLocalDate(), promos.getDate("endDate").toLocalDate());
             }
         } catch (SQLException e) {
         e.printStackTrace();

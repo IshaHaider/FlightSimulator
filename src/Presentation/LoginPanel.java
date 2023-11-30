@@ -78,6 +78,7 @@ public class LoginPanel extends JPanel {
             String password = new String(passwordField.getPassword());
             loginController.validLogin(email, password);
             mainFrame.setUserLabel();
+            mainFrame.switchViewBasedOnAccessLevel();
         });
 
         registerButton.addActionListener(e -> {
@@ -91,6 +92,7 @@ public class LoginPanel extends JPanel {
             String phoneNum = phoneField.getText();
             loginController.createLogin(dateOfBirth, password, email , firstName, lastName, address, phoneNum);
             mainFrame.setUserLabel();
+            mainFrame.switchViewBasedOnAccessLevel();
         });
     }
     

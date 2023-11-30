@@ -238,7 +238,8 @@ public class DBController <T> implements Subject{
             flightQuery.executeUpdate();
 
             // Change availability of seat
-            String updateStatement = "UPDATE SEAT SET available = 1 WHERE seatID = ?";
+            // String updateStatement = "UPDATE SEAT SET available = 1 WHERE seatID = ?";
+            String updateStatement = "UPDATE SEAT SET available = 0 WHERE seatID = ?"; 
             flightQuery = flightConnect.prepareStatement(updateStatement);
             flightQuery.setInt(1, ticket.getSeatID());
             flightQuery.executeUpdate();
@@ -360,7 +361,7 @@ public class DBController <T> implements Subject{
         }
     }
 
-    public void removeTicket(int ticketNumber){
+    public String removeTicket(int ticketNumber){
         try {
             //find the seat ID from the ticketNumber
             String statement = "SELECT seatID FROM ticket WHERE ticketNumber = ?";
@@ -373,20 +374,24 @@ public class DBController <T> implements Subject{
                 int seatID = flightResult.getInt("seatID");
 
                 // Change availability of seat
-                String updateStatement = "UPDATE SEAT SET available = 0 WHERE seatID = ?";
+                // String updateStatement = "UPDATE SEAT SET available = 0 WHERE seatID = ?";
+                String updateStatement = "UPDATE SEAT SET available = 1 WHERE seatID = ?";
                 flightQuery = flightConnect.prepareStatement(updateStatement);
                 flightQuery.setInt(1, seatID);
                 flightQuery.executeUpdate();
             } else {
                 System.out.println("Ticket not found for ticketNumber: " + ticketNumber);
+                return "Ticket not found for ticketNumber: " + String.valueOf(ticketNumber);
             }
             
             statement = "DELETE FROM TICKET WHERE ticketNumber = ?";
             flightQuery = flightConnect.prepareStatement(statement);
             flightQuery.setInt(1, ticketNumber);
             flightQuery.executeUpdate();
+            return "Ticket successfully cancelled.";
         } catch (SQLException e) {
             e.printStackTrace();
+            return "Error cancelling ticket.";
         }
     }
 
@@ -405,9 +410,10 @@ public class DBController <T> implements Subject{
 
     public ResultSet selectTableFromAttribute(String tableName, String attribute, T value){
         try {
-            String statement = "SELECT * FROM " + tableName + " WHERE " + attribute + " = ?";
-            flightQuery = flightConnect.prepareStatement(statement);
+            String statement = "SELECT * FROM " + tableName + " WHERE " + attribute + " = ?" + ";";
 
+            flightQuery = flightConnect.prepareStatement(statement);
+            
             // Set the parameter value based on the type
             if (value instanceof String) {
                 flightQuery.setString(1, (String) value);
@@ -426,7 +432,7 @@ public class DBController <T> implements Subject{
             } else {
                 throw new SQLException("Unsupported data type");
             }
-
+            
             flightResult = flightQuery.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -877,10 +883,11 @@ public class DBController <T> implements Subject{
 
         // Ticket newTicket = new Ticket(1, 1, 5, 26);
         // temp.insertTicket(newTicket);
-
+        
         // Name guestUserName = new Name("Isha", "Haider");
         // Address guestUserAddress = new Address("213", "Sherwood Gate");
         // LocalDate guestUserDate = LocalDate.of(2002, 06, 01);
+        // System.out.println(guestUserDate);
         // GuestUser newGuestUser = new GuestUser(guestUserName, guestUserAddress,  "isha.haider@ucalgary.ca", guestUserDate , "587-890-8532");
         // temp.insertGuestUser(newGuestUser);
 

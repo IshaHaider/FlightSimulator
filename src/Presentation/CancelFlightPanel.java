@@ -13,8 +13,8 @@ import java.time.LocalTime;
 
 public class CancelFlightPanel extends JPanel {
     private JTextField ticketNumField;
-    private JTextField flightIDField;
-    private JTextField seatIDField;
+    // private JTextField flightIDField;
+    // private JTextField seatIDField;
 
     SeatController seatController;
 
@@ -33,23 +33,23 @@ public class CancelFlightPanel extends JPanel {
         gbc.gridx = 1;
         add(ticketNumField, gbc);
 
-        // Flight ID Field
-        JLabel flightIDLabel = new JLabel("Flight ID:");
-        flightIDField = new JTextField(15);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(flightIDLabel, gbc);
-        gbc.gridx = 1;
-        add(flightIDField, gbc);
+        // // Flight ID Field
+        // JLabel flightIDLabel = new JLabel("Flight ID:");
+        // flightIDField = new JTextField(15);
+        // gbc.gridx = 0;
+        // gbc.gridy = 1;
+        // add(flightIDLabel, gbc);
+        // gbc.gridx = 1;
+        // add(flightIDField, gbc);
 
-        // Seat ID Field
-        JLabel seatIDLabel = new JLabel("Seat ID:");
-        seatIDField = new JTextField(15);
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(seatIDLabel, gbc);
-        gbc.gridx = 1;
-        add(seatIDField, gbc);
+        // // Seat ID Field
+        // JLabel seatIDLabel = new JLabel("Seat ID:");
+        // seatIDField = new JTextField(15);
+        // gbc.gridx = 0;
+        // gbc.gridy = 2;
+        // add(seatIDLabel, gbc);
+        // gbc.gridx = 1;
+        // add(seatIDField, gbc);
 
         // Cancel Flight Button
         JButton cancelFlightButton = new JButton("Cancel Flight");
@@ -60,7 +60,7 @@ public class CancelFlightPanel extends JPanel {
             }
         });
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
         add(cancelFlightButton, gbc);
 
@@ -68,7 +68,7 @@ public class CancelFlightPanel extends JPanel {
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> mainFrame.switchViewBasedOnAccessLevel());
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         add(backButton, gbc);
     }
@@ -76,28 +76,31 @@ public class CancelFlightPanel extends JPanel {
     private void confirmAndCancelFlight() {
         
         int ticketNumber = Integer.parseInt(ticketNumField.getText());
-        int flightID = Integer.parseInt(flightIDField.getText());
-        int seatID = Integer.parseInt(seatIDField.getText());
+        // int flightID = Integer.parseInt(flightIDField.getText());
+        // int seatID = Integer.parseInt(seatIDField.getText());
 
         // boolean confirmedCancel = seatController.cancelFlight(ticketNumber, flightID, seatID);
         
         try {
-            seatController.cancelFlight(ticketNumber, flightID, seatID);
-            ResultSet confirmTicketCancel =  seatController.getDBController().selectTableFromTwoAttributes("TICKET", "flightID", flightID, "seatID", seatID);
-            if (!confirmTicketCancel.next()){//TICKET CANCEL CONFIRMED}
+            // seatController.cancelFlight(ticketNumber, flightID, seatID);
+            // ResultSet confirmTicketCancel =  seatController.getDBController().selectTableFromTwoAttributes("TICKET", "flightID", flightID, "seatID", seatID);
+            String returnStatement = seatController.cancelFlight(ticketNumber);
+            // if (!confirmTicketCancel.next()){//TICKET CANCEL CONFIRMED}
 
             JOptionPane.showMessageDialog(
                 this,
-                "Flight Cancellation Confirmed\n" +
-                "Ticket Number: " + ticketNumField.getText() + "\n" +
-                "FlightID: " + flightIDField.getText() + "\n" +
-                "SeatID: " + seatIDField.getText() + "\n",
+                returnStatement,
+                // "Flight Cancellation Confirmed\n" +
+                // "Ticket Number: " + ticketNumField.getText() + "\n", 
+                // "Ticket Number: " + ticketNumField.getText() + "\n" +
+                // "FlightID: " + flightIDField.getText() + "\n" +
+                // "SeatID: " + seatIDField.getText() + "\n",
                 "Cancellation Confirmation",
                 
                 JOptionPane.INFORMATION_MESSAGE
             );
 
-        }} catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(
                 this,
                 "ERROR CHECK INPUTS",
