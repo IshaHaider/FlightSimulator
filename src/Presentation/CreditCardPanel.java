@@ -39,7 +39,7 @@ public class CreditCardPanel extends JPanel {
     // private float newCost;
     // private float percentageDiscount;
 
-    private GuestUser tmpGuesUser;
+    // private GuestUser tmpGuesUser;
 
     public CreditCardPanel(Gui mainFrame, SeatController seatController, PromotionController promotionController) {
         this.mainFrame = mainFrame;
@@ -102,16 +102,13 @@ public class CreditCardPanel extends JPanel {
                 // If all validations pass
                 UserSession userSession = UserSession.getInstance();
                 if (userSession.isLoggedIn()) {
-                    int n = 0;
-                    // displayPurchaseSummary();
+                    seatController.purchaseSeat(flightID, aircraftID, userSession.getUserID() ,seatID);
+                    JOptionPane.showMessageDialog(CreditCardPanel.this,"Purchase Confirmed!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                    displayPurchaseSummary();
                 }
                 else {
                     isGuestUser();
-                    seatController.purchaseSeat(flightID, aircraftID, tmpGuesUser ,seatID); // What would i give for userID if its self-incrementing????????
                 }
-
-                JOptionPane.showMessageDialog(CreditCardPanel.this,"Purchase Confirmed!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
-                displayPurchaseSummary();
 
             }
         });
@@ -210,7 +207,7 @@ public class CreditCardPanel extends JPanel {
         guestFrame.add(birthdateField, gbc);
 
         // Phone Number Field
-        JLabel phoneNumberLabel = new JLabel("Phone Number:");
+        JLabel phoneNumberLabel = new JLabel("Phone Number (###-###-####):");
         JTextField phoneNumberField = new JTextField(15);
         gbc.gridx = 0; gbc.gridy = 5;
         guestFrame.add(phoneNumberLabel, gbc);
@@ -228,8 +225,13 @@ public class CreditCardPanel extends JPanel {
             LocalDate bday = LocalDate.parse(birthdateField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             String phoneNum = phoneNumberField.getText();
 
-            tmpGuesUser = new GuestUser(new Name(fName, lName), new Address(addr), email, bday ,phoneNum );
-            
+            Name guestUserName = new Name(fName, lName);
+            Address guestUserAddress = new Address(addr);
+
+            GuestUser tmpGuesUser = new GuestUser(guestUserName, guestUserAddress, email, bday ,phoneNum );
+            seatController.purchaseSeat(flightID, aircraftID, tmpGuesUser ,seatID); 
+            JOptionPane.showMessageDialog(CreditCardPanel.this,"Purchase Confirmed!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+            displayPurchaseSummary();
             guestFrame.dispose();
         });
         gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2;

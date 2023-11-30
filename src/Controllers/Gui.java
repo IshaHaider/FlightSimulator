@@ -23,6 +23,7 @@ public class Gui extends JFrame{
     private UserPanel userPanel;
     private AirlineAgentPanel airlineAgentPanel;
     private AdminPanel adminPanel;
+    // private CrewPanel crewPanel;
 
     private JLabel userLabel;
     private JButton loginButton, logoutButton;
@@ -54,7 +55,8 @@ public class Gui extends JFrame{
         this.creditCardPanel = new CreditCardPanel(this, seatController, promotionController);
         this.userPanel = new UserPanel(this, promotionController);
         this.airlineAgentPanel = new AirlineAgentPanel(this, flightController);
-        this.adminPanel = new AdminPanel(this, flightController);
+        this.adminPanel = new AdminPanel(this, flightController, promotionController);
+        // this.crewPanel = new CrewPanel(this, flightController);
 
         cardsPanel.add(homePanel, "Home");
         cardsPanel.add(searchFlightPanel, "Search Flight");
@@ -64,6 +66,7 @@ public class Gui extends JFrame{
         cardsPanel.add(userPanel, "UserPanel");
         cardsPanel.add(airlineAgentPanel, "AirlineAgentPanel");
         cardsPanel.add(adminPanel, "AdminPanel");
+        // cardsPanel.add(crewPanel, "CrewPanel");
 
         setLayout(new BorderLayout());
         add(topPanel, BorderLayout.NORTH);
@@ -120,5 +123,6 @@ public class Gui extends JFrame{
     public UserPanel getuserPanel() { return userPanel; }
     public AirlineAgentPanel getAirlineAgentPanel() { return airlineAgentPanel; }
     public AdminPanel  getAdminPanel() { return adminPanel; }
+    // public CrewPanel getCrewPanel() { return crewPanel; }
 }
 

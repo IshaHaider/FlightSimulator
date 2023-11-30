@@ -128,56 +128,6 @@ public class SearchFlightPanel extends JPanel {
         flightTable.setModel(tableModel);
     }
 
-    // private void seatMap(int flightID, int aircraftID, String arrivalLoc, String departLoc, LocalDate departDate, LocalTime departTime, LocalDate arrivalDate, LocalTime arrivalTime) {
-
-    //     ArrayList<Seat> allSeats = seatController.getCertainSeats(aircraftID);
-
-    //     seatMapFrame = new JFrame("Seat Map for aircraftID: " + aircraftID);
-    //     seatMapFrame.setLayout(new GridLayout(9, 7)); // 7 columns for seats, 7 rows
-
-    //     JButton[][] seatButtons = new JButton[9][7]; // 2-D array for seat buttons
-
-    //     int seatIndex = 0;
-    //     for (int row=0; row < 9; row++) {
-    //         for (int col = 0; col < 7; col++) {
-    //             if (col == 3) {
-    //                 JLabel aisleLabel = new JLabel("Aisle");
-    //                 aisleLabel.setHorizontalAlignment(JLabel.CENTER);
-    //                 seatMapFrame.add(aisleLabel);
-    //             } else {
-    //                 if (seatIndex < allSeats.size()) {
-    //                     Seat currentSeat = allSeats.get(seatIndex);
-    //                     seatIndex++;
-    //                     String seatName = currentSeat.getSeatName();
-    //                     AirplaneClass classType = currentSeat.getSeatClass();
-    //                     JButton seatButton = new JButton(seatName);
-    //                     boolean isAvailable = currentSeat.getAvailable();
-    //                     if (isAvailable) {
-    //                         if (classType  == AirplaneClass.Economy) {
-    //                             seatButton.setBackground(Color.BLUE);
-    //                         } else if (classType  == AirplaneClass.Business) {
-    //                             seatButton.setBackground(Color.GREEN);
-    //                         }
-    //                     } else { 
-    //                         seatButton.setBackground(Color.RED);
-    //                         seatButton.setEnabled(false);
-    //                     }
-
-    //                     seatButton.addActionListener(e -> {
-    //                         displayPurchaseOptions(currentSeat.getSeatID(), currentSeat.getAircraftID(), seatName, currentSeat.getSeatClass(), currentSeat.getCost(), currentSeat.getBaggage(), flightID, departDate, departTime, arrivalDate, arrivalTime, arrivalLoc, departLoc);
-    //                     });
-
-    //                     seatMapFrame.add(seatButton);
-    //                     seatButtons[row][col] = seatButton;
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     seatMapFrame.pack();
-    //     seatMapFrame.setVisible(true);
-    // }
-
     private void displayPurchaseOptions(int seatID, int aircraftID, String seatName, AirplaneClass classType, float ticketCost, boolean baggage, int flightID, LocalDate departDate, LocalTime departTime, LocalDate arrivalDate, LocalTime arrivalTime, String arrivalLoc, String departLoc) {
         JFrame optionsFrame = new JFrame("Purchase Options for Seat ID: " + seatID);
         optionsFrame.setLayout(new FlowLayout());
@@ -238,9 +188,9 @@ public class SearchFlightPanel extends JPanel {
     private void seatMap(int flightID, int aircraftID, String arrivalLoc, String departLoc, LocalDate departDate, LocalTime departTime, LocalDate arrivalDate, LocalTime arrivalTime) {
         ArrayList<Seat> allSeats = seatController.getCertainSeats(aircraftID);
 
-        for (Seat seat : allSeats) {
-            System.out.println(seat.getAvailable());
-        }
+        // for (Seat seat : allSeats) {
+        //     System.out.println(seat.getAvailable());
+        // }
 
         seatMapFrame = new JFrame("Seat Map for aircraftID: " + aircraftID);
         JPanel seatPanel = new JPanel(new GridLayout(9, 7)); // 8 columns including aisle

@@ -31,20 +31,13 @@ public class UserPanel extends JPanel {
         LocalDate today = LocalDate.now();
         ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
         for (Promotions promotion : currentPromotions) {
-            if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today)) {
+            if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today) || promotion.getStartDate().isEqual(today) || promotion.getEndDate().isEqual(today)) {
                 JLabel promotionsLabel = new JLabel("This months get " + promotion.getDiscount() + " off tickets. Buy your ticket today!", SwingConstants.CENTER);
                 gbc.gridy = 1;
                 gbc.insets = new Insets(20, 10, 10, 10);
                 add(promotionsLabel, gbc);
             }
         }
-
-        // if (today.getDayOfMonth() == 1) {
-        //     JLabel promotionsLabel = new JLabel("Here's your monthly promotion news! Discounts at airport lounges and more!", SwingConstants.CENTER);
-        //     gbc.gridy = 1;
-        //     gbc.insets = new Insets(20, 10, 10, 10);
-        //     add(promotionsLabel, gbc);
-        // }
 
         // Configure the position for the buttons
         gbc.gridwidth = 1;

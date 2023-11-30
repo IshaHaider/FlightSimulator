@@ -29,6 +29,7 @@ public class MainController {
 
         this.flightController.setAdminPanel(frame.getAdminPanel());
         this.flightController.setAirlineAgentPanel(frame.getAirlineAgentPanel());
+        // this.flightController.setCrewPanel(frame.getCrewPanel());
 
         this.promotionController.setUserPanel(frame.getuserPanel());
 
