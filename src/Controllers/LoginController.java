@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
-public class LoginController {
+public class LoginController implements Observer{
     private Gui mainFrame; 
     private UserSession userInstance;
     private LoginPanel loginPanel;
@@ -19,21 +19,28 @@ public class LoginController {
     private ArrayList<Crew> crewUsers = new ArrayList<Crew>();
     private ArrayList<Admin> adminUsers = new ArrayList<Admin>();
 
-    // public LoginController (Gui mainFrame, DBController db) {
-    public LoginController () {
-        // this.db = db;
+    private Subject subject;
+
+    public LoginController (Subject s) {
         this.userInstance = UserSession.getInstance();
+        subject = s;
+        subject.register(this);
         browseUsers();
     }
 
-    public void setMainFrame(Gui mainFrame) { this.mainFrame = mainFrame; }
+    public LoginController (Gui mainFrame, Subject s) {
+        this.mainFrame = mainFrame;
+        this.userInstance = UserSession.getInstance();
+        subject = s;
+        subject.register(this);
+        browseUsers();
+    }
 
-    // public LoginController (Gui mainFrame) {
-    //     this.mainFrame = mainFrame;
-    //     this.userInstance = UserSession.getInstance();
-    //     browseUsers();
-    // }
-    
+    @Override
+    public void update(){
+        browseUsers();
+    }
+
     private void browseUsers(){
         guestUsers.clear();
         registeredUsers.clear();
@@ -129,13 +136,14 @@ public class LoginController {
 
     
     /* SETTERS AND GETTERS */
+    public void setMainFrame(Gui mainFrame) { this.mainFrame = mainFrame; }
     public void setLoginPanel(LoginPanel panel) { this.loginPanel = panel;}
     public void setGuestUsers(ArrayList<GuestUser> gu) { this.guestUsers = gu; }
     public void setRegisteredUsers(ArrayList<RegisteredUser> ru) { this.registeredUsers = ru; }
     public void setCrewUsers(ArrayList<Crew> cu) { this.crewUsers = cu; }
     public void setAdminUsers(ArrayList<Admin> au) { this.adminUsers = au; }
     
-    
+    public Gui getMainFrame() { return this.mainFrame; }
     public LoginPanel getLoginPanel() { return this.loginPanel;}
     public ArrayList<GuestUser> getGuestUsers() { return this.guestUsers; }
     public ArrayList<RegisteredUser> getRegisteredUsers() { return this.registeredUsers; }

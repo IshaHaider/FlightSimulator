@@ -37,20 +37,20 @@ public class DBController <T> implements Subject{
     @Override
     public void register(Observer o){
         observers.add(o);
-        o.update(onlyInstance);
+        o.update();
     }
 
     @Override
     public void remove(Observer o){
         observers.remove(o);
-        o.update(onlyInstance);
+        o.update();
     }
 
     @Override
-    public void notifyObserver(){
+    public void notifyObservers(){
         for (int i = 0; i < observers.size(); i++){
             Observer o = observers.get(i);
-            o.update(onlyInstance);
+            o.update();
         }
     }
 
@@ -253,7 +253,7 @@ public class DBController <T> implements Subject{
                 flightQuery.executeUpdate();
 
                 // Change availability of seat
-                updateRow("SEAT", "available", false, ticket.getSeatID());
+                onlyInstance.updateRow("SEAT", "available", false, ticket.getSeatID());
             }
         } catch(SQLException e) {
             e.printStackTrace();
@@ -536,7 +536,7 @@ public class DBController <T> implements Subject{
 
             // CHECK IF VALID TICKET
             if (tableName == "TICKET"){
-                ResultSet tableTest = selectTableFromAttribute(tableName, primaryKeyName, id);
+                ResultSet tableTest = onlyInstance.selectTableFromAttribute(tableName, primaryKeyName, id);
                 Ticket tick = new Ticket();
                 while(tableTest.next()){ 
                     if (attributeToUpdate == "aircraftID") {
@@ -652,86 +652,164 @@ public class DBController <T> implements Subject{
 
     /* VALIDATE FUNCTIONS */
     private int validateTicket(Ticket ticket){
-        ResultSet seatResult = onlyInstance.selectTableFromAttribute("SEAT", "seatID", ticket.getSeatID());
-        ResultSet flightResult = onlyInstance.selectTableFromAttribute("FLIGHT", "flightID", ticket.getFlightID());
-        int seatAircraftID = 0;
-        boolean seatAvailability = false;
-        int flightAircraftID = 0;
-        while(seatResult.next()){
-            seatAircraftID = seatResult.getInt("aircraftID");
-            seatAvailability = seatResult.getBoolean("available");
+        try{
+            ResultSet seatResult = onlyInstance.selectTableFromAttribute("SEAT", "seatID", ticket.getSeatID());
+            ResultSet flightResult = onlyInstance.selectTableFromAttribute("FLIGHT", "flightID", ticket.getFlightID());
+            int seatAircraftID = 0;
+            boolean seatAvailability = false;
+            int flightAircraftID = 0;
+            while(seatResult.next()){
+                seatAircraftID = seatResult.getInt("aircraftID");
+                seatAvailability = seatResult.getBoolean("available");
+            }
+            while(flightResult.next()){
+                flightAircraftID = flightResult.getInt("aircraftID");
+            }
+            if (seatAircraftID != flightAircraftID || seatAircraftID != ticket.getAircraftID() || flightAircraftID != ticket.getAircraftID()){ return 1; }
+            if (!seatAvailability){ return 2; }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        while(flightResult.next()){
-            flightAircraftID = flightResult.getInt("aircraftID");
-        }
-
-        if (seatAircraftID != flightAircraftID || seatAircraftID != ticket.getAircraftID() || flightAircraftID != ticket.getAircraftID()){ return 1; }
-        if (!seatAvailability){ return 2; }
         return 0;
     }
     
     private void validateSeats(){
-        String updateStatement = "UPDATE SEAT SET available = false WHERE seatID IN (SELECT seatID FROM ticket);";
-        flightQuery = flightConnect.prepareStatement(updateStatement);
-        flightQuery.executeUpdate();
+        try{
+            String updateStatement = "UPDATE SEAT SET available = false WHERE seatID IN (SELECT seatID FROM ticket);";
+            flightQuery = flightConnect.prepareStatement(updateStatement);
+            flightQuery.executeUpdate();
 
-        updateStatement =  "UPDATE SEAT SET available = true WHERE seatID NOT IN (SELECT seatID FROM ticket);";
-        flightQuery = flightConnect.prepareStatement(updateStatement);
-        flightQuery.executeUpdate();
+            updateStatement =  "UPDATE SEAT SET available = true WHERE seatID NOT IN (SELECT seatID FROM ticket);";
+            flightQuery = flightConnect.prepareStatement(updateStatement);
+            flightQuery.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     private void validateUsers(){
-        ResultSet userResult = onlyInstance.selectTable("ALLUSERS");
-        while(userResult.next()){
-            int userID = userResult.getInt("userID");
-            int accessLevel = userResult.getInt("accessLevel");
-            if (accessLevel == 1){
-                if (( userResult.getObject("promotionID") != null)|| (userResult.getObject("balance") != 0)||(userResult.getObject("password") != null) ){
-                    throw new SQLException("guest user: " + userID + " has incorrect data (promotion, password, and balance must be null).");
+        try{
+            ResultSet userResult = onlyInstance.selectTable("ALLUSERS");
+            while(userResult.next()){
+                int userID = userResult.getInt("userID");
+                int accessLevel = userResult.getInt("accessLevel");
+                if (accessLevel == 1){
+                    if (( userResult.getObject("promotionID") != null)|| (userResult.getObject("balance") != null)||(userResult.getObject("password") != null) ){
+                        String updateStatement = "UPDATE ALLUSERS SET promotionID = null, balance = null, password = null WHERE userID = ?";
+                        flightQuery = flightConnect.prepareStatement(updateStatement);
+                        flightQuery.setInt(1, userResult.getInt("userID"));
+                        flightQuery.executeUpdate();
+                        
+                        throw new SQLException("guest user: " + userID + " has incorrect data (promotion, password, and balance must be null).");
+                    }
+                }
+                else if (accessLevel == 3 || accessLevel == 4){
+                    if (( userResult.getObject("promotionID") != null)|| (userResult.getObject("balance") != null) ){
+                        String updateStatement = "UPDATE ALLUSERS SET promotionID = null, balance = null WHERE userID = ?";
+                        flightQuery = flightConnect.prepareStatement(updateStatement);
+                        flightQuery.setInt(1, userResult.getInt("userID"));
+                        flightQuery.executeUpdate();
+
+                        throw new SQLException("admin or crew user: " + userID + " cannot have a promotion or an account balance.");
+                    }
                 }
             }
-            else if (accessLevel == 3 || accessLevel == 4){
-                if (( userResult.getObject("promotionID") != null)|| (userResult.getObject("balance") != 0) ){
-                    throw new SQLException("admin or crew user: " + userID + " cannot have a promotion or an account balance.");
-                }
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-
     
     private void validatePromotions(){ // ensure promotions startdate is not after enddate
-        ResultSet promoResult = onlyInstance.selectTable("PROMOTIONS");
-        while(promoResult.next()){
-            int promoID = promoResult.getInt("promotionID");
-            Date startDate = promoResult.getDate("startDate");
-            Date endDate = promoResult.getDate("endDate");
-            if (startDate.after(endDate)) { throw new SQLException("Error: the promotion: " + promoID + " has a start date that is after the end date."); }
+        try{
+            ResultSet promoResult = onlyInstance.selectTable("PROMOTIONS");
+            while(promoResult.next()){
+                int promoID = promoResult.getInt("promotionID");
+                Date startDate = promoResult.getDate("startDate");
+                Date endDate = promoResult.getDate("endDate");
+                if (startDate.after(endDate)) {
+                    // switch the two dates
+                    String updateStatement = "UPDATE PROMOTIONS SET startDate = ? WHERE promotionID = ?";
+                    flightQuery = flightConnect.prepareStatement(updateStatement);
+                    flightQuery.setDate(1, endDate);
+                    flightQuery.setInt(2, promoID);
+                    flightQuery.executeUpdate();
+
+                    updateStatement = "UPDATE PROMOTIONS SET endDate = ? WHERE promotionID = ?";
+                    flightQuery = flightConnect.prepareStatement(updateStatement);
+                    flightQuery.setDate(1, startDate);
+                    flightQuery.setInt(2, promoID);
+                    flightQuery.executeUpdate();
+                    
+                    throw new SQLException("Error: the promotion: " + promoID + " has a start date that is after the end date.");
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     private void validateFlights(){ // ensure flight has only crew members assigned
-        ResultSet allCrewMembers = onlyInstance.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
-        List<Integer> allCrewIDs = new ArrayList<>();
-        while (allCrewMembers.next()) {
-            allCrewIDs.add(allCrewMembers.getInt("userID"));
-        }
-        
-        
-        ResultSet flighResult = onlyInstance.selectTable("FLIGHT");
-        List<Integer> flightCrewIDs = new ArrayList<>();
-        while(flighResult.next()){
-            int flightID = flighResult.getInt("flightID");
-            flightCrewIDs.add(flighResult.getInt("crewMember1"));
-            flightCrewIDs.add(flighResult.getInt("crewMember2"));
-            flightCrewIDs.add(flighResult.getInt("crewMember3"));
-
-            // Check if all IDs in flightCrew are present in crewIDs
-            List<Integer> remainingCrewIDs = new ArrayList<>(flightCrewIDs);
-            remainingCrewIDs.removeAll(allCrewIDs);
-
-            if (!remainingCrewIDs.isEmpty()) {
-                throw new SQLException("The following users assigned to flight: " + flightID + " are not crew members: " + remainingCrewIDs);
+        try{
+            ResultSet allCrewMembers = onlyInstance.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
+            List<Integer> allCrewIDs = new ArrayList<>();
+            while (allCrewMembers.next()) {
+                allCrewIDs.add(allCrewMembers.getInt("userID"));
             }
+            
+            ResultSet flighResult = onlyInstance.selectTable("FLIGHT");
+            List<Integer> flightCrewIDs = new ArrayList<>();
+            while(flighResult.next()){
+                int flightID = flighResult.getInt("flightID");
+                flightCrewIDs.add(flighResult.getInt("crewMember1"));
+                flightCrewIDs.add(flighResult.getInt("crewMember2"));
+                flightCrewIDs.add(flighResult.getInt("crewMember3"));
+
+                Date departDate = flighResult.getDate("departDate");
+                Date arriveDate = flighResult.getDate("arriveDate");
+                if (departDate.after(arriveDate)) {
+                    // switch the two dates
+                    String updateStatement = "UPDATE FLIGHT SET departDate = ? WHERE flightID = ?";
+                    flightQuery = flightConnect.prepareStatement(updateStatement);
+                    flightQuery.setDate(1, arriveDate);
+                    flightQuery.setInt(2, flightID);
+                    flightQuery.executeUpdate();
+
+                    updateStatement = "UPDATE FLIGHT SET arriveDate = ? WHERE flightID = ?";
+                    flightQuery = flightConnect.prepareStatement(updateStatement);
+                    flightQuery.setDate(1, departDate);
+                    flightQuery.setInt(2, flightID);
+                    flightQuery.executeUpdate();
+                    
+                    throw new SQLException("Error: the flight: " + flightID + " has a departure date that is after the arrival date.");
+                }
+                // Check if all IDs in flightCrew are present in crewIDs
+                List<Integer> remainingCrewIDs = new ArrayList<>(flightCrewIDs);
+                remainingCrewIDs.removeAll(allCrewIDs);
+
+                if (!remainingCrewIDs.isEmpty()) { //remove all crew member id's that are not actually crew members
+                    for (int id : remainingCrewIDs){
+                        String statement = "UPDATE FLIGHT SET crewMember1 = null WHERE crewMember1 = ?";
+                        flightQuery = flightConnect.prepareStatement(statement);
+                        flightQuery.setInt(1, id);
+                        flightQuery.executeUpdate();
+
+                        statement = "UPDATE FLIGHT SET crewMember2 = null WHERE crewMember2 = ?";
+                        flightQuery = flightConnect.prepareStatement(statement);
+                        flightQuery.setInt(1, id);
+                        flightQuery.executeUpdate();
+
+                        statement = "UPDATE FLIGHT SET crewMember2 = null WHERE crewMember2 = ?";
+                        flightQuery = flightConnect.prepareStatement(statement);
+                        flightQuery.setInt(1, id);
+                        flightQuery.executeUpdate();
+                    }
+                    throw new SQLException("The following users assigned to flight: " + flightID + " are not crew members: " + remainingCrewIDs);
+                }
+            
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     
@@ -740,30 +818,31 @@ public class DBController <T> implements Subject{
         validateUsers();
         validateFlights(); 
         validatePromotions();
+        notifyObservers();
     }
    
-    
+
     public void printResultSet(ResultSet resultSet) {
-    try {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int columnCount = metaData.getColumnCount();
+        try {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
 
-        // Print column names
-        for (int i = 1; i <= columnCount; i++) {
-            System.out.print(metaData.getColumnName(i) + "\t");
-        }
-        System.out.println();
-
-        // Print rows
-        while (resultSet.next()) {
+            // Print column names
             for (int i = 1; i <= columnCount; i++) {
-                System.out.print(resultSet.getString(i) + "\t");
+                System.out.print(metaData.getColumnName(i) + "\t");
             }
             System.out.println();
+
+            // Print rows
+            while (resultSet.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print(resultSet.getString(i) + "\t");
+                }
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
 }
     
     public static void main(String[] args) {
@@ -859,6 +938,8 @@ public class DBController <T> implements Subject{
 
         // Seat newSeat = new Seat(4, "17A", AirplaneClass.Economy, 200.0f, true, true);
         // temp.insertSeat(newSeat);
+
+        // temp.selectTableFromAttribute("SEAT", "seatName", "17A");
 
 
         // ------------ TESTING DBController UPDATE FUNCTIONS ------------

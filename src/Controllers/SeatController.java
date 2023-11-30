@@ -2,34 +2,40 @@ package src.Controllers;
   
 import src.Domain.*;
 import src.Presentation.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.sql.Date;
 import java.sql.Time;
 
-// public class SeatController implements Observer<T>{
-public class SeatController{
+public class SeatController implements Observer {
 
     // private ArrayList<Flight> currentFlights;
+    private Gui mainFrame;
     private ArrayList<Seat> currentSeats = new ArrayList<Seat>();
     private DBController db = DBController.getOnlyInstance();
     private SearchFlightPanel searchFlightPanel;
     private CreditCardPanel creditCardPanel;
     private CancelFlightPanel cancelFlightPanel;
-    private Gui mainFrame;
 
-    public SeatController () { 
-        // currentFlights = new FlightController().browseFlights(); 
+    private Subject subject;
+
+    public SeatController (Subject s) {
+        subject = s;
+        subject.register(this);
+    }
+
+    public SeatController (Gui mainFrame, Subject s) {  
+        this.mainFrame = mainFrame; 
+        subject = s;
+        subject.register(this);
     } 
 
-    // public SeatController (Gui mainFrame) { 
-    //     this.mainFrame = mainFrame;
-    //     // currentFlights = new FlightController().browseFlights(); 
-    // } 
+    @Override
+    public void update(){ db = DBController.getOnlyInstance(); }
 
     private void loadSeats(int givenAircraftID) {
         AirplaneClass[] classValues = AirplaneClass.values(); // Check if class is in the AirplaneClass enum
@@ -62,15 +68,6 @@ public class SeatController{
     }
 
     public ArrayList<Flight> getCertainFlights(String arrivalLoc) {
-        // ArrayList<Flight> tmp = new ArrayList<Flight>();
-        // loadFlights();
-        // for (Flight flight : currentFlights) {
-        //     if (flight.getDepartLocation().equals(destination)) {
-        //         tmp.add(flight);
-        //     }
-        // }
-        // return tmp;
-
         ArrayList<Flight> currentFlights = new ArrayList<>();
         Status[] statusValues = Status.values(); // Check if flightStatus is in the Status enum
         try {
@@ -108,15 +105,6 @@ public class SeatController{
     }
 
     public ArrayList<Seat> getCertainSeats(int aircraftID) {
-        // ArrayList<Seat> tmp = new ArrayList<Seat>();
-        // loadSeats();
-        // for (Seat seat : currentSeats) {
-        //     if (seat.getSeatID() == seatID) {
-        //         tmp.add(seat);
-        //     }
-        // }
-        // return tmp;
-            
         ArrayList<Seat> tempSeats = new ArrayList<Seat>();
         AirplaneClass[] classValues = AirplaneClass.values(); // Check if class is in the AirplaneClass enum
         try {
@@ -168,25 +156,32 @@ public class SeatController{
         db.insertTicket(tmp);
         loadSeats(aircraftID);
     }
-
-    public void cancelFlight(int ticketNum, int flightID, int seatID) {
-        db.removeTicket(ticketNum);
-        // loadFlights();
+ 
+    public void cancelFlight(int ticketNum, int flightID, int seatID) { db.removeTicket(ticketNum); }
+    public void cancelFlight(int ticketNum) { db.removeTicket(ticketNum); }
+    public void cancelFlight(int flightID, int seatID) { 
+        try{
+            ResultSet cancelTicket  = db.selectTableFromTwoAttributes("TICKET", "flightID", flightID, "seatID", seatID);
+            while (cancelTicket.next()){
+                db.removeTicket(cancelTicket.getInt("ticketNumber"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
     }
-
 
     /* SETTERS AND GETTERS */
     public void setSearchFlightPanel(SearchFlightPanel panel) { this.searchFlightPanel = panel; }
     public void setCreditCardPanel(CreditCardPanel panel) { this.creditCardPanel = panel; }
     public void setCancelFlightPanel(CancelFlightPanel panel) { this.cancelFlightPanel = panel; }
-    // public void setCurrentFlights(ArrayList<Flight> cf) { this.currentFlights = cf; }
     public void setCurrentSeats(ArrayList<Seat> cs) { this.currentSeats = cs; }
     
     public SearchFlightPanel getSearchFlightPanel() { return this.searchFlightPanel; }
     public CreditCardPanel getCreditCardPanel() { return this.creditCardPanel; }
     public CancelFlightPanel getCancelFlightPanel() { return this.cancelFlightPanel; }
-    // public ArrayList<Flight> getCurrentFlights() { return this.currentFlights; }
     public ArrayList<Seat> getCurrentSeats() { return this.currentSeats; }
+    public DBController getDBController() { return this.db; }
     
 
 }

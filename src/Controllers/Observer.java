@@ -1,6 +1,5 @@
 package src.Controllers;
 
-import src.Controllers.DBController;
 import src.Domain.*;
 import src.Presentation.*;
 
@@ -9,6 +8,6 @@ import src.Presentation.*;
 // }
 
 public interface Observer {
-    void update(DBController db);
+    void update();
 }
 

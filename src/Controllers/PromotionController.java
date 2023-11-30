@@ -6,15 +6,24 @@ import src.Presentation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
- 
 import java.time.LocalDate;
 
-public class PromotionController {
+public class PromotionController implements Observer {
     private UserPanel userPanel;
     private DBController db = DBController.getOnlyInstance();
     private ArrayList<Promotions> currentPromotions = new ArrayList<>();
+    private Subject subject;
 
-    public PromotionController() { loadPromotions(); }
+    public PromotionController(Subject s) { 
+        subject = s;
+        subject.register(this);
+        loadPromotions(); 
+    }
+
+    @Override
+    public void update(){
+        loadPromotions();
+    }
 
     private void loadPromotions() {
         try {
@@ -40,17 +49,6 @@ public class PromotionController {
         // currentPromotions.add(promotion);
     }
 
-    public void updatePromotion(Promotions promotion) {
-
-        db.updatePromotion(promotion.getPromotionID());
-        // for (int i = 0; i < currentPromotions.size(); i++) {
-        //     if (currentPromotions.get(i).getPromotionID() == promotion.getPromotionID()) {
-        //         currentPromotions.set(i, promotion);
-        //         break;
-        //     }
-        // }
-    }
-
     public Promotions getPromotion(int promotionID) {
         try {
             ResultSet promos = db.selectTableFromAttribute("PROMOTIONS", "promotionID", promotionID);
@@ -61,21 +59,13 @@ public class PromotionController {
         } catch (SQLException e) {
         e.printStackTrace();
         }
-        // for (Promotions promo : currentPromotions) {
-        //     if (promo.getPromotionID() == promotionID) {
-        //         return promo;
-        //     }
-        // }
         return null;
     }
 
-    public void deletePromotion(int promotionID) { db.removePromotion(promotionID);
-        // currentPromotions.removeIf(p -> p.getPromotionID() == promotionID);
-    }
-
+    public void updatePromotion(Promotions promotion) { db.updatePromotion(promotion); }
+    public void deletePromotion(int promotionID) { db.removePromotion(promotionID); }
     public ArrayList<Promotions> getCurrentPromotions() {return this.currentPromotions; }
     public void setCurrentPromotions(ArrayList<Promotions> cp) { this.currentPromotions = cp; }
-
     public void setUserPanel( UserPanel panel ) { this.userPanel = panel; }
 
 }
