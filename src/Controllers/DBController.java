@@ -889,6 +889,8 @@ public class DBController <T> implements Subject{
         // ------------ TESTING DBController INSERT FUNCTIONS ------------
         // AirPlane newPlane = new AirPlane("test");
         // temp.insertAircraft(newPlane);
+        // ResultSet check = temp.selectTableFromAttribute("AIRCRAFT", "name", "test");
+        // temp.printResultSet(check);
 
         // Ticket newTicket1 = new Ticket(1, 1, 5, 26);
         // temp.insertTicket(newTicket1);
@@ -939,8 +941,7 @@ public class DBController <T> implements Subject{
         // Seat newSeat = new Seat(4, "17A", AirplaneClass.Economy, 200.0f, true, true);
         // temp.insertSeat(newSeat);
 
-        // temp.selectTableFromAttribute("SEAT", "seatName", "17A");
-
+        
 
         // ------------ TESTING DBController UPDATE FUNCTIONS ------------
         temp.updateRow("AIRCRAFT", "name", "Boeing 500", 1 );
