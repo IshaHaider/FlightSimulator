@@ -58,11 +58,11 @@ public class AdminPanel extends JPanel {
         add(addRemoveAircraftButton, gbc);
     
         // Add/Remove/Modify Flights Information Button
-        // JButton modifyFlightsInfoButton = new JButton("Add/Remove/Modify Flights Information");
-        // modifyFlightsInfoButton.addActionListener(e -> mainFrame.switchView("Modify Flights Information"));
-        // gbc.gridx = 0;
-        // gbc.gridy = 2;
-        // add(modifyFlightsInfoButton, gbc);
+        JButton modifyFlightsInfoButton = new JButton("Add/Remove/Modify Flights Information");
+        modifyFlightsInfoButton.addActionListener(e -> changeFlights());
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        add(modifyFlightsInfoButton, gbc);
     
         // Add/Remove Crew Button
         JButton addRemoveCrewButton = new JButton("Add/Remove Crew");
@@ -186,34 +186,34 @@ public class AdminPanel extends JPanel {
     
     public void displayCrews(int flightID){
         try {
-            // ArrayList<Crew> crewArray = flightController.retrieveCrewList(flightId);
+            ArrayList<Crew> crewArray = flightController.browseCrew(flightID);
 
-            // String[] columnNames = {"Name", "Role", "ID", "Phone Number", "Address"};
+            String[] columnNames = {"Name", "ID", "Phone Number", "Address", "Email"};
 
-            // DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+            DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-            // // Add user data to the table model
-            // for (Crew crew : crewArray) {
-            //     model.addRow(new Object[]{
-            //         crew.getName().getFirstName() + " " + crew.getName().getLastName(),
-            //         crew.getRole(),
-            //         crew.getUserID(),
-            //         crew.getPhoneNumber(),
-            //         crew.getAddress().getNumber() + " " + crew.getAddress().getStreet()
-            //     });
-            // }
+            // Add user data to the table model
+            for (Crew crew : crewArray) {
+                model.addRow(new Object[]{
+                    crew.getName().getFirstName() + " " + crew.getName().getLastName(),
+                    crew.getUserID(),
+                    crew.getPhoneNumber(),
+                    crew.getAddress().getNumber() + " " + crew.getAddress().getStreet(),
+                    crew.getEmail()
+                });
+            }
 
-            // JTable table = new JTable(model);
-            // table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-            // table.setFillsViewportHeight(true);
+            JTable table = new JTable(model);
+            table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+            table.setFillsViewportHeight(true);
 
-            // JScrollPane scrollPane = new JScrollPane(table);
-            // JDialog dialog = new JDialog();
-            // dialog.setTitle("Crews");
-            // dialog.add(scrollPane);
-            // dialog.pack(); // Adjusts size to fit the content
-            // dialog.setLocationRelativeTo(this); // Center relative to the admin panel
-            // dialog.setVisible(true); // Make it visible
+            JScrollPane scrollPane = new JScrollPane(table);
+            JDialog dialog = new JDialog();
+            dialog.setTitle("Crews");
+            dialog.add(scrollPane);
+            dialog.pack(); // Adjusts size to fit the content
+            dialog.setLocationRelativeTo(this); // Center relative to the admin panel
+            dialog.setVisible(true); // Make it visible
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid flight ID", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -325,17 +325,17 @@ public class AdminPanel extends JPanel {
     }
 
     public void addOrRemoveAirplane(){
-        JFrame crewFrame = new JFrame("Add or Remove Crew Member");
-        crewFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
+        JFrame airplaneFrame = new JFrame("Add or Remove Crew Member");
+        airplaneFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
         
         // Create labels and text fields for each required field
-        crewFrame.add(new JLabel("Aircraft ID:"));
+        airplaneFrame.add(new JLabel("Aircraft ID:"));
         JTextField craftIDField = new JTextField(20);
-        crewFrame.add(craftIDField);
+        airplaneFrame.add(craftIDField);
     
-        crewFrame.add(new JLabel("Aircraft Name:"));
+        airplaneFrame.add(new JLabel("Aircraft Name:"));
         JTextField craftNameField = new JTextField(20);
-        crewFrame.add(craftNameField);
+        airplaneFrame.add(craftNameField);
 
         // Submit button
         JButton addButton = new JButton("add Airplane");
@@ -346,11 +346,11 @@ public class AdminPanel extends JPanel {
             
             flightController.addAirCraft(new AirPlane(craftID, craftName));
 
-            crewFrame.dispose(); // Close the frame after submission
+            airplaneFrame.dispose(); // Close the frame after submission
         });
 
-        crewFrame.add(new JLabel()); // Empty label for grid alignment
-        crewFrame.add(addButton);
+        airplaneFrame.add(new JLabel()); // Empty label for grid alignment
+        airplaneFrame.add(addButton);
 
         JButton removeButton = new JButton("remove Airplane");
         removeButton.addActionListener(e -> {
@@ -359,6 +359,135 @@ public class AdminPanel extends JPanel {
             String craftName = craftNameField.getText();
             
             flightController.removeAirCraft(new AirPlane(craftID, craftName));
+
+            airplaneFrame.dispose(); // Close the frame after submission
+        });
+    
+        airplaneFrame.add(new JLabel()); // Empty label for grid alignment
+        airplaneFrame.add(removeButton);
+    
+        airplaneFrame.pack(); // Adjusts size to fit the components
+        airplaneFrame.setLocationRelativeTo(null); // Center on screen
+        airplaneFrame.setVisible(true); // Make it visible
+    }
+
+    public void changeFlights(){
+        JFrame flightFrame = new JFrame("Add or Remove or Modify Flight");
+        flightFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
+        
+        // Create labels and text fields for each required field
+        flightFrame.add(new JLabel("Flight ID:"));
+        JTextField flightIDField = new JTextField(20);
+        flightFrame.add(flightIDField);
+        
+        flightFrame.add(new JLabel("Aircraft ID:"));
+        JTextField aircraftIDField = new JTextField(20);
+        flightFrame.add(aircraftIDField);
+        
+        flightFrame.add(new JLabel("Depart Date (yyyy-mm-dd):"));
+        JTextField departDateField = new JTextField(20);
+        flightFrame.add(departDateField);  
+        
+        flightFrame.add(new JLabel("Depart Time (##:##):"));
+        JTextField departTimeField = new JTextField(20);
+        flightFrame.add(departTimeField);
+        
+        flightFrame.add(new JLabel("Depart Location:"));
+        JPasswordField departLocationField = new JTextField(20);
+        flightFrame.add(departLocationField);
+    
+        flightFrame.add(new JLabel("Arrival Date:"));
+        JTextField arrivalDateField = new JTextField(20);
+        flightFrame.add(arrivalDateField);
+    
+        flightFrame.add(new JLabel("Arrival Time:"));
+        JTextField arrivalTimeField = new JTextField(20);
+        flightFrame.add(arrivalTimeField);
+
+        flightFrame.add(new JLabel("Arrival Location:"));
+        JTextField arrivalLocationField = new JTextField(20);
+        flightFrame.add(arrivalLocationField);
+
+        flightFrame.add(new JLabel("Flight Status:"));
+        JTextField flightStatusField = new JTextField(20);
+        flightFrame.add(flightStatusField);
+
+        flightFrame.add(new JLabel("Cost:"));
+        JTextField costField = new JTextField(20);
+        flightFrame.add(costField);
+
+        flightFrame.add(new JLabel("Meal:"));
+        JTextField mealField = new JTextField(20);
+        flightFrame.add(mealField);
+    
+        // Submit button
+        JButton addButton = new JButton("add Flight");
+        addButton.addActionListener(e -> {
+            // Retrieve data from fields
+            // String flightID = flightIDField.getText();
+            String aircraftID = aircraftIDField.getText();
+            String address = addressField.getText();
+            LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
+            LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
+            String departLocation = departLocationField.getText();
+            LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
+            LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
+            String arrivalLocation = arrivalLocationField.getText();
+            String flightStatus = flightStatusField.getText();
+            float cost = Float.parseFloat(costField.getText());
+            boolean meal = Boolean.parseBoolean(mealField.getText());
+            
+            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal);
+
+            flightController.addFlight(tmpFlight);
+
+            crewFrame.dispose(); // Close the frame after submission
+        });
+
+        crewFrame.add(new JLabel()); // Empty label for grid alignment
+        crewFrame.add(addButton);
+
+        JButton removeButton = new JButton("remove Flight");
+        removeButton.addActionListener(e -> {
+            // Retrieve data from fields
+            String flightID = flightIDField.getText();
+
+            // String aircraftID = aircraftIDField.getText();
+            // String address = addressField.getText();
+            // LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
+            // LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
+            // String departLocation = departLocationField.getText()
+            // LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
+            // LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
+            // String arrivalLocation = arrivalLocationField.getText();
+            // String flightStatus = flightStatusField.getText();
+            // float cost = Float.parseFloat(costField.getText());
+            // boolean meal = Boolean.parseBoolean(mealField.getText());
+            
+            flightController.removeFlight(flightID);
+
+            crewFrame.dispose(); // Close the frame after submission
+        });
+
+        JButton modifyButton = new JButton("modify Flight");
+        modifyButton.addActionListener(e -> {
+            // Retrieve data from fields
+            String flightID = flightIDField.getText();
+            String aircraftID = aircraftIDField.getText();
+            String address = addressField.getText();
+            LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
+            LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
+            String departLocation = departLocationField.getText();
+            LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
+            LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
+            String arrivalLocation = arrivalLocationField.getText();
+            String flightStatus = flightStatusField.getText();
+            float cost = Float.parseFloat(costField.getText());
+            boolean meal = Boolean.parseBoolean(mealField.getText());
+            
+            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal);
+
+            flightController.modifyFlight(flightID, tmpFlight);
 
             crewFrame.dispose(); // Close the frame after submission
         });

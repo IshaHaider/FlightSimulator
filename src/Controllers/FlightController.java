@@ -87,6 +87,23 @@ public class FlightController implements Observer {
         return currentFlights;
     }
 
+    public List<Integer> getFlightCrew(final int flightID) {
+        List<Integer> flightCrew = new ArrayList<>();
+        
+        try {
+            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT","flightID", flightID);
+
+            while (requiredFlight.next()) {
+                flightCrew.add(requiredFlight.getInt("crewMember1"));
+                flightCrew.add(requiredFlight.getInt("crewMember2"));
+                flightCrew.add(requiredFlight.getInt("crewMember3"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flightCrew;
+    }
+
     public List<Integer> getFlightCrew(final Flight flight) {
         List<Integer> flightCrew = new ArrayList<>();
         
@@ -103,6 +120,33 @@ public class FlightController implements Observer {
         }
         return flightCrew;
     }
+
+    public ArrayList<Crew> browseCrew(final int flightID){
+        // ArrayList<Flight> assignedFlight = new ArrayList<>();
+        List<Integer> flightCrewIDs = getFlightCrew(flightID);
+        try {
+            ResultSet listedCrew = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
+            while (listedCrew.next()) {
+                int crewID = listedCrew.getInt("userID");
+                if(flightCrewIDs.contains(crewID)){
+                    Name crewName = new Name(listedCrew.getString("firstName"), listedCrew.getString("lastName"));
+                    Address crewAddress = new Address(listedCrew.getString("address"));
+                    String crewEmail = listedCrew.getString("email");
+                    String password = listedCrew.getString("password");
+                    LocalDate birthDate = listedCrew.getDate("birthDate").toLocalDate();
+                    String phoneNumber = listedCrew.getString("phoneNumber");
+                    float balance = listedCrew.getFloat("balance");
+                    // assignedFlight.add(flight);
+                    Crew crew = new Crew(crewID, crewName, crewAddress, crewEmail, password, birthDate, phoneNumber);
+                    currentCrew.add(crew);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return currentCrew;
+    }
+    
 
     public ArrayList<Crew> browseCrew(final Flight flight){
         // ArrayList<Flight> assignedFlight = new ArrayList<>();
@@ -263,6 +307,7 @@ public class FlightController implements Observer {
     public void removeAirCraft(final AirPlane airplane){ db.removeAircraft(airplane.getAircraftID()); }
     public void addFlight(final Flight flight){ db.insertFlight(flight); }
     public void removeFlight(final Flight flight){ db.removeFlight(flight.getFlightID()); }
+    public void removeFlight(final int flightID){ db.removeFlight(flightID); }
     
     /* SETTERS AND GETTERS */
     public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel;}

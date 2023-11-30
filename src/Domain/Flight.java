@@ -56,6 +56,24 @@ public class Flight{
         this.crewMember3 = crewMember3;
     }
 
+    // used when we don't want to add crew yet but create a flight
+    public Flight(int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
+    String arriveLocation, Status flightStatus, float cost, boolean meal){
+        this.aircraftID = aircraftID;
+        this.departDate = departDate;
+        this.departTime = departTime;
+        this.departLocation = departLocation;
+        this.arriveDate = arriveDate;
+        this.arriveTime = arriveTime;
+        this.arriveLocation = arriveLocation;
+        this.flightStatus = flightStatus;
+        this.cost = cost;
+        this.meal = meal;
+        this.crewMember1 = null;
+        this.crewMember2 = null;
+        this.crewMember3 = null;
+    }
+
 
     // USE THIS FOR LOCAL STORAGE (to manually add flightID)
     public Flight(int flightID, int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
