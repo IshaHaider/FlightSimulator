@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class UserPanel extends JPanel {
     private Gui mainFrame;
     private PromotionController promotionController;
+    
     public UserPanel(Gui mainFrame, PromotionController promotionController) {
         this.mainFrame = mainFrame;
         this.promotionController = promotionController;

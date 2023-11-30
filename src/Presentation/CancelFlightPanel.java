@@ -126,5 +126,6 @@ public class CancelFlightPanel extends JPanel {
         //         JOptionPane.INFORMATION_MESSAGE
         //     );
         // }
+        }
     }
 }

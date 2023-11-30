@@ -23,7 +23,6 @@ public class SearchFlightPanel extends JPanel {
     private SeatController seatController;
     private PromotionController promotionController;
     private JFrame seatMapFrame;
-    private Connection databaseConnection; // Database connection reference
     private JTable flightTable; // Table to display flight information
     private JTextField searchField; // Field to enter destination
 
