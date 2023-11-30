@@ -2,7 +2,7 @@ package src.Controllers;
 
 import src.Domain.*;
 import src.Presentation.*;
-
+ 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ public class FlightController implements Observer {
     private UserSession userInstance;
     private AirlineAgentPanel airlineAgentPanel;
     private AdminPanel adminPanel;
+    // private CrewPanel crewPanel;
     private DBController db = DBController.getOnlyInstance();
     
     private ArrayList<AirPlane> airplanes = new ArrayList<AirPlane>();
@@ -90,7 +91,7 @@ public class FlightController implements Observer {
         List<Integer> flightCrew = new ArrayList<>();
         
         try {
-            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT","flightID", flight.getFlightID());
+            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT","flightID", flight);
 
             while (requiredFlight.next()) {
                 flightCrew.add(requiredFlight.getInt("crewMember1"));
@@ -262,10 +263,11 @@ public class FlightController implements Observer {
     public void removeAirCraft(final AirPlane airplane){ db.removeAircraft(airplane.getAircraftID()); }
     public void addFlight(final Flight flight){ db.insertFlight(flight); }
     public void removeFlight(final Flight flight){ db.removeFlight(flight.getFlightID()); }
-
+    
     /* SETTERS AND GETTERS */
     public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel;}
     public void setAdminPanel(AdminPanel panel) { this.adminPanel = panel; }
+    // public void setCrewPanel(CrewPanel panel) { this.crewPanel = panel; }
     public void setAirplanes(ArrayList<AirPlane> ap) { this.airplanes = ap; }
     public void setCurrentFlights(ArrayList<Flight> cf) { this.currentFlights = cf; }
     public void setCurrentCrew(ArrayList<Crew> cc) { this.currentCrew = cc; }
