@@ -97,7 +97,7 @@ public class CancelFlightPanel extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE
             );
 
-        } catch (Exception e) {
+        }} catch (Exception e) {
             JOptionPane.showMessageDialog(
                 this,
                 "ERROR CHECK INPUTS",
