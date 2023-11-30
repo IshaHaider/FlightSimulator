@@ -35,6 +35,10 @@ public class LoginController {
     // }
     
     private void browseUsers(){
+        guestUsers.clear();
+        registeredUsers.clear();
+        crewUsers.clear();
+        adminUsers.clear();
         try {
             ResultSet allUsers = db.selectTable("allusers");
 
@@ -75,10 +79,14 @@ public class LoginController {
     public void validLogin(final String email, final String password) {
         if (!email.isEmpty() && !password.isEmpty() ) { // should be checking database here
             try {
-            ResultSet result = db.selectTableFromTwoAttributes("ALLUSERS", "email", email, "password", password);
-            int retrievedAccessLevel = result.getInt("accessLevel");
-            userInstance.setUserName(email);
-            userInstance.setAccessLevel(retrievedAccessLevel);
+                ResultSet result = db.selectTableFromTwoAttributes("ALLUSERS", "email", email, "password", password);
+                while (result.next()) {
+                    int retrievedAccessLevel = result.getInt("accessLevel");
+                    int retrievedID = result.getInt("userID");
+                    userInstance.setUserName(email);
+                    userInstance.setAccessLevel(retrievedAccessLevel);
+                    userInstance.setUserID(retrievedID);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -91,6 +99,7 @@ public class LoginController {
         if (email.isEmpty() || password.isEmpty() || DOFB.isEmpty() || fName.isEmpty() || lName.isEmpty() || address.isEmpty() || phoneNum.isEmpty()) {
             loginPanel.setStatusLabel("Please fill in all fields.");
         }
+        browseUsers(); //
         for (RegisteredUser user : registeredUsers) {
             if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
                 loginPanel.setStatusLabel("User already exists.");

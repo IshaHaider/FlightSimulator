@@ -54,7 +54,7 @@ public class SearchFlightPanel extends JPanel {
             if (destination.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter a destination.", "No Destination", JOptionPane.WARNING_MESSAGE);
             } else {
-                System.out.println(destination);
+                // System.out.println(destination);
                 executeSearch(destination);
             }
         });
