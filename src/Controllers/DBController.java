@@ -15,9 +15,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
-
-public class DBController <T>{
+public class DBController <T> implements Subject{
     private static final String SQL_URL = "jdbc:mysql://localhost:3306/FS";
     private static final String USER = "oop";
     private static final String PASS = "password";
@@ -26,6 +26,8 @@ public class DBController <T>{
     private static Connection flightConnect;
     private ResultSet flightResult;
     private PreparedStatement flightQuery;
+
+    private ArrayList<Observer> observers;
 
     private DBController(){
         createConnection(SQL_URL, USER, PASS);
@@ -243,7 +245,6 @@ public class DBController <T>{
 
                 // Change availability of seat
                 onlyInstance.updateRow("SEAT", "available", false, ticket.getSeatID());
-            }
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -935,7 +936,7 @@ public class DBController <T>{
         // Promotions prom = promotions.getPromotion(2);
 
         // ------------ TESTING SeatController FUNCTIONS ------------
-        SeatController seats = new SeatController();
+        // SeatController seats = new SeatController();
 
 
     }
