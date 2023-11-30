@@ -147,6 +147,21 @@ public class SeatController{
 
         return tempSeats;
     }
+    
+    // This function is for purchasing a seat without having to be loggedIn
+    public void purchaseSeat( int flightID, int aircraftID, GuestUser tmpGuestUser, int seatID ) {
+        db.insertGuestUser(tmpGuestUser);
+        String email = tmpGuestUser.getEmail();
+        try {
+            ResultSet retrieveUserID = db.selectTableFromAttribute("ALLUSERS", "email", email);
+            int userID = retrieveUserID.getInt("userID");
+            Ticket tmp = new Ticket(flightID, aircraftID, userID, seatID);
+            db.insertTicket(tmp);
+            loadSeats(aircraftID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void purchaseSeat( int flightID, int aircraftID, int userID, int seatID ) {
         Ticket tmp = new Ticket(flightID, aircraftID, userID, seatID);

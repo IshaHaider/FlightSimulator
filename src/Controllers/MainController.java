@@ -17,7 +17,6 @@ public class MainController {
         this.seatController = new SeatController();
         this.flightController = new FlightController();
         this.promotionController = new PromotionController();
-
         Gui frame = new Gui(loginController,flightController, seatController, db, promotionController);
 
         loginController.setMainFrame(frame);

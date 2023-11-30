@@ -45,7 +45,7 @@ public class Gui extends JFrame {
         topPanel.add(logoutButton, BorderLayout.CENTER);
 
         loginButton.addActionListener(e -> switchView("Login"));
-        // logoutButton.addActionListener(e -> logout());
+        logoutButton.addActionListener(e -> logout());
         
         // Add the panels (views)
         this.homePanel = new HomePanel(this);
@@ -105,6 +105,12 @@ public class Gui extends JFrame {
             loginButton.setVisible(true);
             logoutButton.setVisible(false);
         }
+    }
+
+    private void logout() {
+        UserSession.getInstance().logout();
+        setUserLabel();
+        switchView("Home");
     }
 
     public HomePanel getHomePanel() {

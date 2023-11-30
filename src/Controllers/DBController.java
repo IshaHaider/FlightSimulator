@@ -10,6 +10,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,10 +18,11 @@ import java.sql.Date;
 import java.sql.Time;
 
 
-public class DBController <T>{
+public class DBController <T> implements Subject{
     private static final String SQL_URL = "jdbc:mysql://localhost:3306/FS";
     private static final String USER = "oop";
     private static final String PASS = "password";
+    private ArrayList<Observer> observers;
 
     private static DBController onlyInstance;
     private static Connection flightConnect;
@@ -29,6 +31,27 @@ public class DBController <T>{
 
     private DBController(){
         createConnection(SQL_URL, USER, PASS);
+        observers = new ArrayList<Observer>();
+    }
+
+    @Override
+    public void register(Observer o){
+        observers.add(o);
+        o.update(onlyInstance);
+    }
+
+    @Override
+    public void remove(Observer o){
+        observers.remove(o);
+        o.update(onlyInstance);
+    }
+
+    @Override
+    public void notifyObserver(){
+        for (int i = 0; i < observers.size(); i++){
+            Observer o = observers.get(i);
+            o.update(onlyInstance);
+        }
     }
 
     public static DBController getOnlyInstance(){
@@ -69,6 +92,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
     
     public void insertGuestUser(GuestUser gUser){
@@ -89,6 +113,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void insertRegisteredUser(RegisteredUser rUser){
@@ -109,6 +134,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void insertCrewUser(Crew cUser){
@@ -129,6 +155,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void insertAdminUser(Admin aUser){
@@ -149,6 +176,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void insertFlight(Flight flight){
@@ -172,6 +200,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
     
     public void insertPromotion(Promotions promotion){
@@ -186,6 +215,7 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
     
     public void insertSeat(Seat seat){
@@ -202,9 +232,9 @@ public class DBController <T>{
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
-    
     public void insertTicket(Ticket ticket){
         try {
             if (validateTicket(ticket)==1) {
@@ -222,38 +252,16 @@ public class DBController <T>{
                 flightQuery.setInt(4, ticket.getUserID());   
                 flightQuery.executeUpdate();
 
-
-                // USE UPDATE FUNCTION HERE
                 // Change availability of seat
-                String updateStatement = "UPDATE SEAT SET available = false WHERE seatID = ?";
-                flightQuery = flightConnect.prepareStatement(updateStatement);
-                flightQuery.setInt(1, ticket.getSeatID());
-                flightQuery.executeUpdate();
+                updateRow("SEAT", "available", false, ticket.getSeatID());
             }
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
-    private int validateTicket(Ticket ticket){
-        ResultSet seatResult = onlyInstance.selectTableFromAttribute("SEAT", "seatID", ticket.getSeatID());
-        ResultSet flightResult = onlyInstance.selectTableFromAttribute("FLIGHT", "flightID", ticket.getFlightID());
-        int seatAircraftID = 0;
-        boolean seatAvailability = false;
-        int flightAircraftID = 0;
-        while(seatResult.next()){
-            seatAircraftID = seatResult.getInt("aircraftID");
-            seatAvailability = seatResult.getBoolean("available");
-        }
-        while(flightResult.next()){
-            flightAircraftID = flightResult.getInt("aircraftID");
-        }
 
-        if (seatAircraftID != flightAircraftID || seatAircraftID != ticket.getAircraftID() || flightAircraftID != ticket.getAircraftID()){ return 1; }
-        if (!seatAvailability){ return 2; }
-        return 0;
-    }
-    
     /* REMOVE FUNCTIONS */
 
     public void removeAircraft(int aircraftID){
@@ -281,6 +289,7 @@ public class DBController <T>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void removeUser(int userID){
@@ -312,7 +321,7 @@ public class DBController <T>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        validateAll();
     }
 
     public void removeFlight(int flightID){
@@ -329,6 +338,7 @@ public class DBController <T>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void removePromotion(int promotionID){
@@ -345,6 +355,7 @@ public class DBController <T>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void removeSeat(int seatID){
@@ -361,6 +372,7 @@ public class DBController <T>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
     public void removeTicket(int ticketNumber){
@@ -391,6 +403,7 @@ public class DBController <T>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
 
 
@@ -406,7 +419,7 @@ public class DBController <T>{
         }
         return flightResult;
     }
-
+    
     public ResultSet selectTableFromAttribute(String tableName, String attribute, T value){
         try {
             String statement = "SELECT * FROM " + tableName + " WHERE " + attribute + " = ?";
@@ -488,6 +501,29 @@ public class DBController <T>{
         return flightResult;
     }
 
+    public ResultSet selectCurrentPromotions() {
+        String sql = "SELECT * FROM Promotions WHERE startDate <= CURRENT_DATE() AND endDate >= CURRENT_DATE()";
+        ResultSet rs = null;
+
+        try {
+            PreparedStatement pstmt = flightConnect.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            
+            double maxDiscount = 0.0;
+            while (rs.next()) {
+                String discountString = rs.getString("discount"); // e.g., "10%"
+                double discount = Double.parseDouble(discountString.replace("%", ""));
+                if (discount > maxDiscount) {
+                    maxDiscount = discount;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        validateAll();
+        return rs;
+}
+
 
     /* UPDATE FUNCTIONS */
 
@@ -498,46 +534,215 @@ public class DBController <T>{
             ResultSetMetaData metadata = table.getMetaData();
             String primaryKeyName = metadata.getColumnName(1);
 
-            String updateStatement = "UPDATE " + tableName + " SET " + attributeToUpdate + " = ? WHERE " + primaryKeyName + " = ?;";
-            flightQuery = flightConnect.prepareStatement(updateStatement);
-
-            // Set the parameter value based on the type
-            if (valueToUpdate instanceof String) {
-                flightQuery.setString(1, (String) valueToUpdate);
-            } else if (valueToUpdate instanceof Integer) {
-                flightQuery.setInt(1, (Integer) valueToUpdate);
-            } else if (valueToUpdate instanceof Boolean) {
-                flightQuery.setBoolean(1, (Boolean) valueToUpdate);
-            } else if (valueToUpdate instanceof Float) {
-                flightQuery.setFloat(1, (Float) valueToUpdate);
-            } else if (valueToUpdate instanceof Double) {
-                flightQuery.setDouble(1, (Double) valueToUpdate);
-            } else if (valueToUpdate instanceof LocalDate) {
-                flightQuery.setDate(1, java.sql.Date.valueOf((LocalDate)valueToUpdate));
-            } else if (valueToUpdate instanceof LocalTime) {
-                flightQuery.setTime(1, java.sql.Time.valueOf((LocalTime)valueToUpdate));
-            } else {
-                throw new SQLException("Unsupported data type");
+            // CHECK IF VALID TICKET
+            if (tableName == "TICKET"){
+                ResultSet tableTest = selectTableFromAttribute(tableName, primaryKeyName, id);
+                Ticket tick = new Ticket();
+                while(tableTest.next()){ 
+                    if (attributeToUpdate == "aircraftID") {
+                        tick.setAircraftID((Integer)valueToUpdate);
+                        tick.setFlightID(tableTest.getInt("flightID"));
+                        tick.setSeatID(tableTest.getInt("seatID"));
+                        tick.setUserID(tableTest.getInt("userID"));
+                    }
+                    else if (attributeToUpdate == "flightID"){
+                        tick.setFlightID((Integer)valueToUpdate);
+                        tick.setAircraftID(tableTest.getInt("aircraftID"));
+                        tick.setSeatID(tableTest.getInt("seatID"));
+                        tick.setUserID(tableTest.getInt("userID"));
+                    }
+                    else if (attributeToUpdate == "seatID"){
+                        tick.setSeatID((Integer)valueToUpdate);
+                        tick.setAircraftID(tableTest.getInt("aircraftID"));
+                        tick.setFlightID(tableTest.getInt("flightID"));
+                        tick.setUserID(tableTest.getInt("userID"));
+                    }
+                    else if (attributeToUpdate == "userID"){
+                        tick.setUserID((Integer)valueToUpdate);
+                        tick.setAircraftID(tableTest.getInt("aircraftID"));
+                        tick.setFlightID(tableTest.getInt("flightID"));
+                        tick.setSeatID(tableTest.getInt("seatID"));
+                    }
+                } 
+                int validation = validateTicket(tick);
+                if (validation==1) {  throw new SQLException("Error Inserting Ticket: the seat or flight are not of the same aircraft."); }
+                else if (validation==2) { throw new SQLException("The seat entered is already booked."); }
+                else {updateTicket(tick); return; }
             }
-            flightQuery.setInt(2, id);
-            flightQuery.executeUpdate();
+            
+            // IF THE TABLE IS NOT THE TICKET TABLE, then continue
+            else {
+                String updateStatement = "UPDATE " + tableName + " SET " + attributeToUpdate + " = ? WHERE " + primaryKeyName + " = ?;";
+                flightQuery = flightConnect.prepareStatement(updateStatement);
+
+                // Set the parameter value based on the type
+                if (valueToUpdate instanceof String) {
+                    flightQuery.setString(1, (String) valueToUpdate);
+                } else if (valueToUpdate instanceof Integer) {
+                    flightQuery.setInt(1, (Integer) valueToUpdate);
+                } else if (valueToUpdate instanceof Boolean) {
+                    flightQuery.setBoolean(1, (Boolean) valueToUpdate);
+                } else if (valueToUpdate instanceof Float) {
+                    flightQuery.setFloat(1, (Float) valueToUpdate);
+                } else if (valueToUpdate instanceof Double) {
+                    flightQuery.setDouble(1, (Double) valueToUpdate);
+                } else if (valueToUpdate instanceof LocalDate) {
+                    flightQuery.setDate(1, java.sql.Date.valueOf((LocalDate)valueToUpdate));
+                } else if (valueToUpdate instanceof LocalTime) {
+                    flightQuery.setTime(1, java.sql.Time.valueOf((LocalTime)valueToUpdate));
+                } else {
+                    throw new SQLException("Unsupported data type");
+                }
+                flightQuery.setInt(2, id);
+                flightQuery.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        validateAll();
     }
-    
-    
-    public void updateUser(User user){
+
+    public void updateGuestUser(GuestUser user){
         removeUser(user.getUserID());
-        insertTicket(ticket);
+        insertGuestUser(user);
+        validateAll();
+    }
+
+    public void updateRegisteredUser(RegisteredUser user){
+        removeUser(user.getUserID());
+        insertRegisteredUser(user);
+        validateAll();
+    }
+
+    public void updateCrewUser(Crew user){
+        removeUser(user.getUserID());
+        insertCrewUser(user);
+        validateAll();
+    }
+
+    public void updateAdminUser(Admin user){
+        removeUser(user.getUserID());
+        insertAdminUser(user);
+        validateAll();
+    }
+
+    public void updateFlight(Flight flight){
+        removeFlight(flight.getFlightID());
+        insertFlight(flight);
+        validateAll();
     }
     
+    public void updatePromotion(Promotions promotion){
+        removePromotion(promotion.getPromotionID());
+        insertPromotion(promotion);
+        validateAll();
+    }
+
+    public void updateSeat(Seat seat){
+        removeSeat(seat.getSeatID());
+        insertSeat(seat);
+        validateAll();
+    }
+
     public void updateTicket(Ticket ticket){
         removeTicket(ticket.getTicketNumber());
         insertTicket(ticket);
+        validateAll();
     }
 
+    /* VALIDATE FUNCTIONS */
+    private int validateTicket(Ticket ticket){
+        ResultSet seatResult = onlyInstance.selectTableFromAttribute("SEAT", "seatID", ticket.getSeatID());
+        ResultSet flightResult = onlyInstance.selectTableFromAttribute("FLIGHT", "flightID", ticket.getFlightID());
+        int seatAircraftID = 0;
+        boolean seatAvailability = false;
+        int flightAircraftID = 0;
+        while(seatResult.next()){
+            seatAircraftID = seatResult.getInt("aircraftID");
+            seatAvailability = seatResult.getBoolean("available");
+        }
+        while(flightResult.next()){
+            flightAircraftID = flightResult.getInt("aircraftID");
+        }
 
+        if (seatAircraftID != flightAircraftID || seatAircraftID != ticket.getAircraftID() || flightAircraftID != ticket.getAircraftID()){ return 1; }
+        if (!seatAvailability){ return 2; }
+        return 0;
+    }
+    
+    private void validateSeats(){
+        String updateStatement = "UPDATE SEAT SET available = false WHERE seatID IN (SELECT seatID FROM ticket);";
+        flightQuery = flightConnect.prepareStatement(updateStatement);
+        flightQuery.executeUpdate();
+
+        updateStatement =  "UPDATE SEAT SET available = true WHERE seatID NOT IN (SELECT seatID FROM ticket);";
+        flightQuery = flightConnect.prepareStatement(updateStatement);
+        flightQuery.executeUpdate();
+    }
+    
+    private void validateUsers(){
+        ResultSet userResult = onlyInstance.selectTable("ALLUSERS");
+        while(userResult.next()){
+            int userID = userResult.getInt("userID");
+            int accessLevel = userResult.getInt("accessLevel");
+            if (accessLevel == 1){
+                if (( userResult.getObject("promotionID") != null)|| (userResult.getObject("balance") != 0)||(userResult.getObject("password") != null) ){
+                    throw new SQLException("guest user: " + userID + " has incorrect data (promotion, password, and balance must be null).");
+                }
+            }
+            else if (accessLevel == 3 || accessLevel == 4){
+                if (( userResult.getObject("promotionID") != null)|| (userResult.getObject("balance") != 0) ){
+                    throw new SQLException("admin or crew user: " + userID + " cannot have a promotion or an account balance.");
+                }
+            }
+        }
+    }
+
+    
+    private void validatePromotions(){ // ensure promotions startdate is not after enddate
+        ResultSet promoResult = onlyInstance.selectTable("PROMOTIONS");
+        while(promoResult.next()){
+            int promoID = promoResult.getInt("promotionID");
+            Date startDate = promoResult.getDate("startDate");
+            Date endDate = promoResult.getDate("endDate");
+            if (startDate.after(endDate)) { throw new SQLException("Error: the promotion: " + promoID + " has a start date that is after the end date."); }
+        }
+    }
+
+    private void validateFlights(){ // ensure flight has only crew members assigned
+        ResultSet allCrewMembers = onlyInstance.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
+        List<Integer> allCrewIDs = new ArrayList<>();
+        while (allCrewMembers.next()) {
+            allCrewIDs.add(allCrewMembers.getInt("userID"));
+        }
+        
+        
+        ResultSet flighResult = onlyInstance.selectTable("FLIGHT");
+        List<Integer> flightCrewIDs = new ArrayList<>();
+        while(flighResult.next()){
+            int flightID = flighResult.getInt("flightID");
+            flightCrewIDs.add(flighResult.getInt("crewMember1"));
+            flightCrewIDs.add(flighResult.getInt("crewMember2"));
+            flightCrewIDs.add(flighResult.getInt("crewMember3"));
+
+            // Check if all IDs in flightCrew are present in crewIDs
+            List<Integer> remainingCrewIDs = new ArrayList<>(flightCrewIDs);
+            remainingCrewIDs.removeAll(allCrewIDs);
+
+            if (!remainingCrewIDs.isEmpty()) {
+                throw new SQLException("The following users assigned to flight: " + flightID + " are not crew members: " + remainingCrewIDs);
+            }
+        }
+    }
+    
+    public void validateAll(){
+        validateSeats();
+        validateUsers();
+        validateFlights(); 
+        validatePromotions();
+    }
+   
+    
     public void printResultSet(ResultSet resultSet) {
     try {
         ResultSetMetaData metaData = resultSet.getMetaData();
@@ -663,13 +868,6 @@ public class DBController <T>{
         temp.updateRow("PROMOTIONS", "startDate", LocalDate.of(2023,9,05), 1 );
         temp.updateRow("SEAT", "aircraftID", 2, 1 );
         temp.updateRow("TICKET", "userID", 2, 6 );
-
-
-        
-
-
-        // public void updateRow(String tableName, String attribute, T newValue , int id ){
-        
 
         // // ------------ TESTING FlightController FUNCTIONS ------------
         // FlightController flight = new FlightController();

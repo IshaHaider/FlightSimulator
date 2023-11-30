@@ -32,7 +32,7 @@ public class UserPanel extends JPanel {
         ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
         for (Promotions promotion : currentPromotions) {
             if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today)) {
-                JLabel promotionsLabel = new JLabel("This months get  " + promotion.getDiscount() + " off tickets. Buy your ticket today!", SwingConstants.CENTER);
+                JLabel promotionsLabel = new JLabel("This months get " + promotion.getDiscount() + " off tickets. Buy your ticket today!", SwingConstants.CENTER);
                 gbc.gridy = 1;
                 gbc.insets = new Insets(20, 10, 10, 10);
                 add(promotionsLabel, gbc);

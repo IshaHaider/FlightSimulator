@@ -50,13 +50,13 @@ public class LoginPanel extends JPanel {
         add(emailField);
         add(new JLabel("Password:"));
         add(passwordField);
-        add(new JLabel("Birth Date (dd mm year):"));
+        add(new JLabel("Birth Date (dd mm yyyy):"));
         add(dofbField);
         add(new JLabel("First Name:"));
         add(firstNameField);
         add(new JLabel("Last Name:"));
         add(lastNameField);
-        add(new JLabel("Address (Street City PostalCode Country):"));
+        add(new JLabel("Address (Ex: 123 SteelWood):"));
         add(addressField);
         add(new JLabel("Phone:"));
         add(phoneField);
@@ -105,11 +105,5 @@ public class LoginPanel extends JPanel {
         lastNameField.setText("");
         addressField.setText("");
         phoneField.setText("");
-    }
-
-    private void logoutPanel() {
-        UserSession.getInstance().logout();
-        mainFrame.setUserLabel();
-        mainFrame.switchView("Home");
     }
 }

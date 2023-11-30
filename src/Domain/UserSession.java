@@ -4,6 +4,7 @@ public class UserSession {
     private static UserSession instance;
     private String email;
     private int accessLevel; // 1 for user, 2 for airline agent, 3 for admin
+    private int userID;
 
     private UserSession() {
         email = ""; // Initially, no user is logged in
@@ -30,6 +31,14 @@ public class UserSession {
 
     public void setAccessLevel(int accessLevel) {
         this.accessLevel = accessLevel;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int id) {
+        this.userID = id;
     }
     
     public boolean isLoggedIn() {

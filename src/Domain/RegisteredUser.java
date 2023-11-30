@@ -86,24 +86,7 @@ public class RegisteredUser extends User{
 //         }
 //         return flights;
 //     }
- 
-//     public void receivePromotion() throws SQLException {
-//         String sql = "SELECT * FROM Promotions WHERE startDate <= CURRENT_DATE() AND endDate >= CURRENT_DATE()";
-//         try (Connection conn = dbController.getConnection();
-//              PreparedStatement pstmt = conn.prepareStatement(sql);
-//              ResultSet rs = pstmt.executeQuery()) {
 
-//             double maxDiscount = 0.0;
-//             while (rs.next()) {
-//                 String discountString = rs.getString("discount"); // e.g., "10%"
-//                 double discount = Double.parseDouble(discountString.replace("%", ""));
-//                 if (discount > maxDiscount) {
-//                     maxDiscount = discount;
-//                 }
-//             }
-//             this.discountPercentage = maxDiscount;
-//         }
-//     }
 
 //     public double applyDiscountToSeatPrice(double seatPrice) {
 //         if (this.discountPercentage > 0) {

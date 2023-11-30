@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class CreditCardPanel extends JPanel {
     Gui mainFrame;
@@ -32,6 +34,8 @@ public class CreditCardPanel extends JPanel {
     private LocalTime arriveTime;
     private String arriveLocation;
     private float cost;
+
+    private GuestUser tmpGuesUser;
 
     public CreditCardPanel(Gui mainFrame, SeatController seatController) {
         this.mainFrame = mainFrame;
@@ -70,6 +74,7 @@ public class CreditCardPanel extends JPanel {
         purchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 // saveCreditCardInfo();
                 String cardNumber = cardNumberField.getText();
                 String expiryDate = expiryDateField.getText();
@@ -91,10 +96,19 @@ public class CreditCardPanel extends JPanel {
                 }
         
                 // If all validations pass
+                UserSession userSession = UserSession.getInstance();
+                if (userSession.isLoggedIn()) {
+                    int n = 0;
+                    // displayPurchaseSummary();
+                }
+                else {
+                    isGuestUser();
+                    seatController.purchaseSeat(flightID, aircraftID, tmpGuesUser ,seatID); // What would i give for userID if its self-incrementing????????
+                }
+
                 JOptionPane.showMessageDialog(CreditCardPanel.this,"Purchase Confirmed!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
                 displayPurchaseSummary();
-                // CHANGE THIS LINE
-                seatController.purchaseSeat(flightID, aircraftID, 0 ,seatID); // What would i give for userID if its self-incrementing????????
+
             }
         });
         gbc.gridx = 0;
@@ -109,29 +123,108 @@ public class CreditCardPanel extends JPanel {
         add(cancelButton, gbc);
     }
 
-private void displayPurchaseSummary() {
-    JFrame summaryFrame = new JFrame("Purchase Summary");
-    summaryFrame.setLayout(new GridLayout(0, 1));
+    private void displayPurchaseSummary() {
+        JFrame summaryFrame = new JFrame("Purchase Summary");
+        summaryFrame.setLayout(new GridLayout(0, 1));
 
-    // Displaying all the required information
-    summaryFrame.add(new JLabel("Flight Number: " + flightID));
-    summaryFrame.add(new JLabel("Seat ID: " + seatID));
-    summaryFrame.add(new JLabel("Seat Class: " + classType));
-    summaryFrame.add(new JLabel("Seat Name: " + seatName));
-    summaryFrame.add(new JLabel("Aircraft ID: " + aircraftID));
-    summaryFrame.add(new JLabel("Departure Date: " + departDate));
-    summaryFrame.add(new JLabel("Departure Time: " + departTime));
-    summaryFrame.add(new JLabel("Departure Location: " + departLocation));
-    summaryFrame.add(new JLabel("Arrival Date: " + arriveDate));
-    summaryFrame.add(new JLabel("Arrival Time: " + arriveTime));
-    summaryFrame.add(new JLabel("Arrival Location: " + arriveLocation));
-    summaryFrame.add(new JLabel("Cost: $" + cost));
+        // Displaying all the required information
+        summaryFrame.add(new JLabel("Flight Number: " + flightID));
+        summaryFrame.add(new JLabel("Seat ID: " + seatID));
+        summaryFrame.add(new JLabel("Seat Class: " + classType));
+        summaryFrame.add(new JLabel("Seat Name: " + seatName));
+        summaryFrame.add(new JLabel("Aircraft ID: " + aircraftID));
+        summaryFrame.add(new JLabel("Departure Date: " + departDate));
+        summaryFrame.add(new JLabel("Departure Time: " + departTime));
+        summaryFrame.add(new JLabel("Departure Location: " + departLocation));
+        summaryFrame.add(new JLabel("Arrival Date: " + arriveDate));
+        summaryFrame.add(new JLabel("Arrival Time: " + arriveTime));
+        summaryFrame.add(new JLabel("Arrival Location: " + arriveLocation));
+        summaryFrame.add(new JLabel("Cost: $" + cost));
 
-    summaryFrame.pack();
-    summaryFrame.setVisible(true);
-    summaryFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // maybe dont need this line
-    mainFrame.switchView("Home");
-}
+        summaryFrame.pack();
+        summaryFrame.setVisible(true);
+        summaryFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // maybe dont need this line
+        mainFrame.switchViewBasedOnAccessLevel();;
+    }
+
+    private void isGuestUser() {
+        // Create a new frame for guest user information
+        JFrame guestFrame = new JFrame("Guest User Information");
+        guestFrame.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        // First Name Field
+        JLabel firstNameLabel = new JLabel("First Name:");
+        JTextField firstNameField = new JTextField(15);
+        gbc.gridx = 0; gbc.gridy = 0;
+        guestFrame.add(firstNameLabel, gbc);
+        gbc.gridx = 1;
+        guestFrame.add(firstNameField, gbc);
+
+        // Last Name Field
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        JTextField lastNameField = new JTextField(15);
+        gbc.gridx = 0; gbc.gridy = 1;
+        guestFrame.add(lastNameLabel, gbc);
+        gbc.gridx = 1;
+        guestFrame.add(lastNameField, gbc);
+
+        // Address Field
+        JLabel addressLabel = new JLabel("Address (Ex: 123 John Laruie):");
+        JTextField addressField = new JTextField(15);
+        gbc.gridx = 0; gbc.gridy = 2;
+        guestFrame.add(addressLabel, gbc);
+        gbc.gridx = 1;
+        guestFrame.add(addressField, gbc);
+
+        // Email Field
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField emailField = new JTextField(15);
+        gbc.gridx = 0; gbc.gridy = 3;
+        guestFrame.add(emailLabel, gbc);
+        gbc.gridx = 1;
+        guestFrame.add(emailField, gbc);
+
+        // Birthdate Field
+        JLabel birthdateLabel = new JLabel("Birthdate (yyyy-MM-dd):");
+        JTextField birthdateField = new JTextField(15);
+        gbc.gridx = 0; gbc.gridy = 4;
+        guestFrame.add(birthdateLabel, gbc);
+        gbc.gridx = 1;
+        guestFrame.add(birthdateField, gbc);
+
+        // Phone Number Field
+        JLabel phoneNumberLabel = new JLabel("Phone Number:");
+        JTextField phoneNumberField = new JTextField(15);
+        gbc.gridx = 0; gbc.gridy = 5;
+        guestFrame.add(phoneNumberLabel, gbc);
+        gbc.gridx = 1;
+        guestFrame.add(phoneNumberField, gbc);
+
+        // Submit Button
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(e -> {
+
+            String fName = firstNameField.getText();
+            String lName = lastNameField.getText();
+            String addr = addressField.getText();
+            String email = emailField.getText();
+            LocalDate bday = LocalDate.parse(birthdateField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String phoneNum = phoneNumberField.getText();
+
+            tmpGuesUser = new GuestUser(new Name(fName, lName), new Address(addr), email, bday ,phoneNum );
+            
+            guestFrame.dispose();
+        });
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2;
+        guestFrame.add(submitButton, gbc);
+
+        // Finalize and display the frame
+        guestFrame.pack();
+        guestFrame.setVisible(true);
+        guestFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
 
     public void setSeatID(int seatID) {
         this.seatID = seatID;
