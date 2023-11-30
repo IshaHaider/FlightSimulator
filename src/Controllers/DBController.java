@@ -10,7 +10,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,11 +17,10 @@ import java.sql.Date;
 import java.sql.Time;
 
 
-public class DBController <T> implements Subject{
+public class DBController <T>{
     private static final String SQL_URL = "jdbc:mysql://localhost:3306/FS";
     private static final String USER = "oop";
     private static final String PASS = "password";
-    private ArrayList<Observer> observers;
 
     private static DBController onlyInstance;
     private static Connection flightConnect;
@@ -92,7 +90,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
     
     public void insertGuestUser(GuestUser gUser){
@@ -113,7 +110,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void insertRegisteredUser(RegisteredUser rUser){
@@ -134,7 +130,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void insertCrewUser(Crew cUser){
@@ -155,7 +150,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void insertAdminUser(Admin aUser){
@@ -176,7 +170,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void insertFlight(Flight flight){
@@ -200,7 +193,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
     
     public void insertPromotion(Promotions promotion){
@@ -215,7 +207,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
     
     public void insertSeat(Seat seat){
@@ -232,25 +223,23 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void insertTicket(Ticket ticket){
         try {
-            if (validateTicket(ticket)==1) {
-                throw new SQLException("Error Inserting Ticket: the seat or flight are not of the same aircraft.");
-            }
-            else if (validateTicket(ticket)==2) {
-                throw new SQLException("The seat entered is already booked.");
-            }
-            else {
-                String statement = "INSERT INTO TICKET (aircraftID, flightID, seatID, userID) VALUES (?,?,?,?)";
-                flightQuery = flightConnect.prepareStatement(statement);
-                flightQuery.setInt(1, ticket.getAircraftID());
-                flightQuery.setInt(2, ticket.getFlightID());
-                flightQuery.setInt(3, ticket.getSeatID());
-                flightQuery.setInt(4, ticket.getUserID());   
-                flightQuery.executeUpdate();
+            String statement = "INSERT INTO TICKET (aircraftID, flightID, seatID, userID) VALUES (?,?,?,?)";
+            flightQuery = flightConnect.prepareStatement(statement);
+            flightQuery.setInt(1, ticket.getAircraftID());
+            flightQuery.setInt(2, ticket.getFlightID());
+            flightQuery.setInt(3, ticket.getSeatID());
+            flightQuery.setInt(4, ticket.getUserID());   
+            flightQuery.executeUpdate();
+
+            // Change availability of seat
+            String updateStatement = "UPDATE SEAT SET available = 1 WHERE seatID = ?";
+            flightQuery = flightConnect.prepareStatement(updateStatement);
+            flightQuery.setInt(1, ticket.getSeatID());
+            flightQuery.executeUpdate();
 
                 // Change availability of seat
                 onlyInstance.updateRow("SEAT", "available", false, ticket.getSeatID());
@@ -258,7 +247,6 @@ public class DBController <T> implements Subject{
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
 
@@ -289,7 +277,6 @@ public class DBController <T> implements Subject{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void removeUser(int userID){
@@ -321,7 +308,7 @@ public class DBController <T> implements Subject{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
+
     }
 
     public void removeFlight(int flightID){
@@ -338,7 +325,6 @@ public class DBController <T> implements Subject{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void removePromotion(int promotionID){
@@ -355,7 +341,6 @@ public class DBController <T> implements Subject{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void removeSeat(int seatID){
@@ -372,7 +357,6 @@ public class DBController <T> implements Subject{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
     public void removeTicket(int ticketNumber){
@@ -403,12 +387,10 @@ public class DBController <T> implements Subject{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        validateAll();
     }
 
 
     /* SELECT FUNCTIONS */
-
     public ResultSet selectTable(String tableName) {
         try {
             String statement = "SELECT * FROM " + tableName + ";";
@@ -419,7 +401,7 @@ public class DBController <T> implements Subject{
         }
         return flightResult;
     }
-    
+
     public ResultSet selectTableFromAttribute(String tableName, String attribute, T value){
         try {
             String statement = "SELECT * FROM " + tableName + " WHERE " + attribute + " = ?";
@@ -886,26 +868,14 @@ public class DBController <T> implements Subject{
         // temp.printResultSet(temp.flightResult);
 
         
-        // ------------ TESTING DBController INSERT FUNCTIONS ------------
+        // // ------------ TESTING DBController INSERT FUNCTIONS ------------
         // AirPlane newPlane = new AirPlane("test");
         // temp.insertAircraft(newPlane);
         // ResultSet check = temp.selectTableFromAttribute("AIRCRAFT", "name", "test");
         // temp.printResultSet(check);
 
-        // Ticket newTicket1 = new Ticket(1, 1, 5, 26);
-        // temp.insertTicket(newTicket1);
-
-        // Ticket newTicket2 = new Ticket(1, 1, 5, 40); //seatID doesn't match
-        // temp.insertTicket(newTicket2);
-
-        // Ticket newTicket3 = new Ticket(1, 3, 5, 37); //flightID doesn't match
-        // temp.insertTicket(newTicket3);
-
-        // Ticket newTicket4 = new Ticket(1, 3, 5, 114); //aircraftID doesn't match
-        // temp.insertTicket(newTicket4);
-
-        // Ticket newTicket5 = new Ticket(1, 1, 5, 1); //unavailable seat
-        // temp.insertTicket(newTicket5);
+        // Ticket newTicket = new Ticket(1, 1, 5, 26);
+        // temp.insertTicket(newTicket);
 
         // Name guestUserName = new Name("Isha", "Haider");
         // Address guestUserAddress = new Address("213", "Sherwood Gate");
@@ -943,14 +913,6 @@ public class DBController <T> implements Subject{
 
         
 
-        // ------------ TESTING DBController UPDATE FUNCTIONS ------------
-        temp.updateRow("AIRCRAFT", "name", "Boeing 500", 1 );
-        temp.updateRow("ALLUSERS", "balance", 50.0f, 4 );
-        temp.updateRow("FLIGHT", "departDate", LocalDate.of(2023,04,05), 4 );
-        temp.updateRow("PROMOTIONS", "startDate", LocalDate.of(2023,9,05), 1 );
-        temp.updateRow("SEAT", "aircraftID", 2, 1 );
-        temp.updateRow("TICKET", "userID", 2, 6 );
-
         // // ------------ TESTING FlightController FUNCTIONS ------------
         // FlightController flight = new FlightController();
         
@@ -973,7 +935,7 @@ public class DBController <T> implements Subject{
         // Promotions prom = promotions.getPromotion(2);
 
         // ------------ TESTING SeatController FUNCTIONS ------------
-        // SeatController seats = new SeatController();
+        SeatController seats = new SeatController();
 
 
     }

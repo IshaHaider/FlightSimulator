@@ -39,6 +39,7 @@ public class RegisteredUser extends User{
 
     // USE THIS FOR LOCAL STORAGE (to manually add userID)
     public RegisteredUser (int userID, int promotionID, Name name, Address address, String email, String password, LocalDate birthDate, String phoneNumber, float balance)  {
+        this.userID = userID;
         this.accessLevel = 2;
         this.promotionID = promotionID;
         this.name = name;     

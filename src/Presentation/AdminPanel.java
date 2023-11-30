@@ -109,11 +109,11 @@ public class AdminPanel extends JPanel {
         // Add user data to the table model
         for (RegisteredUser user : registeredUsers) {
             model.addRow(new Object[]{
-                user.getName(),
+                user.getName().getFirstName() + " " + user.getName().getLastName(),
                 user.getEmail(),
                 user.getUserID(),
                 user.getPhoneNumber(),
-                user.getAddress()
+                user.getAddress().getNumber() + " " + user.getAddress().getStreet()
             });
         }
 

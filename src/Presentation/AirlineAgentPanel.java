@@ -35,7 +35,7 @@ public class AirlineAgentPanel extends JPanel {
         JButton searchFlightButton = new JButton("Search Flights");
         searchFlightButton.addActionListener(e -> mainFrame.switchView("Search Flight"));
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         add(searchFlightButton, gbc);
 
@@ -43,23 +43,31 @@ public class AirlineAgentPanel extends JPanel {
         JButton cancelFlightButton = new JButton("Cancel Flights");
         cancelFlightButton.addActionListener(e -> mainFrame.switchView("Cancel Flight"));
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
         add(cancelFlightButton, gbc);
 
-        flightIdField = new JTextField(10); // Specify the width of the text field
+        // Flight ID Label and TextField
+        JLabel flightIdLabel = new JLabel("Enter Flight ID:");
         gbc.gridx = 0;
-        gbc.gridy = 3;
-        add(flightIdField, gbc);
-
-        JButton browsePassangerListbutton = new JButton("Browse Passanger List"); //NEEDA DO SOMETHING TO SHOW LIST IDK YET
-        browsePassangerListbutton.addActionListener( 
-            e -> browsePassangerList() 
-        );
-        gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_END;
-        add(browsePassangerListbutton, gbc);
+        add(flightIdLabel, gbc);
+
+        flightIdField = new JTextField(10); // Specify the width of the text field
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        add(flightIdField, gbc);
+
+        // Browse Passenger List Button
+        JButton browsePassengerListButton = new JButton("Browse Passenger List");
+        browsePassengerListButton.addActionListener(e -> browsePassangerList());
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(browsePassengerListButton, gbc);
     }
 
     public void browsePassangerList() {
