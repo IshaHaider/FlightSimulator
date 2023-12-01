@@ -307,12 +307,13 @@ public class FlightController implements Observer {
 
     public void addCrew(final Crew crew){ db.insertCrewUser(crew);}
     public void removeCrew(final Crew crew){ db.removeUser(crew.getUserID());}
+    public void removeCrew(final int crewID){ db.removeUser(crewID);}
     public void addAirCraft(final AirPlane airplane){ db.insertAircraft(airplane);}
     public void removeAirCraft(final AirPlane airplane){ db.removeAircraft(airplane.getAircraftID()); }
     public void addFlight(final Flight flight){ db.insertFlight(flight); }
     public void removeFlight(final Flight flight){ db.removeFlight(flight.getFlightID()); }
     public void removeFlight(final int flightID){ db.removeFlight(flightID); }
-    
+     
     /* SETTERS AND GETTERS */
     public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel;}
     public void setAdminPanel(AdminPanel panel) { this.adminPanel = panel; }
