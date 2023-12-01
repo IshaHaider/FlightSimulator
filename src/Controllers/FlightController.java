@@ -190,6 +190,7 @@ public class FlightController implements Observer {
     }
 
     public ArrayList<User> retrievePassengerList(final Flight flight) {
+        currentPassengers.clear();
         try {
             ResultSet usersInFlight = db.selectTableFromAttribute("TICKET", "flightID", flight.getFlightID());
             ResultSet allGuestUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 1);
@@ -233,13 +234,16 @@ public class FlightController implements Observer {
     }
 
     public ArrayList<User> retrievePassengerList(final int flightID) {
+        System.out.println("retrivePassangerList being used");
+        currentPassengers.clear();
         try {
             ResultSet usersInFlight = db.selectTableFromAttribute("TICKET", "flightID", flightID);
-            ResultSet allGuestUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 1);
-            ResultSet allRegUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 2);
 
             while (usersInFlight.next()) {
                 int userID = usersInFlight.getInt("userID");
+                
+                ResultSet allGuestUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 1);
+                ResultSet allRegUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 2);
 
                 while(allGuestUsers.next()){
                     if (allGuestUsers.getInt("userID") == userID){
@@ -267,12 +271,12 @@ public class FlightController implements Observer {
                         currentPassengers.add(regUser);    
                     }
                 }
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return currentPassengers;
-        // return userList.toArray(new String[0]);
     }
 
     public ArrayList<RegisteredUser> browseRegisteredUsers(){

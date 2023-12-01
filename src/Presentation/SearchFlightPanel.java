@@ -133,14 +133,20 @@ public class SearchFlightPanel extends JPanel {
         optionsFrame.setSize(600, 500);
 
         LocalDate today = LocalDate.now();
-        ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
-        for (Promotions promotion : currentPromotions) {
-            if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today)) {
-                percentageDiscount = Float.parseFloat(promotion.getDiscount().replace("%", "")) / 100;
-                newCost = ticketCost * (1 - percentageDiscount);
-            } else {
-                newCost = ticketCost;
+
+        UserSession userSession = UserSession.getInstance();
+        if (userSession.isLoggedIn()) {
+            ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
+            for (Promotions promotion : currentPromotions) {
+                if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today) || promotion.getStartDate().isEqual(today) || promotion.getEndDate().isEqual(today)) {
+                    percentageDiscount = Float.parseFloat(promotion.getDiscount().replace("%", "")) / 100;
+                    newCost = ticketCost * (1 - percentageDiscount);
+                } else {
+                    newCost = ticketCost;
+                }
             }
+        } else {
+            newCost = ticketCost;
         }
     
         // JLabel seatLabel = new JLabel("Do you want to buy flight to: " + arrivalLoc  + "\nFrom: " + departLoc + "\nAt: " + departDate.toString() + " " + departTime.toString() + "\nOn Flight ID: " + flightID + "\nSeatType: " + classType + "\nTicket Cost: $" + ticketCost);
@@ -186,12 +192,12 @@ public class SearchFlightPanel extends JPanel {
 
     private void seatMap(int flightID, int aircraftID, String arrivalLoc, String departLoc, LocalDate departDate, LocalTime departTime, LocalDate arrivalDate, LocalTime arrivalTime) {
         ArrayList<Seat> allSeats = seatController.getCertainSeats(aircraftID);
-
-        // for (Seat seat : allSeats) {
-        //     System.out.println(seat.getAvailable());
-        // }
-
+ 
         seatMapFrame = new JFrame("Seat Map for aircraftID: " + aircraftID);
+        JPanel legendsPanel = new JPanel(new GridLayout(1, 1)); // 1 row, 2 columns
+        JLabel blueLegend = new JLabel("Blue: Business Class    Gray: Economy Class", SwingConstants.CENTER);
+        legendsPanel.add(blueLegend);
+        seatMapFrame.add(legendsPanel, BorderLayout.NORTH);
         JPanel seatPanel = new JPanel(new GridLayout(9, 7)); // 8 columns including aisle
     
         JButton[][] seatButtons = new JButton[9][7]; 
