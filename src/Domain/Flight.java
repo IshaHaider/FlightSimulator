@@ -69,9 +69,9 @@ public class Flight{
         this.flightStatus = flightStatus;
         this.cost = cost;
         this.meal = meal;
-        this.crewMember1 = null;
-        this.crewMember2 = null;
-        this.crewMember3 = null;
+        this.crewMember1 = 0;
+        this.crewMember2 = 0;
+        this.crewMember3 = 0;
     }
 
 

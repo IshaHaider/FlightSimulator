@@ -46,6 +46,8 @@ public class UserSession {
     }
 
     public void logout() {
-        email = "";
+        this.email = "";
+        this.accessLevel = 0;
+        this.userID = 0;
     }
 }

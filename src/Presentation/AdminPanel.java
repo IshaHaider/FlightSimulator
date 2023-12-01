@@ -325,7 +325,7 @@ public class AdminPanel extends JPanel {
     }
 
     public void addOrRemoveAirplane(){
-        JFrame airplaneFrame = new JFrame("Add or Remove Crew Member");
+        JFrame airplaneFrame = new JFrame("Add or Remove Airplane");
         airplaneFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
         
         // Create labels and text fields for each required field
@@ -393,7 +393,7 @@ public class AdminPanel extends JPanel {
         flightFrame.add(departTimeField);
         
         flightFrame.add(new JLabel("Depart Location:"));
-        JPasswordField departLocationField = new JTextField(20);
+        JTextField departLocationField = new JTextField(20);
         flightFrame.add(departLocationField);
     
         flightFrame.add(new JLabel("Arrival Date:"));
@@ -425,32 +425,45 @@ public class AdminPanel extends JPanel {
         addButton.addActionListener(e -> {
             // Retrieve data from fields
             // String flightID = flightIDField.getText();
-            String aircraftID = aircraftIDField.getText();
-            String address = addressField.getText();
+            int aircraftID = Integer.valueOf(aircraftIDField.getText());
             LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
             LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
             String departLocation = departLocationField.getText();
             LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
             LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
             String arrivalLocation = arrivalLocationField.getText();
+
             String flightStatus = flightStatusField.getText();
+            Status flightStatusEnum;
+            switch (flightStatus.toLowerCase()) { // Switch flightstatus to enum
+                case "ontime":
+                    flightStatusEnum = Status.OnTime;
+                    break;
+                case "delayed":
+                    flightStatusEnum = Status.Delayed;
+                    break;
+                default:
+                    flightStatusEnum = Status.OnTime;
+                    break;
+            }
+
             float cost = Float.parseFloat(costField.getText());
             boolean meal = Boolean.parseBoolean(mealField.getText());
             
-            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal);
+            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal);
 
             flightController.addFlight(tmpFlight);
 
-            crewFrame.dispose(); // Close the frame after submission
+            flightFrame.dispose(); // Close the frame after submission
         });
 
-        crewFrame.add(new JLabel()); // Empty label for grid alignment
-        crewFrame.add(addButton);
+        flightFrame.add(new JLabel()); // Empty label for grid alignment
+        flightFrame.add(addButton);
 
         JButton removeButton = new JButton("remove Flight");
         removeButton.addActionListener(e -> {
             // Retrieve data from fields
-            String flightID = flightIDField.getText();
+            int flightID = Integer.valueOf(flightIDField.getText());
 
             // String aircraftID = aircraftIDField.getText();
             // String address = addressField.getText();
@@ -466,15 +479,14 @@ public class AdminPanel extends JPanel {
             
             flightController.removeFlight(flightID);
 
-            crewFrame.dispose(); // Close the frame after submission
+            flightFrame.dispose(); // Close the frame after submission
         });
 
         JButton modifyButton = new JButton("modify Flight");
         modifyButton.addActionListener(e -> {
             // Retrieve data from fields
-            String flightID = flightIDField.getText();
-            String aircraftID = aircraftIDField.getText();
-            String address = addressField.getText();
+            int flightID = Integer.valueOf(flightIDField.getText());
+            int aircraftID = Integer.valueOf(aircraftIDField.getText());
             LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
             LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
             String departLocation = departLocationField.getText();
@@ -482,21 +494,33 @@ public class AdminPanel extends JPanel {
             LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
             String arrivalLocation = arrivalLocationField.getText();
             String flightStatus = flightStatusField.getText();
+            Status flightStatusEnum;
+            switch (flightStatus.toLowerCase()) { // Switch flightstatus to enum
+                case "ontime":
+                    flightStatusEnum = Status.OnTime;
+                    break;
+                case "delayed":
+                    flightStatusEnum = Status.Delayed;
+                    break;
+                default:
+                    flightStatusEnum = Status.OnTime;
+                    break;
+            }
             float cost = Float.parseFloat(costField.getText());
             boolean meal = Boolean.parseBoolean(mealField.getText());
             
-            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal);
+            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal);
 
-            flightController.modifyFlight(flightID, tmpFlight);
+            // flightController.modifyFlight(flightID, tmpFlight); // IDK WHAT TO DO FOR THIS ONE!
 
-            crewFrame.dispose(); // Close the frame after submission
+            flightFrame.dispose(); // Close the frame after submission
         });
     
-        crewFrame.add(new JLabel()); // Empty label for grid alignment
-        crewFrame.add(removeButton);
+        flightFrame.add(new JLabel()); // Empty label for grid alignment
+        flightFrame.add(removeButton);
     
-        crewFrame.pack(); // Adjusts size to fit the components
-        crewFrame.setLocationRelativeTo(null); // Center on screen
-        crewFrame.setVisible(true); // Make it visible
+        flightFrame.pack(); // Adjusts size to fit the components
+        flightFrame.setLocationRelativeTo(null); // Center on screen
+        flightFrame.setVisible(true); // Make it visible
     }
 }

@@ -93,7 +93,7 @@ public class DBController <T> implements Subject{
             e.printStackTrace();
         }
     }
-    
+     
     public void insertGuestUser(GuestUser gUser){
         try {
             String statement = "INSERT INTO ALLUSERS (accessLevel, promotionID, firstName, lastName, address, email, password, birthDate, phoneNumber, balance) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -312,7 +312,7 @@ public class DBController <T> implements Subject{
         }
 
     }
-
+ 
     public void removeFlight(int flightID){
         try {
             String statement = "DELETE FROM TICKET WHERE flightID = ?";

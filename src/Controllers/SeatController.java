@@ -145,7 +145,7 @@ public class SeatController implements Observer {
             while (retrieveUserID.next()) {
                 int userID = retrieveUserID.getInt("userID");
                 Ticket tmp = new Ticket(aircraftID, flightID, userID, seatID);
-                db.insertTicket(tmp);
+                db.insertTicket(tmp); 
                 loadSeats(aircraftID);
             }
         } catch (SQLException e) {

@@ -62,7 +62,7 @@ public class AirlineAgentPanel extends JPanel {
 
         // Browse Passenger List Button
         JButton browsePassengerListButton = new JButton("Browse Passenger List");
-        browsePassengerListButton.addActionListener(e -> browsePassangerList());
+        browsePassengerListButton.addActionListener(e -> browsePassangerList(Integer.valueOf(flightIdField.getText())));
         gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -70,9 +70,8 @@ public class AirlineAgentPanel extends JPanel {
         add(browsePassengerListButton, gbc);
     }
 
-    public void browsePassangerList() {
-        int flightId = Integer.parseInt(flightIdField.getText()); // Get flight ID from the text field
-        ArrayList<User> passengerArray = flightController.retrievePassengerList(flightId);
+    public void browsePassangerList(int flightID) {
+        ArrayList<User> passengerArray = flightController.retrievePassengerList(flightID);
 
         String[] passengerNames = new String[passengerArray.size()];
         for (int i = 0; i < passengerArray.size(); i++) {
