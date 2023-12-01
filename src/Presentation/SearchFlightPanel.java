@@ -173,7 +173,7 @@ public class SearchFlightPanel extends JPanel {
             creditCardPanel.setArriveDate(arrivalDate);
             creditCardPanel.setArriveTime(arrivalTime);
             creditCardPanel.setArriveLocation(arrivalLoc);
-            creditCardPanel.setCost(ticketCost);
+            creditCardPanel.setCost(newCost);
             seatMapFrame.dispose();
             mainFrame.switchView("Payment");
         });

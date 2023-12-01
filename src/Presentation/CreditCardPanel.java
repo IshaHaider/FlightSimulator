@@ -43,6 +43,8 @@ public class CreditCardPanel extends JPanel {
 
     public CreditCardPanel(Gui mainFrame, SeatController seatController, PromotionController promotionController) {
         this.mainFrame = mainFrame;
+        this.seatController = seatController;
+        this.promotionController = promotionController;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
