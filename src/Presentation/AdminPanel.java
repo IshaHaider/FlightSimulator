@@ -252,6 +252,10 @@ public class AdminPanel extends JPanel {
         crewFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
     
         // Create labels and text fields for each required field
+        crewFrame.add(new JLabel("CrewID:"));
+        JTextField crewIDField = new JTextField(20);
+        crewFrame.add(crewIDField);
+
         crewFrame.add(new JLabel("First Name:"));
         JTextField fnameField = new JTextField(20);
         crewFrame.add(fnameField);
@@ -303,15 +307,16 @@ public class AdminPanel extends JPanel {
         JButton removeButton = new JButton("remove Crew Member");
         removeButton.addActionListener(e -> {
             // Retrieve data from fields
-            String fname = fnameField.getText();
-            String lname = lnameField.getText();
-            String address = addressField.getText();
-            String email = emailField.getText();
-            String password = new String(passwordField.getPassword());
-            LocalDate birthdate = LocalDate.parse(birthdateField.getText()); // Requires error checking
-            String phoneNum = phoneNumField.getText();
+            int crewID = Integer.parseInt(crewIDField.getText());
+            // String fname = fnameField.getText();
+            // String lname = lnameField.getText();
+            // String address = addressField.getText();
+            // String email = emailField.getText();
+            // String password = new String(passwordField.getPassword());
+            // LocalDate birthdate = LocalDate.parse(birthdateField.getText()); // Requires error checking
+            // String phoneNum = phoneNumField.getText();
             
-            flightController.removeCrew(new Crew(new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
+            flightController.removeCrew(crewID);
     
             crewFrame.dispose(); // Close the frame after submission
         });
