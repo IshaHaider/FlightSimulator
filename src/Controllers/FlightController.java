@@ -175,6 +175,7 @@ public class FlightController implements Observer {
     }
     
     public ArrayList<AirPlane> browseAircrafts(){
+        airplanes.clear();
         try {
             ResultSet listedAircrafts = db.selectTable("AIRCRAFT");
             while (listedAircrafts.next()) {
