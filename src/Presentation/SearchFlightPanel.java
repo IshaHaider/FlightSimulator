@@ -138,10 +138,14 @@ public class SearchFlightPanel extends JPanel {
         if (userSession.isLoggedIn()) {
             ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
             for (Promotions promotion : currentPromotions) {
+                System.out.println(promotion.getStartDate());
                 if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today) || promotion.getStartDate().isEqual(today) || promotion.getEndDate().isEqual(today)) {
+                    System.out.println("Promotion is valid");
                     percentageDiscount = Float.parseFloat(promotion.getDiscount().replace("%", "")) / 100;
                     newCost = ticketCost * (1 - percentageDiscount);
+                    break;
                 } else {
+                    System.out.println("Promotion is not valid");
                     newCost = ticketCost;
                 }
             }
