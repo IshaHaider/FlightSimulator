@@ -17,6 +17,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
+
 public class DBController <T> implements Subject{
     private static final String SQL_URL = "jdbc:mysql://localhost:3306/FS";
     private static final String USER = "oop";
@@ -187,10 +188,28 @@ public class DBController <T> implements Subject{
             flightQuery.setString(7, flight.getArriveLocation());
             flightQuery.setString(8, flight.getFlightStatus().toString());
             flightQuery.setFloat(9, flight.getCost());
-            flightQuery.setBoolean(10, flight.getMeal());    
-            flightQuery.setInt(11, flight.getCrewMember1());
-            flightQuery.setInt(12, flight.getCrewMember2());
-            flightQuery.setInt(13, flight.getCrewMember3());     
+            flightQuery.setBoolean(10, flight.getMeal());   
+
+            // flight.getCrewMember1() ? flightQuery.setInt(11, flight.getCrewMember1()); : flightQuery.setObject(11, null);
+            if (flight.getCrewMember1() != 0){ flightQuery.setInt(11, flight.getCrewMember1()); }
+            else { flightQuery.setNull(11, java.sql.Types.INTEGER); }
+
+            if (flight.getCrewMember2() != 0){ flightQuery.setInt(12, flight.getCrewMember2()); }
+            else { flightQuery.setNull(12, java.sql.Types.INTEGER); }
+
+            if (flight.getCrewMember3() != 0){ flightQuery.setInt(13, flight.getCrewMember3()); }
+            else { flightQuery.setNull(13, java.sql.Types.INTEGER); }
+
+
+            // flight.getCrewMember2() != 0 ? flightQuery.setInt(12, flight.getCrewMember2()) : flightQuery.setNull(12, java.sql.Types.INTEGER);   
+            // flight.getCrewMember3() != 0 ? flightQuery.setInt(13, flight.getCrewMember3()) : flightQuery.setNull(13, java.sql.Types.INTEGER);   
+
+            // flightQuery.setInt(12, flight.getCrewMember2() != 0 ? flight.getCrewMember2() : 0);
+            // flightQuery.setInt(12, flight.getCrewMember3() != 0 ? flight.getCrewMember3() : 0);
+            
+            // flightQuery.setInt(11, flight.getCrewMember1());
+            // flightQuery.setInt(12, flight.getCrewMember2());
+            // flightQuery.setInt(13, flight.getCrewMember3());     
             flightQuery.executeUpdate();
         } catch(SQLException e) {
             e.printStackTrace();
