@@ -41,6 +41,7 @@ public class Flight{
     // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the flightID is auto-increment)
     public Flight(int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
     String arriveLocation, Status flightStatus, float cost, boolean meal, int crewMember1, int crewMember2, int crewMember3){
+        this.flightID = 0;
         this.aircraftID = aircraftID;
         this.departDate = departDate;
         this.departTime = departTime;
@@ -59,6 +60,7 @@ public class Flight{
     // used when we don't want to add crew yet but create a flight
     public Flight(int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
     String arriveLocation, Status flightStatus, float cost, boolean meal){
+        this.flightID = 0;
         this.aircraftID = aircraftID;
         this.departDate = departDate;
         this.departTime = departTime;
@@ -74,6 +76,7 @@ public class Flight{
         this.crewMember3 = 0;
     }
 
+    // used when we don't want to add crew yet but update a flight
     public Flight(int flightID, int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
     String arriveLocation, Status flightStatus, float cost, boolean meal){
         this.flightID = flightID;

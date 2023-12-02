@@ -51,26 +51,26 @@ public class AdminPanel extends JPanel {
         gbc.gridy = 1;
         add(browseAircraftsButton, gbc);
     
-        // Add/Remove Aircraft Button
-        JButton addRemoveAircraftButton = new JButton("Add/Remove Aircraft");
-        addRemoveAircraftButton.addActionListener(e -> addOrRemoveAirplane());
+        // Add/Remove/Modify Aircraft Button
+        JButton maintainAircraftButton = new JButton("Maintain Aircrafts");
+        maintainAircraftButton.addActionListener(e -> maintainAircrafts());
         gbc.gridx = 2;
         gbc.gridy = 1;
-        add(addRemoveAircraftButton, gbc);
+        add(maintainAircraftButton, gbc);
     
         // Add/Remove/Modify Flights Information Button
-        JButton modifyFlightsInfoButton = new JButton("Add/Remove/Modify Flights Information");
-        modifyFlightsInfoButton.addActionListener(e -> changeFlights());
+        JButton maintainFlightsButton = new JButton("Maintain Flights");
+        maintainFlightsButton.addActionListener(e -> maintainFlights());
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(modifyFlightsInfoButton, gbc);
+        add(maintainFlightsButton, gbc);
     
-        // Add/Remove Crew Button
-        JButton addRemoveCrewButton = new JButton("Add/Remove Crew");
-        addRemoveCrewButton.addActionListener(e -> addOrRemoveCrew());
+        // Add/Remove/Modify Crew Button
+        JButton maintainCrewButton = new JButton("Maintain Crew");
+        maintainCrewButton.addActionListener(e -> maintainCrew());
         gbc.gridx = 1;
         gbc.gridy = 2;
-        add(addRemoveCrewButton, gbc);
+        add(maintainCrewButton, gbc);
     
         // Enter Flight ID Label
         JLabel browseCrewLabel = new JLabel("Enter Flight ID:");
@@ -248,7 +248,7 @@ public class AdminPanel extends JPanel {
         dialog.setVisible(true); // Make it visible
     }
 
-    public void addOrRemoveCrew(){
+    public void maintainCrew(){
         JFrame crewFrame = new JFrame("Add or Remove Crew Member");
         crewFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
     
@@ -288,9 +288,8 @@ public class AdminPanel extends JPanel {
         // Submit button
         JButton addButton = new JButton("add Crew Member");
         addButton.addActionListener(e -> {
-            int crewID = Integer.valueOf(crewIDField.getText());
-            
             // Retrieve data from fields
+            int crewID = Integer.valueOf(crewIDField.getText());
             String fname = fnameField.getText();
             String lname = lnameField.getText();
             String address = addressField.getText();
@@ -300,6 +299,7 @@ public class AdminPanel extends JPanel {
             String phoneNum = phoneNumField.getText();
             
             if (flightController.checkIDExists(crewID, "Crew")){
+                fname != null ? fname=fname : fname = ;
                 flightController.getOnlyInstance().updateCrewUser(new Crew(crewID, new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
             }
 
@@ -337,7 +337,7 @@ public class AdminPanel extends JPanel {
         crewFrame.setVisible(true); // Make it visible
     }
 
-    public void addOrRemoveAirplane(){
+    public void maintainAircrafts(){
         JFrame airplaneFrame = new JFrame("Add or Remove Airplane");
         airplaneFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
         
@@ -391,7 +391,7 @@ public class AdminPanel extends JPanel {
         airplaneFrame.setVisible(true); // Make it visible
     }
 
-    public void changeFlights(){
+    public void maintainFlights(){
         JFrame flightFrame = new JFrame("Add or Remove or Modify Flight");
         flightFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
         
