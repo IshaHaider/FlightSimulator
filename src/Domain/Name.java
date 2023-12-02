@@ -19,6 +19,4 @@ public class Name {
 
     public void setFirstName(final String firstName){this.firstName = firstName;}
     public void setLastName(final String lastName){this.lastName = lastName;}
-
-    void validateName(Name name) {}
 }

@@ -7,7 +7,6 @@ import java.awt.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -249,7 +248,7 @@ public class AdminPanel extends JPanel {
     }
 
     public void maintainCrew(){
-        JFrame crewFrame = new JFrame("Add or Remove Crew Member");
+        JFrame crewFrame = new JFrame("Maintain Crew Members");
         crewFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
     
         // Create labels and text fields for each required field
@@ -286,23 +285,33 @@ public class AdminPanel extends JPanel {
         crewFrame.add(phoneNumField);
     
         // Submit button
-        JButton addButton = new JButton("add Crew Member");
+        JButton addButton = new JButton("Add/Update Crew Member");
         addButton.addActionListener(e -> {
             // Retrieve data from fields
-            int crewID = Integer.valueOf(crewIDField.getText());
-            String fname = fnameField.getText();
-            String lname = lnameField.getText();
-            String address = addressField.getText();
-            String email = emailField.getText();
-            String password = new String(passwordField.getPassword());
-            LocalDate birthdate = LocalDate.parse(birthdateField.getText()); // Requires error checking
-            String phoneNum = phoneNumField.getText();
+            
+            int crewID = crewIDField.getText().isEmpty() ? 0 : Integer.valueOf(crewIDField.getText());
+            String fname = fnameField.getText().isEmpty() ? null : fnameField.getText(); 
+            String lname = lnameField.getText().isEmpty() ? null : lnameField.getText(); 
+            String address = addressField.getText().isEmpty() ? null : addressField.getText(); 
+            String email = emailField.getText().isEmpty() ? null : emailField.getText(); 
+            
+            char[] passwordChars = passwordField.getPassword();
+            String password = (passwordChars.length == 0) ? null : new String(passwordChars);
+
+            LocalDate birthdate = birthdateField.getText().isEmpty() ? null : LocalDate.parse(birthdateField.getText());  // Requires error checking
+            String phoneNum = phoneNumField.getText().isEmpty() ? null : phoneNumField.getText(); 
             
             if (flightController.checkIDExists(crewID, "Crew")){
-                fname != null ? fname=fname : fname = ;
-                flightController.getOnlyInstance().updateCrewUser(new Crew(crewID, new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
+                Crew crewObject = flightController.createCrewObject(crewID);
+                fname = (fname != null) ? fname : crewObject.getName().getFirstName();
+                lname = (lname != null) ? lname : crewObject.getName().getLastName();
+                address = (address != null) ? address : crewObject.getAddress().getString();
+                email = (email != null) ? email : crewObject.getEmail();
+                password = (password != null) ? password : crewObject.getPassword();
+                birthdate = (birthdate != null) ? birthdate : crewObject.getBirthDate();
+                phoneNum = (phoneNum != null) ? phoneNum : crewObject.getPhoneNumber();
+                flightController.updateCrewUser(new Crew(crewID, new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
             }
-
             else{
                 flightController.addCrew(new Crew(new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
             }
@@ -312,7 +321,7 @@ public class AdminPanel extends JPanel {
         crewFrame.add(new JLabel()); // Empty label for grid alignment
         crewFrame.add(addButton);
 
-        JButton removeButton = new JButton("remove Crew Member");
+        JButton removeButton = new JButton("Remove Crew Member");
         removeButton.addActionListener(e -> {
             // Retrieve data from fields
             int crewID = Integer.parseInt(crewIDField.getText());
@@ -338,7 +347,7 @@ public class AdminPanel extends JPanel {
     }
 
     public void maintainAircrafts(){
-        JFrame airplaneFrame = new JFrame("Add or Remove Airplane");
+        JFrame airplaneFrame = new JFrame("Maintain Aircrafts");
         airplaneFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
         
         // Create labels and text fields for each required field
@@ -351,35 +360,32 @@ public class AdminPanel extends JPanel {
         airplaneFrame.add(craftNameField);
 
         // Submit button
-        JButton addButton = new JButton("add Airplane");
+        JButton addButton = new JButton("Add/Update Airplane");
         addButton.addActionListener(e -> {
             // Retrieve data from fields
-            int craftID = Integer.parseInt(craftIDField.getText());
-            String craftName = craftNameField.getText();
-            
+            int craftID = craftIDField.getText().isEmpty() ? 0 : Integer.parseInt(craftIDField.getText());
+            String craftName = craftNameField.getText().isEmpty() ? null : craftNameField.getText(); 
+
             if (flightController.checkIDExists(craftID, "Aircraft")){
-                flightController.getOnlyInstance().updateAircraft(new AirPlane(craftID, craftName));
+                AirPlane airplaneObject = flightController.createAircraftObject(craftID);
+                craftName = (craftName != null) ? craftName : airplaneObject.getAircraftName();
+                flightController.updateAircraft(new AirPlane(craftID, craftName));
             }
             else{
                 flightController.addAirCraft(new AirPlane(craftName));
             }
-
-            
-
             airplaneFrame.dispose(); // Close the frame after submission
         });
 
         airplaneFrame.add(new JLabel()); // Empty label for grid alignment
         airplaneFrame.add(addButton);
 
-        JButton removeButton = new JButton("remove Airplane");
+        JButton removeButton = new JButton("Remove Airplane");
         removeButton.addActionListener(e -> {
             // Retrieve data from fields
             int craftID = Integer.parseInt(craftIDField.getText());
             String craftName = craftNameField.getText();
-            
             flightController.removeAirCraft(new AirPlane(craftID, craftName));
-
             airplaneFrame.dispose(); // Close the frame after submission
         });
     
@@ -392,7 +398,7 @@ public class AdminPanel extends JPanel {
     }
 
     public void maintainFlights(){
-        JFrame flightFrame = new JFrame("Add or Remove or Modify Flight");
+        JFrame flightFrame = new JFrame("Maintain Flights");
         flightFrame.setLayout(new GridLayout(0, 2)); // Use GridLayout for form-like structure
         
         // Create labels and text fields for each required field
@@ -453,25 +459,26 @@ public class AdminPanel extends JPanel {
         flightFrame.add(crewMember3Field);
 
         // Submit button
-        JButton addButton = new JButton("add Flight");
+        JButton addButton = new JButton("Add/Update Flight");
         addButton.addActionListener(e -> {
             // Retrieve data from fields
-            int flightID = Integer.valueOf(flightIDField.getText());
-            int aircraftID = Integer.valueOf(aircraftIDField.getText());
-            LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
-            LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
-            String departLocation = departLocationField.getText();
-            LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
-            LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
-            String arrivalLocation = arrivalLocationField.getText();
-            int crewMember1 = Integer.valueOf(crewMember1Field.getText());
-            int crewMember2 = Integer.valueOf(crewMember2Field.getText());
-            int crewMember3 = Integer.valueOf(crewMember3Field.getText());
+            int flightID = flightIDField.getText().isEmpty() ? 0 : Integer.valueOf(flightIDField.getText());
+            int aircraftID = aircraftIDField.getText().isEmpty() ? 0 : Integer.valueOf(aircraftIDField.getText());
+            LocalDate departDate = departDateField.getText().isEmpty() ? null : LocalDate.parse(departDateField.getText());  // Requires error checking
+            LocalTime departTime = departTimeField.getText().isEmpty() ? null : LocalTime.parse(departTimeField.getText()); // Requires error checking
+            String departLocation = departLocationField.getText().isEmpty() ? null : departLocationField.getText(); 
+            LocalDate arrivalDate = arrivalDateField.getText().isEmpty() ? null : LocalDate.parse(arrivalDateField.getText()); // Requires error checking
+            LocalTime arrivalTime = arrivalTimeField.getText().isEmpty() ? null : LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
+ 
+            String arrivalLocation = arrivalLocationField.getText().isEmpty() ? null : arrivalLocationField.getText(); 
+            int crewMember1 = crewMember1Field.getText().isEmpty() ? 0 : Integer.valueOf(crewMember1Field.getText());
+            int crewMember2 = crewMember2Field.getText().isEmpty() ? 0 : Integer.valueOf(crewMember2Field.getText());
+            int crewMember3 = crewMember3Field.getText().isEmpty() ? 0 : Integer.valueOf(crewMember3Field.getText());
 
-            String flightStatus = flightStatusField.getText();
+            String flightStatus = flightStatusField.getText().isEmpty() ? null : flightStatusField.getText(); 
             Status flightStatusEnum;
             switch (flightStatus.toLowerCase()) { // Switch flightstatus to enum
-                case "ontime":
+                case "on time":
                     flightStatusEnum = Status.OnTime;
                     break;
                 case "delayed":
@@ -482,41 +489,41 @@ public class AdminPanel extends JPanel {
                     break;
             }
 
-            float cost = Float.parseFloat(costField.getText());
-            boolean meal = Boolean.parseBoolean(mealField.getText());
+            float cost = costField.getText().isEmpty() ? 0.0f : Float.parseFloat(costField.getText());
+            boolean meal = mealField.getText().isEmpty() ? false : Boolean.parseBoolean(mealField.getText());
             
-            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal,crewMember1,crewMember2,crewMember3);
-
             if (flightController.checkIDExists(flightID, "Flight")){
-                flightController.getOnlyInstance().updateFlight(new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal, crewMember1, crewMember2, crewMember3));
+                Flight flightObject = flightController.createFlightObject(flightID);
+                aircraftID = (aircraftID != 0) ? aircraftID : flightObject.getAircraftID();
+                departDate = (departDate != null) ? departDate : flightObject.getDepartDate();
+                departTime = (departTime != null) ? departTime : flightObject.getDepartTime();
+                departLocation = (departLocation != null) ? departLocation : flightObject.getDepartLocation();
+                arrivalDate = (arrivalDate != null) ? arrivalDate : flightObject.getArriveDate();
+                arrivalTime = (arrivalTime != null) ? arrivalTime : flightObject.getArriveTime();
+                arrivalLocation = (arrivalLocation != null) ? arrivalLocation : flightObject.getArriveLocation();
+                crewMember1 = (crewMember1 != 0) ? crewMember1 : flightObject.getCrewMember1();
+                crewMember2 = (crewMember2 != 0) ? crewMember2 : flightObject.getCrewMember2();
+                crewMember3 = (crewMember3 != 0) ? crewMember3 : flightObject.getCrewMember3();
+                cost = (cost != 0.0) ? cost : flightObject.getCost();
+                meal = (meal != false) ? meal : flightObject.getMeal();
+                flightStatusEnum = (flightStatusEnum != null) ? flightStatusEnum : flightObject.getFlightStatus();
+
+                flightController.updateFlight(new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal, crewMember1, crewMember2, crewMember3));
             }
-            else{flightController.addFlight(tmpFlight);}
-
-            
-
+            else{
+                Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal,crewMember1,crewMember2,crewMember3);
+                flightController.addFlight(tmpFlight);
+            }
             flightFrame.dispose(); // Close the frame after submission
         });
 
         flightFrame.add(new JLabel()); // Empty label for grid alignment
         flightFrame.add(addButton);
 
-        JButton removeButton = new JButton("remove Flight");
+        JButton removeButton = new JButton("Remove Flight");
         removeButton.addActionListener(e -> {
             // Retrieve data from fields
             int flightID = Integer.valueOf(flightIDField.getText());
-
-            // String aircraftID = aircraftIDField.getText();
-            // String address = addressField.getText();
-            // LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
-            // LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
-            // String departLocation = departLocationField.getText()
-            // LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
-            // LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
-            // String arrivalLocation = arrivalLocationField.getText();
-            // String flightStatus = flightStatusField.getText();
-            // float cost = Float.parseFloat(costField.getText());
-            // boolean meal = Boolean.parseBoolean(mealField.getText());
-            
             flightController.removeFlight(flightID);
 
             flightFrame.dispose(); // Close the frame after submission

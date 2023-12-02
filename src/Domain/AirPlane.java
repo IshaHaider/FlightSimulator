@@ -14,6 +14,7 @@ public class AirPlane {
     
     // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the aircraftID is auto-increment)
     public AirPlane(String name) {
+        this.aircraftID = 0;
         this.aircraftName = name;
     }
 

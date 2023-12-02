@@ -17,6 +17,7 @@ public class Ticket{
 
     // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the ticketNumber is auto-increment)
     public Ticket( int aircraftID, int flightID, int userID, int seatID) {
+        this.ticketNumber = 0;
         this.flightID = flightID;
         this.aircraftID = aircraftID;
         this.userID = userID;

@@ -17,6 +17,7 @@ public class Promotions {
 
     // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the promotionID is auto-increment)
     public Promotions(String name, String discount, LocalDate startDate, LocalDate endDate) {
+        this.promotionID = 0;
         this.name = name;
         this.discount = discount;
         this.startDate = startDate;

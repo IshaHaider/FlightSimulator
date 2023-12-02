@@ -144,46 +144,4 @@ public class Flight{
     public void setCrewMember1(final int crewMember1) {this.crewMember1 = crewMember1;}
     public void setCrewMember2(final int crewMember2) {this.crewMember2 = crewMember2;}
     public void setCrewMember3(final int crewMember3) {this.crewMember3 = crewMember3;}
-
-    // public final ArrayList<User> getPassengerList() {
-    //     ArrayList<User> passengerList = new ArrayList<>();
-    //     for (Map.Entry<Seat, User> entry : assignedSeats.entrySet()) {
-    //         passengerList.add(entry.getValue());
-    //     }
-    //     return passengerList;
-    // }
-
-    // public final Seat getSeat(final int userID) {
-    //     for (Map.Entry<Seat, User> entry : assignedSeats.entrySet()) {
-    //         if (entry.getValue().getUserID() == userID) {
-    //             return entry.getKey();
-    //         }
-    //     }
-    //     return null;
-    // }
-
-
-    // public void assignSeat(final int userID, final Seat seat) {
-    //     seat.setUserID(userID);
-    //     seat.setIsAvailable(false);
-    // }
-
-    // @Override
-    // public void addObserver(Observer o) {
-    //     if(!observers.contains(o)) {
-    //         observers.add(o);
-    //     }
-    // }
-
-    // @Override
-    // public void removeObserver(Observer o) {
-    //     observers.remove(o);
-    // }
-
-    // @Override
-    // public void notifyAllObservers() {
-    //     for(Observer o : observers) {
-    //         o.update(this, null);
-    //     }
-    // }
 }

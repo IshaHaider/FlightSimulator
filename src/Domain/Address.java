@@ -26,6 +26,7 @@ public class Address {
 
     }
 
+    public final String getString() {return number + " " + street;}
     public final String getNumber() {return number;}
     public final String getStreet() {return street;}
     public void setNumber(final String number) {this.number = number;}

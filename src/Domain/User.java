@@ -10,6 +10,32 @@ public abstract class User {
     protected String email;
     protected LocalDate birthDate;
     protected String phoneNumber;
+
+    public User(){
+        this.userID = 0;
+        this.name = new Name();     
+        this.address = new Address();      
+        this.email = ""; 
+        this.phoneNumber = ""; 
+    }
+
+    public User(Name name, Address address, String email, LocalDate birthDate, String phoneNumber){
+        this.userID = 0;
+        this.name = name;     
+        this.address = address;      
+        this.email = email;       
+        this.birthDate = birthDate; 
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User(int userID, Name name, Address address, String email, LocalDate birthDate, String phoneNumber){
+        this.userID = userID;
+        this.name = name;     
+        this.address = address;      
+        this.email = email;       
+        this.birthDate = birthDate; 
+        this.phoneNumber = phoneNumber;
+    }
      
     public int getUserID() {return userID;}
     public int getAccessLevel() {return accessLevel;}

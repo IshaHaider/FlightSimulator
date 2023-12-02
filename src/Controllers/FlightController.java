@@ -321,7 +321,7 @@ public class FlightController implements Observer {
     public boolean checkIDExists(int id, String tableName) {
         try {
             if (tableName.equals("Crew")) {
-                ResultSet checkID = db.selectTableFromAttribute("ALLUSERS", "crewID", id);
+                ResultSet checkID = db.selectTableFromAttribute("ALLUSERS", "userID", id);
                 if (checkID.next()) {
                     return true;
                 }
@@ -342,8 +342,94 @@ public class FlightController implements Observer {
         return false;
     }
 
+    public Crew createCrewObject(int crewID) {
+        try {
+            ResultSet crewTuple = db.selectTableFromAttribute("ALLUSERS", "userID", crewID);
+            if (crewTuple.next()) {
+                Crew crewObject = new Crew(crewTuple.getInt("userID"),
+                        new Name(crewTuple.getString("firstName"), crewTuple.getString("lastName")),
+                        new Address(crewTuple.getString("address")),
+                        crewTuple.getString("email"), crewTuple.getString("password"),
+                        crewTuple.getDate("birthdate").toLocalDate(), crewTuple.getString("phoneNumber"));
+                return crewObject;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public AirPlane createAircraftObject(int aircraftID) {
+        try {
+            ResultSet aircraftTuple = db.selectTableFromAttribute("AIRCRAFT", "aircraftID", aircraftID);
+            if (aircraftTuple.next()) {
+                AirPlane airplaneObject = new AirPlane(aircraftTuple.getInt("aircraftID"),
+                        aircraftTuple.getString("name"));
+                return airplaneObject;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Flight createFlightObject(int flightID) {
+        try {
+            ResultSet flightTuple = db.selectTableFromAttribute("FLIGHT", "flightID", flightID);
+            if (flightTuple.next()) {
+                String flightStatus = flightTuple.getString("flightStatus");
+                Status flightStatusEnum;
+                switch (flightStatus.toLowerCase()) { // Switch flightstatus to enum
+                    case "on time":
+                        flightStatusEnum = Status.OnTime;
+                        break;
+                    case "delayed":
+                        flightStatusEnum = Status.Delayed;
+                        break;
+                    default:
+                        flightStatusEnum = Status.OnTime;
+                        break;
+                }
+
+                Flight flightObject = new Flight(flightTuple.getInt("flightID"), flightTuple.getInt("aircraftID"),
+                        flightTuple.getDate("departDate").toLocalDate(),
+                        flightTuple.getTime("departTime").toLocalTime(),
+                        flightTuple.getString("departLocation"), flightTuple.getDate("arriveDate").toLocalDate(),
+                        flightTuple.getTime("arriveTime").toLocalTime(), flightTuple.getString("arriveLocation"),
+                        flightStatusEnum,
+                        flightTuple.getFloat("cost"), flightTuple.getBoolean("meal"), flightTuple.getInt("crewMember1"),
+                        flightTuple.getInt("crewMember2"), flightTuple.getInt("crewMember3"));
+
+                return flightObject;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateCrewUser(final Crew crew) {
+        db.updateCrewUser(crew);
+    }
+
+    public void updateAircraft(final AirPlane aircraft) {
+        db.updateAircraft(aircraft);
+    }
+
+    public void updateFlight(final Flight flight) {
+        db.updateFlight(flight);
+    }
+
     public void addCrew(final Crew crew) {
         db.insertCrewUser(crew);
+    }
+
+    public void addAirCraft(final AirPlane airplane) {
+        db.insertAircraft(airplane);
+    }
+
+    public void addFlight(final Flight flight) {
+        db.insertFlight(flight);
     }
 
     public void removeCrew(final Crew crew) {
@@ -354,16 +440,8 @@ public class FlightController implements Observer {
         db.removeUser(crewID);
     }
 
-    public void addAirCraft(final AirPlane airplane) {
-        db.insertAircraft(airplane);
-    }
-
     public void removeAirCraft(final AirPlane airplane) {
         db.removeAircraft(airplane.getAircraftID());
-    }
-
-    public void addFlight(final Flight flight) {
-        db.insertFlight(flight);
     }
 
     public void removeFlight(final Flight flight) {
@@ -383,7 +461,6 @@ public class FlightController implements Observer {
         this.adminPanel = panel;
     }
 
-    // public void setCrewPanel(CrewPanel panel) { this.crewPanel = panel; }
     public void setAirplanes(ArrayList<AirPlane> ap) {
         this.airplanes = ap;
     }
@@ -398,10 +475,6 @@ public class FlightController implements Observer {
 
     public void setCurrentPassengers(ArrayList<User> cp) {
         this.currentPassengers = cp;
-    }
-
-    public DBController getOnlyInstance() {
-        return this.db;
     }
 
     public AirlineAgentPanel getAirlineAgentPanel() {
