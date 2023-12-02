@@ -605,6 +605,12 @@ public class DBController <T> implements Subject{
         validateAll();
     }
 
+    public void updateAircraft(AirPlane plane){
+        removeAircraft(plane.getAircraftID());
+        insertAircraft(plane);
+        validateAll();
+    }
+
     public void updateRegisteredUser(RegisteredUser user){
         removeUser(user.getUserID());
         insertRegisteredUser(user);

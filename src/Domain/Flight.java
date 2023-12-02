@@ -74,6 +74,23 @@ public class Flight{
         this.crewMember3 = 0;
     }
 
+    public Flight(int flightID, int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,
+    String arriveLocation, Status flightStatus, float cost, boolean meal){
+        this.flightID = flightID;
+        this.aircraftID = aircraftID;
+        this.departDate = departDate;
+        this.departTime = departTime;
+        this.departLocation = departLocation;
+        this.arriveDate = arriveDate;
+        this.arriveTime = arriveTime;
+        this.arriveLocation = arriveLocation;
+        this.flightStatus = flightStatus;
+        this.cost = cost;
+        this.meal = meal;
+        this.crewMember1 = 0;
+        this.crewMember2 = 0;
+        this.crewMember3 = 0;
+    }
 
     // USE THIS FOR LOCAL STORAGE (to manually add flightID)
     public Flight(int flightID, int aircraftID, LocalDate departDate, LocalTime departTime, String departLocation, LocalDate arriveDate, LocalTime arriveTime,

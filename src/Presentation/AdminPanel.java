@@ -4,6 +4,7 @@ import src.Controllers.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -287,6 +288,8 @@ public class AdminPanel extends JPanel {
         // Submit button
         JButton addButton = new JButton("add Crew Member");
         addButton.addActionListener(e -> {
+            int crewID = Integer.valueOf(crewIDField.getText());
+            
             // Retrieve data from fields
             String fname = fnameField.getText();
             String lname = lnameField.getText();
@@ -295,9 +298,14 @@ public class AdminPanel extends JPanel {
             String password = new String(passwordField.getPassword());
             LocalDate birthdate = LocalDate.parse(birthdateField.getText()); // Requires error checking
             String phoneNum = phoneNumField.getText();
-    
-            flightController.addCrew(new Crew(new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
+            
+            if (flightController.checkIDExists(crewID, "Crew")){
+                flightController.getOnlyInstance().updateCrewUser(new Crew(crewID, new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
+            }
 
+            else{
+                flightController.addCrew(new Crew(new Name(fname, lname), new Address(address), email, password, birthdate, phoneNum));
+            }
             crewFrame.dispose(); // Close the frame after submission
         });
 
@@ -349,7 +357,14 @@ public class AdminPanel extends JPanel {
             int craftID = Integer.parseInt(craftIDField.getText());
             String craftName = craftNameField.getText();
             
-            flightController.addAirCraft(new AirPlane(craftID, craftName));
+            if (flightController.checkIDExists(craftID, "Aircraft")){
+                flightController.getOnlyInstance().updateAircraft(new AirPlane(craftID, craftName));
+            }
+            else{
+                flightController.addAirCraft(new AirPlane(craftName));
+            }
+
+            
 
             airplaneFrame.dispose(); // Close the frame after submission
         });
@@ -425,11 +440,23 @@ public class AdminPanel extends JPanel {
         JTextField mealField = new JTextField(20);
         flightFrame.add(mealField);
     
+        flightFrame.add(new JLabel("Crew Member 1:"));
+        JTextField crewMember1Field = new JTextField(20);
+        flightFrame.add(crewMember1Field);
+
+        flightFrame.add(new JLabel("Crew Member 2:"));
+        JTextField crewMember2Field = new JTextField(20);
+        flightFrame.add(crewMember2Field);
+
+        flightFrame.add(new JLabel("Crew Member 3:"));
+        JTextField crewMember3Field = new JTextField(20);
+        flightFrame.add(crewMember3Field);
+
         // Submit button
         JButton addButton = new JButton("add Flight");
         addButton.addActionListener(e -> {
             // Retrieve data from fields
-            // String flightID = flightIDField.getText();
+            int flightID = Integer.valueOf(flightIDField.getText());
             int aircraftID = Integer.valueOf(aircraftIDField.getText());
             LocalDate departDate = LocalDate.parse(departDateField.getText()); // Requires error checking
             LocalTime departTime = LocalTime.parse(departTimeField.getText()); // Requires error checking
@@ -437,6 +464,9 @@ public class AdminPanel extends JPanel {
             LocalDate arrivalDate = LocalDate.parse(arrivalDateField.getText()); // Requires error checking
             LocalTime arrivalTime = LocalTime.parse(arrivalTimeField.getText()); // Requires error checking
             String arrivalLocation = arrivalLocationField.getText();
+            int crewMember1 = Integer.valueOf(crewMember1Field.getText());
+            int crewMember2 = Integer.valueOf(crewMember2Field.getText());
+            int crewMember3 = Integer.valueOf(crewMember3Field.getText());
 
             String flightStatus = flightStatusField.getText();
             Status flightStatusEnum;
@@ -455,9 +485,14 @@ public class AdminPanel extends JPanel {
             float cost = Float.parseFloat(costField.getText());
             boolean meal = Boolean.parseBoolean(mealField.getText());
             
-            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal);
+            Flight tmpFlight = new Flight(aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal,crewMember1,crewMember2,crewMember3);
 
-            flightController.addFlight(tmpFlight);
+            if (flightController.checkIDExists(flightID, "Flight")){
+                flightController.getOnlyInstance().updateFlight(new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatusEnum, cost, meal, crewMember1, crewMember2, crewMember3));
+            }
+            else{flightController.addFlight(tmpFlight);}
+
+            
 
             flightFrame.dispose(); // Close the frame after submission
         });

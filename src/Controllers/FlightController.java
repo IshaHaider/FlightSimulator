@@ -1,8 +1,10 @@
 package src.Controllers;
 
+import src.Controllers.DBController;
+import src.Controllers.Gui;
 import src.Domain.*;
 import src.Presentation.*;
- 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,14 +16,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class FlightController implements Observer {
-    private Gui mainFrame; 
-    
+    private Gui mainFrame;
+
     private UserSession userInstance;
     private AirlineAgentPanel airlineAgentPanel;
     private AdminPanel adminPanel;
     // private CrewPanel crewPanel;
     private DBController db = DBController.getOnlyInstance();
-    
+
     private ArrayList<AirPlane> airplanes = new ArrayList<AirPlane>();
     private ArrayList<Flight> currentFlights = new ArrayList<Flight>();
     private ArrayList<Crew> currentCrew = new ArrayList<Crew>();
@@ -30,13 +32,13 @@ public class FlightController implements Observer {
 
     private Subject subject;
 
-    public FlightController (Subject s) { 
-        this.userInstance = UserSession.getInstance(); 
+    public FlightController(Subject s) {
+        this.userInstance = UserSession.getInstance();
         subject = s;
         subject.register(this);
     }
 
-    public FlightController (Gui mainFrame, Subject s) {
+    public FlightController(Gui mainFrame, Subject s) {
         this.mainFrame = mainFrame;
         this.userInstance = UserSession.getInstance();
         subject = s;
@@ -44,12 +46,12 @@ public class FlightController implements Observer {
     }
 
     @Override
-    public void update(){
+    public void update() {
         this.airplanes = browseAircrafts();
         this.currentFlights = browseFlights();
     }
 
-    public ArrayList<Flight> browseFlights(){
+    public ArrayList<Flight> browseFlights() {
         ArrayList<Flight> currentFlights = new ArrayList<>();
         Status[] statusValues = Status.values(); // Check if flightStatus is in the Status enum
         try {
@@ -77,8 +79,9 @@ public class FlightController implements Observer {
                         break;
                     }
                 }
-        
-                Flight flight = new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate, arrivalTime, arrivalLocation, flightStatus, cost, meal, CM1, CM2, CM3);
+
+                Flight flight = new Flight(flightID, aircraftID, departDate, departTime, departLocation, arrivalDate,
+                        arrivalTime, arrivalLocation, flightStatus, cost, meal, CM1, CM2, CM3);
                 currentFlights.add(flight);
             }
         } catch (SQLException e) {
@@ -89,9 +92,9 @@ public class FlightController implements Observer {
 
     public List<Integer> getFlightCrew(final int flightID) {
         List<Integer> flightCrew = new ArrayList<>();
-        
+
         try {
-            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT","flightID", flightID);
+            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT", "flightID", flightID);
 
             while (requiredFlight.next()) {
                 flightCrew.add(requiredFlight.getInt("crewMember1"));
@@ -106,9 +109,9 @@ public class FlightController implements Observer {
 
     public List<Integer> getFlightCrew(final Flight flight) {
         List<Integer> flightCrew = new ArrayList<>();
-        
+
         try {
-            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT","flightID", flight);
+            ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT", "flightID", flight);
 
             while (requiredFlight.next()) {
                 flightCrew.add(requiredFlight.getInt("crewMember1"));
@@ -121,14 +124,14 @@ public class FlightController implements Observer {
         return flightCrew;
     }
 
-    public ArrayList<Crew> browseCrew(final int flightID){
+    public ArrayList<Crew> browseCrew(final int flightID) {
         // ArrayList<Flight> assignedFlight = new ArrayList<>();
         List<Integer> flightCrewIDs = getFlightCrew(flightID);
         try {
             ResultSet listedCrew = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
             while (listedCrew.next()) {
                 int crewID = listedCrew.getInt("userID");
-                if(flightCrewIDs.contains(crewID)){
+                if (flightCrewIDs.contains(crewID)) {
                     Name crewName = new Name(listedCrew.getString("firstName"), listedCrew.getString("lastName"));
                     Address crewAddress = new Address(listedCrew.getString("address"));
                     String crewEmail = listedCrew.getString("email");
@@ -146,16 +149,15 @@ public class FlightController implements Observer {
         }
         return currentCrew;
     }
-    
 
-    public ArrayList<Crew> browseCrew(final Flight flight){
+    public ArrayList<Crew> browseCrew(final Flight flight) {
         // ArrayList<Flight> assignedFlight = new ArrayList<>();
         List<Integer> flightCrewIDs = getFlightCrew(flight);
         try {
             ResultSet listedCrew = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
             while (listedCrew.next()) {
                 int crewID = listedCrew.getInt("userID");
-                if(flightCrewIDs.contains(crewID)){
+                if (flightCrewIDs.contains(crewID)) {
                     Name crewName = new Name(listedCrew.getString("firstName"), listedCrew.getString("lastName"));
                     Address crewAddress = new Address(listedCrew.getString("address"));
                     String crewEmail = listedCrew.getString("email");
@@ -173,8 +175,8 @@ public class FlightController implements Observer {
         }
         return currentCrew;
     }
-    
-    public ArrayList<AirPlane> browseAircrafts(){
+
+    public ArrayList<AirPlane> browseAircrafts() {
         airplanes.clear();
         try {
             ResultSet listedAircrafts = db.selectTable("AIRCRAFT");
@@ -200,30 +202,34 @@ public class FlightController implements Observer {
             while (usersInFlight.next()) {
                 int userID = usersInFlight.getInt("userID");
 
-                while(allGuestUsers.next()){
-                    if (allGuestUsers.getInt("userID") == userID){
-                        Name guestUserName = new Name(allGuestUsers.getString("firstName"), allGuestUsers.getString("lastName"));
+                while (allGuestUsers.next()) {
+                    if (allGuestUsers.getInt("userID") == userID) {
+                        Name guestUserName = new Name(allGuestUsers.getString("firstName"),
+                                allGuestUsers.getString("lastName"));
                         Address guestAddress = new Address(allGuestUsers.getString("address"));
                         String email = allGuestUsers.getString("email");
                         LocalDate birthDate = allGuestUsers.getDate("birthDate").toLocalDate();
-                        String phoneNum = allGuestUsers.getString("phoneNumber");  
-                        GuestUser guest = new GuestUser(userID, guestUserName, guestAddress, email, birthDate, phoneNum);
-                        currentPassengers.add(guest);    
+                        String phoneNum = allGuestUsers.getString("phoneNumber");
+                        GuestUser guest = new GuestUser(userID, guestUserName, guestAddress, email, birthDate,
+                                phoneNum);
+                        currentPassengers.add(guest);
                     }
                 }
 
-                while(allRegUsers.next()){
-                    if (allRegUsers.getInt("userID") == userID){
+                while (allRegUsers.next()) {
+                    if (allRegUsers.getInt("userID") == userID) {
                         int promotionID = allRegUsers.getInt("promotionID");
-                        Name regUserName = new Name(allRegUsers.getString("firstName"), allRegUsers.getString("lastName"));
+                        Name regUserName = new Name(allRegUsers.getString("firstName"),
+                                allRegUsers.getString("lastName"));
                         Address userAddress = new Address(allRegUsers.getString("address"));
                         String email = allRegUsers.getString("email");
                         String pass = allRegUsers.getString("password");
                         LocalDate birthDate = allRegUsers.getDate("birthDate").toLocalDate();
-                        String phoneNum = allRegUsers.getString("phoneNumber");  
-                        Float balance = allRegUsers.getFloat("balance");  
-                        RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress, email, pass, birthDate, phoneNum, balance);
-                        currentPassengers.add(regUser);    
+                        String phoneNum = allRegUsers.getString("phoneNumber");
+                        Float balance = allRegUsers.getFloat("balance");
+                        RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress,
+                                email, pass, birthDate, phoneNum, balance);
+                        currentPassengers.add(regUser);
                     }
                 }
             }
@@ -242,34 +248,38 @@ public class FlightController implements Observer {
 
             while (usersInFlight.next()) {
                 int userID = usersInFlight.getInt("userID");
-                
+
                 ResultSet allGuestUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 1);
                 ResultSet allRegUsers = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 2);
 
-                while(allGuestUsers.next()){
-                    if (allGuestUsers.getInt("userID") == userID){
-                        Name guestUserName = new Name(allGuestUsers.getString("firstName"), allGuestUsers.getString("lastName"));
+                while (allGuestUsers.next()) {
+                    if (allGuestUsers.getInt("userID") == userID) {
+                        Name guestUserName = new Name(allGuestUsers.getString("firstName"),
+                                allGuestUsers.getString("lastName"));
                         Address guestAddress = new Address(allGuestUsers.getString("address"));
                         String email = allGuestUsers.getString("email");
                         LocalDate birthDate = allGuestUsers.getDate("birthDate").toLocalDate();
-                        String phoneNum = allGuestUsers.getString("phoneNumber");  
-                        GuestUser guest = new GuestUser(userID, guestUserName, guestAddress, email, birthDate, phoneNum);
-                        currentPassengers.add(guest);    
+                        String phoneNum = allGuestUsers.getString("phoneNumber");
+                        GuestUser guest = new GuestUser(userID, guestUserName, guestAddress, email, birthDate,
+                                phoneNum);
+                        currentPassengers.add(guest);
                     }
                 }
 
-                while(allRegUsers.next()){
-                    if (allRegUsers.getInt("userID") == userID){
+                while (allRegUsers.next()) {
+                    if (allRegUsers.getInt("userID") == userID) {
                         int promotionID = allRegUsers.getInt("promotionID");
-                        Name regUserName = new Name(allRegUsers.getString("firstName"), allRegUsers.getString("lastName"));
+                        Name regUserName = new Name(allRegUsers.getString("firstName"),
+                                allRegUsers.getString("lastName"));
                         Address userAddress = new Address(allRegUsers.getString("address"));
                         String email = allRegUsers.getString("email");
                         String pass = allRegUsers.getString("password");
                         LocalDate birthDate = allRegUsers.getDate("birthDate").toLocalDate();
-                        String phoneNum = allRegUsers.getString("phoneNumber");  
-                        Float balance = allRegUsers.getFloat("balance");  
-                        RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress, email, pass, birthDate, phoneNum, balance);
-                        currentPassengers.add(regUser);    
+                        String phoneNum = allRegUsers.getString("phoneNumber");
+                        Float balance = allRegUsers.getFloat("balance");
+                        RegisteredUser regUser = new RegisteredUser(userID, promotionID, regUserName, userAddress,
+                                email, pass, birthDate, phoneNum, balance);
+                        currentPassengers.add(regUser);
                     }
                 }
 
@@ -280,23 +290,25 @@ public class FlightController implements Observer {
         return currentPassengers;
     }
 
-    public ArrayList<RegisteredUser> browseRegisteredUsers(){
+    public ArrayList<RegisteredUser> browseRegisteredUsers() {
         try {
             ResultSet listedRegUser = db.selectTable("ALLUSERS");
             while (listedRegUser.next()) {
                 int accessLevel = listedRegUser.getInt("accessLevel");
 
-                if(accessLevel ==2){
+                if (accessLevel == 2) {
                     int usrID = listedRegUser.getInt("userID");
                     int promotionID = listedRegUser.getInt("promotionID");
-                    Name regUserName = new Name(listedRegUser.getString("firstName"), listedRegUser.getString("lastName"));
+                    Name regUserName = new Name(listedRegUser.getString("firstName"),
+                            listedRegUser.getString("lastName"));
                     Address userAddress = new Address(listedRegUser.getString("address"));
                     String email = listedRegUser.getString("email");
                     String password = listedRegUser.getString("password");
                     LocalDate birthDate = listedRegUser.getDate("birthDate").toLocalDate();
                     String phoneNumber = listedRegUser.getString("phoneNumber");
                     float balance = listedRegUser.getFloat("balance");
-                    RegisteredUser regUser = new RegisteredUser(usrID, promotionID, regUserName, userAddress, email, password, birthDate, phoneNumber, balance);
+                    RegisteredUser regUser = new RegisteredUser(usrID, promotionID, regUserName, userAddress, email,
+                            password, birthDate, phoneNumber, balance);
                     currentRegisteredUsers.add(regUser);
                 }
             }
@@ -306,29 +318,114 @@ public class FlightController implements Observer {
         return currentRegisteredUsers;
     }
 
-    public void addCrew(final Crew crew){ db.insertCrewUser(crew);}
-    public void removeCrew(final Crew crew){ db.removeUser(crew.getUserID());}
-    public void removeCrew(final int crewID){ db.removeUser(crewID);}
-    public void addAirCraft(final AirPlane airplane){ db.insertAircraft(airplane);}
-    public void removeAirCraft(final AirPlane airplane){ db.removeAircraft(airplane.getAircraftID()); }
-    public void addFlight(final Flight flight){ db.insertFlight(flight); }
-    public void removeFlight(final Flight flight){ db.removeFlight(flight.getFlightID()); }
-    public void removeFlight(final int flightID){ db.removeFlight(flightID); }
-     
-    /* SETTERS AND GETTERS */
-    public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel;}
-    public void setAdminPanel(AdminPanel panel) { this.adminPanel = panel; }
-    // public void setCrewPanel(CrewPanel panel) { this.crewPanel = panel; }
-    public void setAirplanes(ArrayList<AirPlane> ap) { this.airplanes = ap; }
-    public void setCurrentFlights(ArrayList<Flight> cf) { this.currentFlights = cf; }
-    public void setCurrentCrew(ArrayList<Crew> cc) { this.currentCrew = cc; }
-    public void setCurrentPassengers(ArrayList<User> cp) { this.currentPassengers = cp; }
+    public boolean checkIDExists(int id, String tableName) {
+        try {
+            if (tableName.equals("Crew")) {
+                ResultSet checkID = db.selectTableFromAttribute("ALLUSERS", "crewID", id);
+                if (checkID.next()) {
+                    return true;
+                }
+            } else if (tableName.equals("Aircraft")) {
+                ResultSet checkID = db.selectTableFromAttribute("AIRCRAFT", "aircraftID", id);
+                if (checkID.next()) {
+                    return true;
+                }
+            } else if (tableName.equals("Flight")) {
+                ResultSet checkID = db.selectTableFromAttribute("FLIGHT", "flightID", id);
+                if (checkID.next()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-    public AirlineAgentPanel getAirlineAgentPanel() { return this.airlineAgentPanel;}
-    public AdminPanel getAdminPanel() { return this.adminPanel; }
-    public ArrayList<AirPlane>  getAirplanes() { return this.airplanes; }
-    public ArrayList<Flight> getCurrentFlights() { return this.currentFlights; }
-    public ArrayList<Crew>  getCurrentCrew() { return this.currentCrew; }
-    public ArrayList<User> getCurrentPassengers() { return this.currentPassengers; }
+    public void addCrew(final Crew crew) {
+        db.insertCrewUser(crew);
+    }
+
+    public void removeCrew(final Crew crew) {
+        db.removeUser(crew.getUserID());
+    }
+
+    public void removeCrew(final int crewID) {
+        db.removeUser(crewID);
+    }
+
+    public void addAirCraft(final AirPlane airplane) {
+        db.insertAircraft(airplane);
+    }
+
+    public void removeAirCraft(final AirPlane airplane) {
+        db.removeAircraft(airplane.getAircraftID());
+    }
+
+    public void addFlight(final Flight flight) {
+        db.insertFlight(flight);
+    }
+
+    public void removeFlight(final Flight flight) {
+        db.removeFlight(flight.getFlightID());
+    }
+
+    public void removeFlight(final int flightID) {
+        db.removeFlight(flightID);
+    }
+
+    /* SETTERS AND GETTERS */
+    public void setAirlineAgentPanel(AirlineAgentPanel panel) {
+        this.airlineAgentPanel = panel;
+    }
+
+    public void setAdminPanel(AdminPanel panel) {
+        this.adminPanel = panel;
+    }
+
+    // public void setCrewPanel(CrewPanel panel) { this.crewPanel = panel; }
+    public void setAirplanes(ArrayList<AirPlane> ap) {
+        this.airplanes = ap;
+    }
+
+    public void setCurrentFlights(ArrayList<Flight> cf) {
+        this.currentFlights = cf;
+    }
+
+    public void setCurrentCrew(ArrayList<Crew> cc) {
+        this.currentCrew = cc;
+    }
+
+    public void setCurrentPassengers(ArrayList<User> cp) {
+        this.currentPassengers = cp;
+    }
+
+    public DBController getOnlyInstance() {
+        return this.db;
+    }
+
+    public AirlineAgentPanel getAirlineAgentPanel() {
+        return this.airlineAgentPanel;
+    }
+
+    public AdminPanel getAdminPanel() {
+        return this.adminPanel;
+    }
+
+    public ArrayList<AirPlane> getAirplanes() {
+        return this.airplanes;
+    }
+
+    public ArrayList<Flight> getCurrentFlights() {
+        return this.currentFlights;
+    }
+
+    public ArrayList<Crew> getCurrentCrew() {
+        return this.currentCrew;
+    }
+
+    public ArrayList<User> getCurrentPassengers() {
+        return this.currentPassengers;
+    }
 
 }
