@@ -198,18 +198,7 @@ public class DBController <T> implements Subject{
             else { flightQuery.setNull(12, java.sql.Types.INTEGER); }
 
             if (flight.getCrewMember3() != 0){ flightQuery.setInt(13, flight.getCrewMember3()); }
-            else { flightQuery.setNull(13, java.sql.Types.INTEGER); }
-
-
-            // flight.getCrewMember2() != 0 ? flightQuery.setInt(12, flight.getCrewMember2()) : flightQuery.setNull(12, java.sql.Types.INTEGER);   
-            // flight.getCrewMember3() != 0 ? flightQuery.setInt(13, flight.getCrewMember3()) : flightQuery.setNull(13, java.sql.Types.INTEGER);   
-
-            // flightQuery.setInt(12, flight.getCrewMember2() != 0 ? flight.getCrewMember2() : 0);
-            // flightQuery.setInt(12, flight.getCrewMember3() != 0 ? flight.getCrewMember3() : 0);
-            
-            // flightQuery.setInt(11, flight.getCrewMember1());
-            // flightQuery.setInt(12, flight.getCrewMember2());
-            // flightQuery.setInt(13, flight.getCrewMember3());     
+            else { flightQuery.setNull(13, java.sql.Types.INTEGER); }   
             flightQuery.executeUpdate();
         } catch(SQLException e) {
             e.printStackTrace();
