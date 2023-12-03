@@ -1,0 +1,2 @@
+Main-Class: src.Controllers.MainController
+Class-Path: lib/mysql-connector-j-8.2.0.jar
