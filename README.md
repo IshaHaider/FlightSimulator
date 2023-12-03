@@ -9,3 +9,9 @@ in main controller, run the following commands to run the GUI:
 javac -cp .:lib/mysql-connector-j-8.2.0.jar src/Controllers/*.java 
 javac -cp .:lib/mysql-connector-j-8.2.0.jar src/Presentation/*.java
 javac -cp .:lib/mysql-connector-j-8.2.0.jar src/Domain/*.java 
+
+
+javac -d bin -cp lib/mysql-connector-j-8.2.0.jar src/Controllers/.java src/Doman/.java src/Presentation/*.java
+jar cvfm FlightWebApp.jar Manifest.txt -C bin/ . 
+
+COMMAND TO RUN PROGRAM: java -jar FlightWebApp.jar
