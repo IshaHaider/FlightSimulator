@@ -37,6 +37,7 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
      
+    /* SETTERS AND GETTERS */
     public int getUserID() {return userID;}
     public int getAccessLevel() {return accessLevel;}
     public Name getName() {return name;}
@@ -52,7 +53,4 @@ public abstract class User {
     public void setEmail(final String email) {this.email = email;}
     public void setBirthDate(final LocalDate birthDate) {this.birthDate = birthDate;}
     public void setPhoneNumber(final String phoneNumber) {this.phoneNumber = phoneNumber;}
-
-    // public abstract ArrayList<Flight> getFlights(final String destination);
-    // public abstract void manageReservation(final Flight flight);   
 }

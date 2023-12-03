@@ -96,9 +96,7 @@ public class LoginPanel extends JPanel {
         });
     }
     
-    public void setStatusLabel(String txt) {
-        statusLabel.setText(txt);
-    }
+    public void setStatusLabel(String txt) { statusLabel.setText(txt); }
 
     public void clearFields() {
         // usernameField.setText("");

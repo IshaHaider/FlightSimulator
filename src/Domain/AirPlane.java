@@ -24,6 +24,7 @@ public class AirPlane {
         this.aircraftName = name;
     }
 
+    /* SETTERS AND GETTERS */
     public final int getAircraftID() {return aircraftID;}
     public final String getAircraftName() {return aircraftName;}
     public void setAircraftID(final int aircraftID) {this.aircraftID = aircraftID;}

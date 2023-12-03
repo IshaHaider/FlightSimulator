@@ -2,13 +2,6 @@ package src.Presentation;
 import src.Domain.*;
 import src.Controllers.*;
 
-// Search for flights to certain destinations and I want you to be able to search for flights in certain times in my database 
-// which is MYSQL. then after that it should print the flights and you click on a flight then it should show a seat map. 
-// There are 3 different sections of the seat map economy, business, first class. 
-// When you click on a seat it should bring you to a new window that displays all the info about the seat price, 
-// where it is, etc. I want you to remember all the info abut the flight and stuff and then display a new window on the c
-// reditcardpanel that has all that. 
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;

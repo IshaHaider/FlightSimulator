@@ -6,7 +6,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import java.time.LocalDate;
-import src.Controllers.DBController;
 
 public class RegisteredUser extends User{
     private int promotionID;
@@ -39,6 +38,7 @@ public class RegisteredUser extends User{
         this.balance = balance;
     }
     
+    /* SETTERS AND GETTERS */
     public final int getPromotionID() {return promotionID;}
     public final String getPassword() {return password;}
     public final float getBalance() {return balance;}

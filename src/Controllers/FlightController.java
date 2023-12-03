@@ -1,7 +1,4 @@
 package src.Controllers;
-
-import src.Controllers.DBController;
-import src.Controllers.Gui;
 import src.Domain.*;
 import src.Presentation.*;
 
@@ -21,7 +18,6 @@ public class FlightController implements Observer {
     private UserSession userInstance;
     private AirlineAgentPanel airlineAgentPanel;
     private AdminPanel adminPanel;
-    // private CrewPanel crewPanel;
     private DBController db = DBController.getOnlyInstance();
 
     private ArrayList<AirPlane> airplanes = new ArrayList<AirPlane>();
@@ -95,7 +91,6 @@ public class FlightController implements Observer {
 
         try {
             ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT", "flightID", flightID);
-
             while (requiredFlight.next()) {
                 flightCrew.add(requiredFlight.getInt("crewMember1"));
                 flightCrew.add(requiredFlight.getInt("crewMember2"));
@@ -112,7 +107,6 @@ public class FlightController implements Observer {
 
         try {
             ResultSet requiredFlight = db.selectTableFromAttribute("FLIGHT", "flightID", flight);
-
             while (requiredFlight.next()) {
                 flightCrew.add(requiredFlight.getInt("crewMember1"));
                 flightCrew.add(requiredFlight.getInt("crewMember2"));
@@ -125,7 +119,6 @@ public class FlightController implements Observer {
     }
 
     public ArrayList<Crew> browseCrew(final int flightID) {
-        // ArrayList<Flight> assignedFlight = new ArrayList<>();
         List<Integer> flightCrewIDs = getFlightCrew(flightID);
         try {
             ResultSet listedCrew = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
@@ -151,7 +144,6 @@ public class FlightController implements Observer {
     }
 
     public ArrayList<Crew> browseCrew(final Flight flight) {
-        // ArrayList<Flight> assignedFlight = new ArrayList<>();
         List<Integer> flightCrewIDs = getFlightCrew(flight);
         try {
             ResultSet listedCrew = db.selectTableFromAttribute("ALLUSERS", "accessLevel", 3);
@@ -237,7 +229,6 @@ public class FlightController implements Observer {
             e.printStackTrace();
         }
         return currentPassengers;
-        // return userList.toArray(new String[0]);
     }
 
     public ArrayList<User> retrievePassengerList(final int flightID) {
@@ -408,97 +399,33 @@ public class FlightController implements Observer {
         return null;
     }
 
-    public void updateCrewUser(final Crew crew) {
-        db.updateCrewUser(crew);
-    }
+    public void updateCrewUser(final Crew crew) { db.updateCrewUser(crew); }
+    public void updateAircraft(final AirPlane aircraft) { db.updateAircraft(aircraft); }
+    public void updateFlight(final Flight flight) { db.updateFlight(flight); }
 
-    public void updateAircraft(final AirPlane aircraft) {
-        db.updateAircraft(aircraft);
-    }
+    public void addCrew(final Crew crew) { db.insertCrewUser(crew); }
+    public void addAirCraft(final AirPlane airplane) { db.insertAircraft(airplane); }
+    public void addFlight(final Flight flight) { db.insertFlight(flight); }
 
-    public void updateFlight(final Flight flight) {
-        db.updateFlight(flight);
-    }
-
-    public void addCrew(final Crew crew) {
-        db.insertCrewUser(crew);
-    }
-
-    public void addAirCraft(final AirPlane airplane) {
-        db.insertAircraft(airplane);
-    }
-
-    public void addFlight(final Flight flight) {
-        db.insertFlight(flight);
-    }
-
-    public void removeCrew(final Crew crew) {
-        db.removeUser(crew.getUserID());
-    }
-
-    public void removeCrew(final int crewID) {
-        db.removeUser(crewID);
-    }
-
-    public void removeAirCraft(final AirPlane airplane) {
-        db.removeAircraft(airplane.getAircraftID());
-    }
-
-    public void removeFlight(final Flight flight) {
-        db.removeFlight(flight.getFlightID());
-    }
-
-    public void removeFlight(final int flightID) {
-        db.removeFlight(flightID);
-    }
+    public void removeCrew(final Crew crew) { db.removeUser(crew.getUserID()); }
+    public void removeCrew(final int crewID) { db.removeUser(crewID); }
+    public void removeAirCraft(final AirPlane airplane) { db.removeAircraft(airplane.getAircraftID()); }
+    public void removeFlight(final Flight flight) { db.removeFlight(flight.getFlightID()); }
+    public void removeFlight(final int flightID) { db.removeFlight(flightID); }
 
     /* SETTERS AND GETTERS */
-    public void setAirlineAgentPanel(AirlineAgentPanel panel) {
-        this.airlineAgentPanel = panel;
-    }
+    public void setAirlineAgentPanel(AirlineAgentPanel panel) { this.airlineAgentPanel = panel; }
+    public void setAdminPanel(AdminPanel panel) { this.adminPanel = panel; }
+    public void setAirplanes(ArrayList<AirPlane> ap) { this.airplanes = ap; }
+    public void setCurrentFlights(ArrayList<Flight> cf) { this.currentFlights = cf; }
+    public void setCurrentCrew(ArrayList<Crew> cc) { this.currentCrew = cc; }
+    public void setCurrentPassengers(ArrayList<User> cp) { this.currentPassengers = cp; }
 
-    public void setAdminPanel(AdminPanel panel) {
-        this.adminPanel = panel;
-    }
-
-    public void setAirplanes(ArrayList<AirPlane> ap) {
-        this.airplanes = ap;
-    }
-
-    public void setCurrentFlights(ArrayList<Flight> cf) {
-        this.currentFlights = cf;
-    }
-
-    public void setCurrentCrew(ArrayList<Crew> cc) {
-        this.currentCrew = cc;
-    }
-
-    public void setCurrentPassengers(ArrayList<User> cp) {
-        this.currentPassengers = cp;
-    }
-
-    public AirlineAgentPanel getAirlineAgentPanel() {
-        return this.airlineAgentPanel;
-    }
-
-    public AdminPanel getAdminPanel() {
-        return this.adminPanel;
-    }
-
-    public ArrayList<AirPlane> getAirplanes() {
-        return this.airplanes;
-    }
-
-    public ArrayList<Flight> getCurrentFlights() {
-        return this.currentFlights;
-    }
-
-    public ArrayList<Crew> getCurrentCrew() {
-        return this.currentCrew;
-    }
-
-    public ArrayList<User> getCurrentPassengers() {
-        return this.currentPassengers;
-    }
+    public AirlineAgentPanel getAirlineAgentPanel() { return this.airlineAgentPanel; }
+    public AdminPanel getAdminPanel() { return this.adminPanel; }
+    public ArrayList<AirPlane> getAirplanes() { return this.airplanes; }
+    public ArrayList<Flight> getCurrentFlights() { return this.currentFlights; }
+    public ArrayList<Crew> getCurrentCrew() { return this.currentCrew; }
+    public ArrayList<User> getCurrentPassengers() { return this.currentPassengers; }
 
 }

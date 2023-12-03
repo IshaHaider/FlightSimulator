@@ -16,8 +16,7 @@ public class GuestUser extends User{
     // USE THIS WHEN CREATING AN OBJECT FOR SQL DATABASE (because the userID is auto-increment)
     public GuestUser(Name name, Address address, String email, LocalDate birthDate, String phoneNumber) {
         super(name, address, email, birthDate, phoneNumber);
-        this.accessLevel = 1;
-        
+        this.accessLevel = 1; 
     }
 
     // USE THIS FOR LOCAL STORAGE (to manually add userID)

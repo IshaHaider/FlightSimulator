@@ -33,6 +33,7 @@ public class Ticket{
         this.seatID = seatID;
     }
 
+    /* SETTERS AND GETTERS */
     public final int getTicketNumber() {return ticketNumber;}
     public final int getFlightID() {return flightID;}
     public final int getAircraftID() {return aircraftID;}
@@ -44,47 +45,4 @@ public class Ticket{
     public final void setAircraftID( int aircraftID) {this.aircraftID = aircraftID;}
     public final void setUserID( int userID) {this.userID = userID;}
     public final void setSeatID( int seatID) {this.seatID = seatID;}
-
-    // public void addTicket( Ticket ticket) {
-    //     tickets.add(ticket);
-    //     notifyAllObservers();
-    // }
-
-    // public void removeTicket( int ticketNum) {
-    //     for (Ticket currTicket: tickets) {
-    //         if (currTicket.getTicketNumber() == ticketNum) {
-    //             tickets.remove(currTicket);
-    //         }
-    //     }
-    //     notifyAllObservers();
-    // }
-
-    // public void modifyTicket( Ticket ticket) {
-    //     for (final Ticket t : tickets) {
-    //         if (t.getTicketNumber() == ticket.getTicketNumber()) {
-    //             t.setFlightID(ticket.getFlightID());
-    //             t.setAircraftID(ticket.getAircraftID());
-    //             t.setUserID(ticket.getUserID());
-    //             t.setSeatID(ticket.getSeatID());
-    //             notifyAllObservers();
-    //         }
-    //     }
-    // }
-    
-    // @Override
-    // public void addObserver(Observer o) {
-    //     observers.add(o);
-    // }
-
-    // @Override
-    // public void removeObserver(final Observer o) {
-    //     observers.remove(o);
-    // }
-
-    // @Override
-    // public void notifyAllObservers() {
-    //     // for (final Observer o : observers) {
-    //     //     o.update(this, null);
-    //     // }
-    // }
 }

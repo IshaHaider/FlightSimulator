@@ -5,6 +5,7 @@ import src.Presentation.*;
 
 import javax.security.auth.login.LoginContext;
 import javax.swing.*;
+
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,7 +24,6 @@ public class Gui extends JFrame{
     private UserPanel userPanel;
     private AirlineAgentPanel airlineAgentPanel;
     private AdminPanel adminPanel;
-    // private CrewPanel crewPanel;
 
     private JLabel userLabel;
     private JButton loginButton, logoutButton;
@@ -76,24 +76,14 @@ public class Gui extends JFrame{
         setSize(600, 400);
     }
 
-    public void switchView(String viewName) {
-        cardLayout.show(cardsPanel, viewName);
-    }
+    public void switchView(String viewName) { cardLayout.show(cardsPanel, viewName); }
 
     public void switchViewBasedOnAccessLevel() {
         int accessLevel = UserSession.getInstance().getAccessLevel();
-        if (accessLevel == 2) {
-            switchView("UserPanel");
-        }
-        else if (accessLevel == 3) {
-            switchView("AirlineAgentPanel");
-        }
-        else if (accessLevel == 4) {
-            switchView("AdminPanel");
-        }
-        else {
-            switchView("Home");
-        }
+        if (accessLevel == 2) { switchView("UserPanel"); }
+        else if (accessLevel == 3) { switchView("AirlineAgentPanel"); }
+        else if (accessLevel == 4) { switchView("AdminPanel"); }
+        else { switchView("Home"); }
     }
 
     public void setUserLabel() {
@@ -115,6 +105,7 @@ public class Gui extends JFrame{
         switchView("Home");
     }
 
+    /* SETTERS AND GETTERS */
     public HomePanel getHomePanel() { return homePanel; }
     public SearchFlightPanel getSearchFlightPanel() { return searchFlightPanel; }
     public LoginPanel getLoginPanel() { return loginPanel; }
@@ -123,6 +114,5 @@ public class Gui extends JFrame{
     public UserPanel getuserPanel() { return userPanel; }
     public AirlineAgentPanel getAirlineAgentPanel() { return airlineAgentPanel; }
     public AdminPanel  getAdminPanel() { return adminPanel; }
-    // public CrewPanel getCrewPanel() { return crewPanel; }
 }
 

@@ -21,9 +21,7 @@ public class PromotionController implements Observer {
     }
 
     @Override
-    public void update(){
-        loadPromotions();
-    }
+    public void update(){ loadPromotions(); }
 
     private void loadPromotions() {
         try {
@@ -44,11 +42,6 @@ public class PromotionController implements Observer {
         }
     }
 
-    public void addPromotion(final Promotions promotion) {
-        db.insertPromotion(promotion);
-        // currentPromotions.add(promotion);
-    }
-
     public Promotions getPromotion(int promotionID) {
         try {
             ResultSet promos = db.selectTableFromAttribute("PROMOTIONS", "promotionID", promotionID);
@@ -61,8 +54,11 @@ public class PromotionController implements Observer {
         return null;
     }
 
+    public void addPromotion(final Promotions promotion) { db.insertPromotion(promotion); }
     public void updatePromotion(Promotions promotion) { db.updatePromotion(promotion); }
     public void deletePromotion(int promotionID) { db.removePromotion(promotionID); }
+
+    /* SETTERS AND GETTERS */
     public ArrayList<Promotions> getCurrentPromotions() {return this.currentPromotions; }
     public void setCurrentPromotions(ArrayList<Promotions> cp) { this.currentPromotions = cp; }
     public void setUserPanel( UserPanel panel ) { this.userPanel = panel; }

@@ -17,37 +17,20 @@ public class UserSession {
         return instance;
     }
 
-    public String getUserName() {
-        return email;
-    }
-
-    public void setUserName(String email) {
-        this.email = email;
-    }
-
-    public int getAccessLevel() {
-        return accessLevel;
-    }
-
-    public void setAccessLevel(int accessLevel) {
-        this.accessLevel = accessLevel;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int id) {
-        this.userID = id;
-    }
-    
-    public boolean isLoggedIn() {
-        return !email.isEmpty();
-    }
+    public boolean isLoggedIn() { return !email.isEmpty(); }
 
     public void logout() {
         this.email = "";
         this.accessLevel = 0;
         this.userID = 0;
     }
-}
+
+    /* SETTERS AND GETTERS */
+    public String getUserName() { return email; }
+    public void setUserName(String email) { this.email = email; }
+    public int getAccessLevel() { return accessLevel; }
+    public void setAccessLevel(int accessLevel) { this.accessLevel = accessLevel; }
+    public int getUserID() { return userID; }
+    public void setUserID(int id) { this.userID = id; }
+    
+}  

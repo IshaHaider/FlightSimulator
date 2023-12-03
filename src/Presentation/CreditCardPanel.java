@@ -36,10 +36,6 @@ public class CreditCardPanel extends JPanel {
     private LocalTime arriveTime;
     private String arriveLocation;
     private float cost;
-    // private float newCost;
-    // private float percentageDiscount;
-
-    // private GuestUser tmpGuesUser;
 
     public CreditCardPanel(Gui mainFrame, SeatController seatController, PromotionController promotionController) {
         this.mainFrame = mainFrame;
@@ -130,15 +126,6 @@ public class CreditCardPanel extends JPanel {
         JFrame summaryFrame = new JFrame("Purchase Summary");
         summaryFrame.setLayout(new GridLayout(0, 1));
         summaryFrame.setSize(800, 800);
-        // Promotions
-        // LocalDate today = LocalDate.now();
-        // ArrayList<Promotions> currentPromotions = promotionController.getCurrentPromotions();
-        // for (Promotions promotion : currentPromotions) {
-        //     if (promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today)) {
-        //         percentageDiscount = Float.parseFloat(promotion.getDiscount().replace("%", "")) / 100;
-        //         newCost = cost * (1 - percentageDiscount);
-        //     }
-        // }
 
         // Displaying all the required information
         summaryFrame.add(new JLabel("Flight Number: " + flightID));
@@ -245,52 +232,18 @@ public class CreditCardPanel extends JPanel {
         guestFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    public void setSeatID(int seatID) {
-        this.seatID = seatID;
-    }
-
-    public void setFlightID(int flightID) {
-        this.flightID = flightID;
-    }
-
-    public void setSeatName(String seatName) {
-        this.seatName = seatName;
-    }
-
-    public void setAircraftID(int aircraftID) {
-        this.aircraftID = aircraftID;
-    }
-
-    public void setClassType(AirplaneClass classType) {
-        this.classType = classType;
-    }
-
-    public void setDepartDate(LocalDate departDate) {
-        this.departDate = departDate;
-    }
-
-    public void setDepartTime(LocalTime departTime) {
-        this.departTime = departTime;
-    }
-
-    public void setDepartLocation(String departLocation) {
-        this.departLocation = departLocation;
-    }
-
-    public void setArriveDate(LocalDate arriveDate) {
-        this.arriveDate = arriveDate;
-    }
-
-    public void setArriveTime(LocalTime arriveTime) {
-        this.arriveTime = arriveTime;
-    }
-
-    public void setArriveLocation(String arriveLocation) {
-        this.arriveLocation = arriveLocation;
-    }
-
-    public void setCost(float cost) {
-        this.cost = cost;
-    }
+    /* SETTERS AND GETTERS */
+    public void setSeatID(int seatID) { this.seatID = seatID; }
+    public void setFlightID(int flightID) { this.flightID = flightID; }
+    public void setSeatName(String seatName) { this.seatName = seatName; }
+    public void setAircraftID(int aircraftID) { this.aircraftID = aircraftID; }
+    public void setClassType(AirplaneClass classType) { this.classType = classType; }
+    public void setDepartDate(LocalDate departDate) { this.departDate = departDate; }
+    public void setDepartTime(LocalTime departTime) { this.departTime = departTime; }
+    public void setDepartLocation(String departLocation) { this.departLocation = departLocation; }
+    public void setArriveDate(LocalDate arriveDate) { this.arriveDate = arriveDate; }
+    public void setArriveTime(LocalTime arriveTime) { this.arriveTime = arriveTime; }
+    public void setArriveLocation(String arriveLocation) { this.arriveLocation = arriveLocation; }
+    public void setCost(float cost) { this.cost = cost; }
 
 }

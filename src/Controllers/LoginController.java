@@ -37,9 +37,7 @@ public class LoginController implements Observer{
     }
 
     @Override
-    public void update(){
-        browseUsers();
-    }
+    public void update(){ browseUsers(); }
 
     private void browseUsers(){
         guestUsers.clear();
@@ -132,8 +130,6 @@ public class LoginController implements Observer{
             }
         }
     }
-
-
     
     /* SETTERS AND GETTERS */
     public void setMainFrame(Gui mainFrame) { this.mainFrame = mainFrame; }

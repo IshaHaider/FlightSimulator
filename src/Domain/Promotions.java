@@ -33,6 +33,15 @@ public class Promotions {
         this.endDate = endDate;
     }
 
+    public boolean isValid() { 
+        LocalDate currentDate = LocalDate.now();
+        if (this.startDate.isBefore(currentDate) && this.endDate.isAfter(currentDate)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* SETTERS AND GETTERS */
     public final int getPromotionID() {return promotionID;}
     public final String getName() {return name;}
     public final String getDiscount() {return discount;}
@@ -44,13 +53,4 @@ public class Promotions {
     public void setDiscount(final String discount) {this.discount = discount;}
     public void setStartDate(final LocalDate startDate) {this.startDate = startDate;}
     public void setEndDate(final LocalDate endDate) {this.endDate = endDate;}
-
-    public boolean isValid() { 
-        LocalDate currentDate = LocalDate.now();
-        if (this.startDate.isBefore(currentDate) && this.endDate.isAfter(currentDate)) {
-            return true;
-        }
-        return false;
-    }
-    
 }

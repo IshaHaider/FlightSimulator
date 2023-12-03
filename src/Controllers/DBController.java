@@ -69,9 +69,7 @@ public class DBController<T> implements Subject {
         }
     }
 
-    public Connection getFlightConnect() {
-        return flightConnect;
-    }
+    public Connection getFlightConnect() { return flightConnect; }
 
     public void close() {
         try {
@@ -269,8 +267,6 @@ public class DBController<T> implements Subject {
                 flightQuery.setFloat(10, flight.getCost());
                 flightQuery.setBoolean(11, flight.getMeal());
 
-                // flight.getCrewMember1() ? flightQuery.setInt(11, flight.getCrewMember1()); :
-                // flightQuery.setObject(11, null);
                 if (flight.getCrewMember1() != 0) {
                     flightQuery.setInt(12, flight.getCrewMember1());
                 } else {
@@ -304,8 +300,6 @@ public class DBController<T> implements Subject {
                 flightQuery.setFloat(9, flight.getCost());
                 flightQuery.setBoolean(10, flight.getMeal());
 
-                // flight.getCrewMember1() ? flightQuery.setInt(11, flight.getCrewMember1()); :
-                // flightQuery.setObject(11, null);
                 if (flight.getCrewMember1() != 0) {
                     flightQuery.setInt(11, flight.getCrewMember1());
                 } else {
@@ -470,7 +464,6 @@ public class DBController<T> implements Subject {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void removeFlight(int flightID) {
@@ -772,6 +765,7 @@ public class DBController<T> implements Subject {
     }
 
     public void updateCrewUser(Crew user){
+        // crew needs to be updated without deleting because flight uses the crew IDs
         if (!user.getName().getFirstName().equals("")) { onlyInstance.updateRow("ALLUSERS", "firstName", user.getName().getFirstName(), user.getUserID()); }
         if (!user.getName().getLastName().equals("")) { onlyInstance.updateRow("ALLUSERS", "lastName", user.getName().getLastName(), user.getUserID()); }
         if (!user.getAddress().getString().equals("")) { onlyInstance.updateRow("ALLUSERS", "address", user.getAddress().getString(), user.getUserID()); }
@@ -991,148 +985,6 @@ public class DBController<T> implements Subject {
         validateFlights();
         validatePromotions();
         notifyObservers();
-    }
-
-    public void printResultSet(ResultSet resultSet) {
-        try {
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            // Print column names
-            for (int i = 1; i <= columnCount; i++) {
-                System.out.print(metaData.getColumnName(i) + "\t");
-            }
-            System.out.println();
-
-            // Print rows
-            while (resultSet.next()) {
-                for (int i = 1; i <= columnCount; i++) {
-                    System.out.print(resultSet.getString(i) + "\t");
-                }
-                System.out.println();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        DBController temp = DBController.getOnlyInstance();
-        if (temp.getFlightConnect() != null) {
-            System.out.println("Connection successful");
-        } else {
-            System.out.println("Connection unsuccessful");
-        }
-
-        // // ------------ TESTING DBController REMOVE FUNCTIONS ------------
-        // temp.removeAircraft(1);
-        // temp.removeFlight(4);
-        // temp.removePromotion(2);
-        // temp.removeSeat(50);
-        // temp.removeTicket(1);
-        // temp.removeUser(41);
-
-        // // ------------ TESTING DBController SELECT FUNCTIONS ------------
-        // temp.selectTableFromAttribute("FLIGHT", "departLocation", "New York");
-        // temp.printResultSet(temp.flightResult);
-
-        // temp.selectTableFromAttribute("AIRCRAFT", "aircraftID", 1);
-        // temp.printResultSet(temp.flightResult);
-
-        // temp.selectTableFromAttribute("SEAT", "available", false);
-        // temp.printResultSet(temp.flightResult);
-
-        // temp.selectTableFromAttribute("ALLUSERS", "balance", 75.5);
-        // temp.printResultSet(temp.flightResult);
-
-        // LocalDate newDate = LocalDate.of(2023, 06, 01);
-        // temp.selectTableFromAttribute("PROMOTIONS", "startDate", newDate);
-        // temp.printResultSet(temp.flightResult);
-
-        // LocalTime newTime = LocalTime.of(10, 0, 0);
-        // temp.selectTableFromAttribute("FLIGHT", "arriveTime", newTime);
-        // temp.printResultSet(temp.flightResult);
-
-        // temp.selectTableFromTwoAttributes("ALLUSERS", "firstName",
-        // "John","lastName","Doe");
-        // temp.printResultSet(temp.flightResult);
-
-        // // ------------ TESTING DBController INSERT FUNCTIONS ------------
-        // AirPlane newPlane = new AirPlane("test");
-        // temp.insertAircraft(newPlane);
-        // ResultSet check = temp.selectTableFromAttribute("AIRCRAFT", "name", "test");
-        // temp.printResultSet(check);
-
-        // Ticket newTicket = new Ticket(1, 1, 5, 26);
-        // temp.insertTicket(newTicket);
-
-        // Name guestUserName = new Name("Isha", "Haider");
-        // Address guestUserAddress = new Address("213", "Sherwood Gate");
-        // LocalDate guestUserDate = LocalDate.of(2002, 06, 01);
-        // System.out.println(guestUserDate);
-        // GuestUser newGuestUser = new GuestUser(guestUserName, guestUserAddress,
-        // "isha.haider@ucalgary.ca", guestUserDate , "587-890-8532");
-        // temp.insertGuestUser(newGuestUser);
-
-        // Name regUserName = new Name("Abdel", "Rahman");
-        // Address regUserAddress = new Address("527", "Springbank Circle");
-        // LocalDate regUserDate = LocalDate.of(2004, 04, 29);
-        // RegisteredUser newRegUser = new RegisteredUser(2, regUserName,
-        // regUserAddress, "abdel.rahman@ucalgary.ca", "abdel1256", regUserDate ,
-        // "403-532-2309", 73.5f);
-        // temp.insertRegisteredUser(newRegUser);
-
-        // Name crewUserName = new Name("Eric", "Mei");
-        // Address crewUserAddress = new Address("402", "Everhollow Crest");
-        // LocalDate crewUserDate = LocalDate.of(2001, 03, 27);
-        // Crew newCrewUser = new Crew(crewUserName, crewUserAddress,
-        // "eric.mei@ucalgary.ca", "eric1234", crewUserDate , "587-098-1234");
-        // temp.insertCrewUser(newCrewUser);
-
-        // Name adminUserName = new Name("Aksh", "Singh");
-        // Address adminUserAddress = new Address("12", "Somerset Bridlewood");
-        // LocalDate adminUserDate = LocalDate.of(2001, 07, 13);
-        // Admin newAdminUser = new Admin(adminUserName, adminUserAddress,
-        // "aksh.singh@gmail.com", "akshSingh34", adminUserDate , "403-678-0345");
-        // temp.insertAdminUser(newAdminUser);
-
-        // Flight newFlight = new Flight(1, adminUserDate, LocalTime.of(3, 23, 00),
-        // "Calgary", adminUserDate, LocalTime.of(7, 40, 00), "Vancouver",
-        // Status.OnTime, 250.0f, true, 41, 42, 43);
-        // temp.insertFlight(newFlight);
-
-        // Promotions newPromotion = new Promotions("Valentine's Sale", "13%",
-        // crewUserDate, regUserDate);
-        // temp.insertPromotion(newPromotion);
-
-        // Seat newSeat = new Seat(4, "17A", AirplaneClass.Economy, 200.0f, true, true);
-        // temp.insertSeat(newSeat);
-
-        // // ------------ TESTING FlightController FUNCTIONS ------------
-        // FlightController flight = new FlightController();
-
-        // ArrayList<Flight> currentFlights = new ArrayList<Flight>();
-        // ArrayList<Crew> currentCrew = new ArrayList<Crew>();
-        // ArrayList<User> currentPassengers = new ArrayList<User>();
-        // ArrayList<AirPlane> airplanes = new ArrayList<AirPlane>();
-
-        // currentFlights = flight.browseFlights();
-        // currentCrew = flight.browseCrew(newFlight);
-        // airplanes = flight.browseAircrafts();
-        // currentPassengers = flight.retrievePassengerList(2);
-
-        // // ------------ TESTING LoginController FUNCTIONS ------------
-        // LoginController login = new LoginController();
-        // login.createLogin("04 03 2002", "pass", "testemail@gmail.com", "hello",
-        // "bye", "214 Southcrest Dr", "587-890-8432");
-
-        // // ------------ TESTING PromotionController FUNCTIONS ------------
-        // PromotionController promotions = new PromotionController();
-        // Promotions prom = promotions.getPromotion(2);
-
-        // ------------ TESTING SeatController FUNCTIONS ------------
-        // SeatController seats = new SeatController();
-
     }
 
 }

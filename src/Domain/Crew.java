@@ -26,6 +26,7 @@ public class Crew extends User{
         this.password = password; 
     }
 
+    /* SETTERS AND GETTERS */
     public String getPassword() {return password;}
     public void setPassword(final String password) {this.password = password;}
 }

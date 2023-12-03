@@ -22,15 +22,11 @@ public class MainController {
         loginController.setMainFrame(frame);
 
         this.loginController.setLoginPanel(frame.getLoginPanel());
-        
         this.seatController.setSearchFlightPanel(frame.getSearchFlightPanel());
         this.seatController.setCreditCardPanel(frame.getCreditCardPanel());
         this.seatController.setCancelFlightPanel(frame.getCancelFlightPanel());
-
         this.flightController.setAdminPanel(frame.getAdminPanel());
-        this.flightController.setAirlineAgentPanel(frame.getAirlineAgentPanel());
-        // this.flightController.setCrewPanel(frame.getCrewPanel());
-
+        this.flightController.setAirlineAgentPanel(frame.getAirlineAgentPanel()); 
         this.promotionController.setUserPanel(frame.getuserPanel());
 
         frame.setVisible(true);

@@ -27,6 +27,7 @@ public class Admin extends User {
         this.password = password; 
     }
 
+    /* SETTERS AND GETTERS */
     public String getPassword() {return password;}
     public void setPassword(final String password) {this.password = password;}
 }

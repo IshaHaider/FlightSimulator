@@ -1,8 +1,8 @@
 package src.Controllers;
- 
-import java.util.ArrayList;
+
 import src.Domain.*;
 import src.Presentation.*;
+import java.util.ArrayList;
 
 public class TicketController implements Observer{
     private Gui mainFrame;
@@ -18,10 +18,5 @@ public class TicketController implements Observer{
 
     @Override
     public void update(){ db = DBController.getOnlyInstance(); }
-
     public void setCancelFlightPanel(CancelFlightPanel cancelFlightPanel){ this.cancelFlightPanel = cancelFlightPanel; }
-    public boolean cancelFlight(String ticketNum, String flightID, String seatID) {
-        // ArrayList<Ticket> tmp = Ticket.getTickets(); // idk what this is doing so i commented it out
-        return false;
-    }
 }

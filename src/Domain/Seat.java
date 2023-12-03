@@ -41,6 +41,7 @@ public class Seat {
         this.available = available;
     }
 
+    /* SETTERS AND GETTERS */
     public final int getSeatID() {return seatID;}
     public final int getAircraftID() {return aircraftID;}
     public final String getSeatName() {return seatName;}

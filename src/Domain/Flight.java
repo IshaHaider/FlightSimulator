@@ -115,6 +115,7 @@ public class Flight{
     }
 
 
+    /* SETTERS AND GETTERS */
     public final int getFlightID() {return flightID;}
     public final int getAircraftID() {return aircraftID;}
     public final LocalDate getDepartDate() {return departDate;}

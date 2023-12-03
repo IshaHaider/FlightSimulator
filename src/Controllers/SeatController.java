@@ -12,8 +12,6 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class SeatController implements Observer {
-
-    // private ArrayList<Flight> currentFlights;
     private Gui mainFrame;
     private ArrayList<Seat> currentSeats = new ArrayList<Seat>();
     private DBController db = DBController.getOnlyInstance();
@@ -206,5 +204,4 @@ public class SeatController implements Observer {
     public ArrayList<Seat> getCurrentSeats() { return this.currentSeats; }
     public DBController getDBController() { return this.db; }
     
-
 }

@@ -15,17 +15,13 @@ public class Address {
 
     public Address(String address) {
         String[] parts = address.split("\\s+");
-        
-        if (parts.length >= 1) {
-            this.number = parts[0];
-        }if (parts.length >= 2) {
-            this.street = parts[1];
-        }if (parts.length >= 3) {
-            this.street += " " + parts[2];
-        }
+        if (parts.length >= 1) { this.number = parts[0]; }
+        if (parts.length >= 2) { this.street = parts[1]; }
+        if (parts.length >= 3) { this.street += " " + parts[2]; }
 
     }
 
+    /* SETTERS AND GETTERS */
     public final String getString() {return number + " " + street;}
     public final String getNumber() {return number;}
     public final String getStreet() {return street;}
